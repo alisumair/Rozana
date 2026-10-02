@@ -1,0 +1,15 @@
+{
+  "name": "Rozana – روزانہ",
+  "short_name": "Rozana",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F5F2FC",
+  "theme_color": "#6028E4",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><rect width=\"100\" height=\"100\" rx=\"25\" fill=\"%236028E4\"/><text y=\"55%\" x=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" font-size=\"50\" fill=\"white\">R</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

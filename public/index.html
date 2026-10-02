@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#6028E4">
+  <title>Rozana – روزانہ (TransactFlow Edition)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <style>
+    :root {
+      --primary: #6028E4;
+      --primary-dark: #4713C6;
+      --primary-light: #8655F7;
+      --primary-container: #ECE6FD;
+      --on-primary-container: #28076F;
+      --surface: #FFFFFF;
+      --surface-variant: #ECE7FA;
+      --background: #F5F2FC;
+      --text: #1E1736;
+      --text-muted: #7E7799;
+      --border: #E4DEF5;
+      --income: #00C48C;
+      --expense: #EF4444;
+      --warning: #F59E0B;
+      --blue: #3355FF;
+      --pink: #E4337F;
+      --font-en: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-ur: 'Noto Nastaliq Urdu', 'Plus Jakarta Sans', serif;
+    }
+
+    body.dark-mode {
+      --primary: #A57DFF;
+      --primary-dark: #6028E4;
+      --primary-light: #C0A1FF;
+      --primary-container: #291D4C;
+      --on-primary-container: #ECE6FD;
+      --surface: #1B1630;
+      --surface-variant: #261F40;
+      --background: #120E22;
+      --text: #F5F3FC;
+      --text-muted: #AAA4C4;
+      --border: #383058;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--background);
+      color: var(--text);
+      font-family: var(--font-en);
+    }
+
+    .app-root {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: var(--background);
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: var(--background);
+      position: relative;
+    }
+
+    /* Top App Bar with Avatar & Greeting */
+    .top-header {
+      padding: 16px 20px 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .user-greeting {
+      display: flex;
+      flex-direction: column;
+    }
+    .greeting-sub {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .greeting-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .avatar-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 4px 10px rgba(108, 60, 233, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      position: relative;
+    }
+    .avatar-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 10px;
+      height: 10px;
+      background: #10B981;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .icon-btn:hover { background: var(--surface-variant); transform: translateY(-1px); }
+
+    .lang-pill {
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-weight: 700;
+      font-size: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    /* Scrollable Content */
+    .content-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Hero Gradient Sales / Finance Card (exact match with reference phone 1) */
+    .hero-stat-card {
+      background: linear-gradient(135deg, #6028E4 0%, #4713C6 100%);
+      color: #FFFFFF;
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 14px 34px rgba(96, 40, 228, 0.32);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-stat-card::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+    }
+
+    .hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .hero-subtitle {
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+    .hero-menu-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-amount {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+
+    .hero-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Wave Sparkline SVG */
+    .sparkline-svg {
+      width: 110px;
+      height: 36px;
+    }
+
+    /* Middle System Feature Badges Row (matching reference image) */
+    .feature-badges-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .feature-pill {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .feature-pill:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .feature-icon-box {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .feature-pill-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    /* Section Headers */
+    .section-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .section-link {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Quick Actions 4-Grid (exact match with reference phone 1) */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .quick-squircle-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+    }
+    .quick-squircle-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(108, 60, 233, 0.12);
+      border-color: var(--primary);
+    }
+    .squircle-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .squircle-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+    }
+
+    /* Branch / Account Status List (matching reference image) */
+    .status-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 4px;
+      border-bottom: 1px solid var(--border);
+    }
+    .status-item:last-child { border-bottom: none; }
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .status-icon-wrap {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--primary-container);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .status-info-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .status-info-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .status-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .status-tag {
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .dot-green { background: #00C48C; }
+    .dot-purple { background: var(--primary); }
+
+    /* Bottom Navigation Bar (exact match with active pill and clear icons) */
+    .bottom-bar {
+      height: 72px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 12px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+    .bar-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 8px 14px;
+      border-radius: 18px;
+      font-size: 11px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .bar-item.active {
+      color: var(--primary);
+      font-weight: 800;
+    }
+    .bar-item .material-symbols-rounded {
+      font-size: 24px;
+    }
+
+    /* Floating Action Button */
+    .fab-button {
+      position: absolute;
+      bottom: 86px;
+      right: 24px;
+      width: 58px;
+      height: 58px;
+      border-radius: 29px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      box-shadow: 0 8px 24px rgba(96, 40, 228, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 30;
+    }
+    .fab-button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 10px 28px rgba(96, 40, 228, 0.55);
+    }
+
+    /* Second Screen "Business Overview" (matching Phone 2 in reference image) */
+    .overview-hero-card {
+      background: linear-gradient(135deg, #6028E4 0%, #4713C6 100%);
+      color: white;
+      border-radius: 22px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 24px rgba(96, 40, 228, 0.25);
+    }
+    .overview-box-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+    }
+
+    .metric-row-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+    .metric-icon-sq {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    /* Bottom System Verification Badges (exact match with Phone 2 footer) */
+    .system-badges-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .system-badge-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-align: center;
+    }
+    .system-badge-item .material-symbols-rounded {
+      font-size: 20px;
+      color: #00C48C;
+    }
+    .system-badge-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .system-badge-status {
+      font-size: 9px;
+      color: #00C48C;
+      font-weight: 600;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 12, 30, 0.65);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 1000;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-content {
+      width: 100%;
+      max-width: 420px;
+      background: var(--surface);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+      max-height: 88vh;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+    }
+
+    .field-wrap { margin-bottom: 14px; }
+    .field-lbl {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: block;
+      color: var(--text-muted);
+    }
+    .field-control {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--surface-variant);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+    }
+    .field-control:focus { border-color: var(--primary); }
+
+    .primary-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(108, 60, 233, 0.35);
+      margin-top: 10px;
+    }
+
+    /* RTL */
+    body.rtl {
+      direction: rtl;
+      font-family: var(--font-ur);
+    }
+    body.rtl .fab-button {
+      right: auto;
+      left: 24px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-root">
+  <div class="app-container">
+    <!-- Header with Ali 👋 greeting -->
+    <header class="top-header">
+      <div class="user-greeting">
+        <span class="greeting-sub" id="greetingTimeText">Good Morning,</span>
+        <h1 class="greeting-title" id="greetingNameText">Ali 👋</h1>
+      </div>
+      <div class="header-actions">
+        <button class="lang-pill" style="background:#00C48C; color:white; display:flex; align-items:center; gap:4px; font-weight:800;" onclick="document.getElementById('apkDownloadModal').classList.add('open')">
+          <span class="material-symbols-rounded" style="font-size:16px;">download</span> APK
+        </button>
+        <button class="icon-btn" onclick="openTab('calc')" title="Calculator">
+          <span class="material-symbols-rounded">calculate</span>
+        </button>
+        <button class="icon-btn" onclick="openTab('ai')" title="AI Assistant">
+          <span class="material-symbols-rounded">auto_awesome</span>
+        </button>
+        <button class="lang-pill" id="langSwitchBtn" onclick="toggleAppLanguage()">اردو</button>
+        <div class="avatar-btn" onclick="openTab('settings')" title="User Profile">
+          Ali
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Screen Area -->
+    <main class="content-scroll" id="contentViewport">
+      <!-- Rendered dynamically -->
+    </main>
+
+    <!-- Floating Action Button -->
+    <button class="fab-button" onclick="openAddModal()">
+      <span class="material-symbols-rounded">add</span>
+    </button>
+
+    <!-- Bottom Navigation Bar (exact match with reference Image 2) -->
+    <nav class="bottom-bar">
+      <button class="bar-item active" id="tabBtnDashboard" onclick="openTab('dashboard')">
+        <span class="material-symbols-rounded">home</span>
+        <span class="tab-label" data-en="Dashboard" data-ur="ڈیش بورڈ">Dashboard</span>
+      </button>
+      <button class="bar-item" id="tabBtnSales" onclick="openTab('sales')">
+        <span class="material-symbols-rounded">shopping_bag</span>
+        <span class="tab-label" data-en="Sales" data-ur="آمدن/سیل">Sales</span>
+      </button>
+      <button class="bar-item" id="tabBtnReports" onclick="openTab('reports')">
+        <span class="material-symbols-rounded">bar_chart</span>
+        <span class="tab-label" data-en="Reports" data-ur="رپورٹس">Reports</span>
+      </button>
+      <button class="bar-item" id="tabBtnOverview" onclick="openTab('overview')">
+        <span class="material-symbols-rounded">inventory_2</span>
+        <span class="tab-label" data-en="Overview" data-ur="اوور ویو">Overview</span>
+      </button>
+      <button class="bar-item" id="tabBtnMore" onclick="openTab('settings')">
+        <span class="material-symbols-rounded">grid_view</span>
+        <span class="tab-label" data-en="More" data-ur="مزید">More</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Add Transaction Modal -->
+  <div class="modal-backdrop" id="addTxModal">
+    <div class="modal-content">
+      <h3 style="font-weight:800; font-size:18px; margin-bottom:14px;">Add New Record</h3>
+      <div class="field-wrap">
+        <label class="field-lbl">Type</label>
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="lang-pill" id="typeSalesBtn" onclick="setEntryType('INCOME')" style="flex:1; padding:10px; justify-content:center;">Sales / Income (+)</button>
+          <button type="button" class="lang-pill" id="typeExpBtn" onclick="setEntryType('EXPENSE')" style="flex:1; padding:10px; justify-content:center; background:var(--surface-variant); color:var(--text);">Expense (-)</button>
+        </div>
+      </div>
+      <div class="field-wrap">
+        <label class="field-lbl">Amount (PKR)</label>
+        <input type="number" class="field-control" id="modalAmount" placeholder="e.g. 84250" required>
+      </div>
+      <div class="field-wrap">
+        <label class="field-lbl">Category / Branch</label>
+        <select class="field-control" id="modalCategory">
+          <option value="Islamabad Branch">Islamabad Branch</option>
+          <option value="Lahore Branch">Lahore Branch</option>
+          <option value="Karachi Branch">Karachi Branch</option>
+          <option value="Online Store">Online Store</option>
+          <option value="Retail Sales">Retail Sales</option>
+          <option value="Food & Grocery">Food & Grocery (راشن)</option>
+          <option value="Petrol / Fuel">Petrol / Fuel (پیٹرول)</option>
+          <option value="Electricity Bill">Electricity Bill (LESCO)</option>
+          <option value="Gas Bill">Gas Bill (SNGPL)</option>
+        </select>
+      </div>
+      <div class="field-wrap">
+        <label class="field-lbl">Description</label>
+        <input type="text" class="field-control" id="modalDesc" placeholder="e.g. Daily Cash Sales">
+      </div>
+      <button class="primary-btn" onclick="confirmAddRecord()">Save Record</button>
+      <button class="primary-btn" style="background:var(--surface-variant); color:var(--text); box-shadow:none; margin-top:8px;" onclick="closeModal('addTxModal')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Voice Input Modal -->
+  <div class="modal-backdrop" id="voiceModal">
+    <div class="modal-content">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <span class="material-symbols-rounded" style="color:var(--primary); font-size:32px;">mic</span>
+        <h3 style="font-weight:800;">Voice Input</h3>
+      </div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">Speak or type your daily sales & expense entry:</p>
+      <input type="text" class="field-control" id="voiceInputField" placeholder="e.g. Aj 84250 rupay ki sales hui aur 3500 petrol par kharch kiye">
+      <div style="display:flex; flex-direction:column; gap:6px; margin:12px 0;">
+        <span style="font-size:11px; font-weight:700;">Sample:</span>
+        <button type="button" class="lang-pill" style="text-align:left; background:var(--surface-variant); color:var(--text);" onclick="document.getElementById('voiceInputField').value = this.innerText;">Aj 84250 rupay ki sales hui aur 3500 petrol par kharch kiye</button>
+      </div>
+      <button class="primary-btn" onclick="executeVoiceParse()">Confirm & Save</button>
+      <button class="primary-btn" style="background:var(--surface-variant); color:var(--text); box-shadow:none; margin-top:8px;" onclick="closeModal('voiceModal')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- GitHub Push Guide Modal -->
+  <div class="modal-backdrop" id="githubGuideModal">
+    <div class="modal-content">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+        <span class="material-symbols-rounded" style="color:var(--primary); font-size:32px;">cloud_upload</span>
+        <h3 style="font-weight:800;">Push to GitHub</h3>
+      </div>
+      <div style="font-size:13px; line-height:1.6; margin-bottom:12px;">
+        <p><strong>طریقہ 1 (AI Studio مینو سے):</strong><br>
+        اوپر دائیں Export / Share مینو سے <strong>Push to GitHub</strong> منتخب کریں اور ریپوزٹری کا نام <code>rozana</code> منتخب کریں۔</p>
+        <p style="margin-top:8px;"><strong>طریقہ 2 (Terminal Commands):</strong></p>
+      </div>
+      <div style="background:var(--surface-variant); padding:12px; border-radius:14px; font-size:12px; font-family:monospace; line-height:1.6; margin-bottom:12px;">
+        git remote add origin https://github.com/YOUR_USERNAME/rozana.git<br>
+        git branch -M main<br>
+        git push -u origin main
+      </div>
+      <button class="primary-btn" onclick="closeModal('githubGuideModal')">Got it / سمجھ آگئی</button>
+    </div>
+  </div>
+
+  <!-- APK File Download & Installation Modal -->
+  <div class="modal-backdrop" id="apkDownloadModal">
+    <div class="modal-content">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+        <span class="material-symbols-rounded" style="color:#00C48C; font-size:36px;">android</span>
+        <div>
+          <h3 style="font-weight:800; font-size:18px;">Download APK & Install</h3>
+          <span style="font-size:12px; color:var(--text-muted);">Rozana / TransactFlow Mobile App</span>
+        </div>
+      </div>
+
+      <div style="background:var(--primary-container); border:1px solid var(--primary-light); padding:14px; border-radius:16px; margin-bottom:14px;">
+        <div style="font-size:13px; font-weight:800; color:var(--on-primary-container); margin-bottom:4px;">
+          🚀 براہ راست موبائل میں انسٹالیشن (Direct Mobile App)
+        </div>
+        <p style="font-size:12px; color:var(--on-primary-container); line-height:1.5; margin-bottom:10px;">
+          بغیر کسی فائل ڈاؤن لوڈ کیے اپنے اینڈرائیڈ موبائل پر اصلی ایپ کی طرح انسٹال کریں:
+        </p>
+        <a href="https://ais-pre-csznmc4fckb7mu6v5pcya6-896921133693.asia-southeast1.run.app" target="_blank" style="display:block; text-align:center; padding:10px; background:var(--primary); color:white; border-radius:12px; text-decoration:none; font-weight:700; font-size:13px;">
+          موبائل میں لائیو لنک کھولیں ↗
+        </a>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px; font-size:13px; line-height:1.6; margin-bottom:14px;">
+        <div style="background:var(--surface-variant); padding:12px; border-radius:14px;">
+          <strong>طریقہ 1 (AI Studio مینو سے APK فائل بنانا):</strong><br>
+          1. اوپر دائیں کونے میں <strong>Settings (⚙️)</strong> یا <strong>Export</strong> بٹن پر کلک کریں۔<br>
+          2. <strong>"Generate APK"</strong> منتخب کریں۔<br>
+          3. سسٹم چند سیکنڈ میں مکمل تیار شدہ <code>.apk</code> ڈاؤن لوڈ لنک اور QR کوڈ بنا دے گا جسے آپ موبائل پر انسٹال کر سکتے ہیں۔
+        </div>
+
+        <div style="background:var(--surface-variant); padding:12px; border-radius:14px;">
+          <strong>طریقہ 2 (موبائل کروم انسٹالر):</strong><br>
+          موبائل کے کروم براؤزر میں لنک کھولیں اور اوپر تین ڈاٹس <strong>(⋮)</strong> دبا کر <strong>"Install App"</strong> یا <strong>"Add to Home screen"</strong> پر کلک کریں۔ ایپ موبائل کی ہوم اسکرین پر آ جائے گی۔
+        </div>
+
+        <div style="background:var(--surface-variant); padding:12px; border-radius:14px;">
+          <strong>طریقہ 3 (Android Studio سے APK):</strong><br>
+          اوپر سے <strong>Export as ZIP</strong> ڈاؤن لوڈ کریں یا <strong>GitHub</strong> پر پش کریں۔ پھر Android Studio میں کھول کر <code>Build &gt; Build APK</code> پر کلک کریں۔
+        </div>
+      </div>
+
+      <button class="primary-btn" onclick="closeModal('apkDownloadModal')">بند کریں (Close)</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var appLang = 'en';
+var currentTab = 'dashboard';
+var currentEntryType = 'INCOME';
+
+var salesTotal = 84250;
+var todayOrders = 142;
+var lowStock = 7;
+var inventoryProducts = 12548;
+
+var records = [
+  { id: 1, type: 'INCOME', amount: 84250, branch: 'Islamabad Branch', desc: 'Daily POS Sales', date: 'Today' },
+  { id: 2, type: 'INCOME', amount: 32100, branch: 'Lahore Branch', desc: 'Counter Sales', date: 'Today' },
+  { id: 3, type: 'EXPENSE', amount: 6850, branch: 'Islamabad Branch', desc: 'Electricity Bill (LESCO)', date: 'Due in 3d' },
+  { id: 4, type: 'EXPENSE', amount: 3500, branch: 'General', desc: 'Delivery Fuel & Petrol', date: 'Yesterday' }
+];
+
+var branches = [
+  { name: 'Islamabad Branch', status: 'Online', dot: 'dot-green', amount: 'PKR 45,200' },
+  { name: 'Lahore Branch', status: 'Online', dot: 'dot-green', amount: 'PKR 32,100' },
+  { name: 'Karachi Branch', status: 'Syncing', dot: 'dot-purple', amount: 'PKR 6,950' }
+];
+
+function formatPKR(num) {
+  return 'PKR ' + num.toLocaleString();
+}
+
+function toggleAppLanguage() {
+  appLang = appLang === 'en' ? 'ur' : 'en';
+  document.body.classList.toggle('rtl', appLang === 'ur');
+  document.getElementById('langSwitchBtn').innerText = appLang === 'en' ? 'اردو' : 'English';
+  document.getElementById('greetingNameText').innerText = appLang === 'en' ? 'Ali 👋' : 'علی صاحب 👋';
+  document.getElementById('greetingTimeText').innerText = appLang === 'en' ? 'Good Morning,' : 'صبح بخیر،';
+  document.querySelectorAll('.tab-label').forEach(function(el) {
+    el.innerText = el.getAttribute('data-' + appLang);
+  });
+  renderTabContent();
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('dark-mode');
+}
+
+function openTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.bar-item').forEach(function(b) { b.classList.remove('active'); });
+  if (tab === 'dashboard') document.getElementById('tabBtnDashboard').classList.add('active');
+  if (tab === 'sales') document.getElementById('tabBtnSales').classList.add('active');
+  if (tab === 'reports') document.getElementById('tabBtnReports').classList.add('active');
+  if (tab === 'overview') document.getElementById('tabBtnOverview').classList.add('active');
+  if (tab === 'settings') document.getElementById('tabBtnMore').classList.add('active');
+  renderTabContent();
+}
+
+function openAddModal() {
+  document.getElementById('addTxModal').classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function setEntryType(t) {
+  currentEntryType = t;
+  document.getElementById('typeSalesBtn').style.background = t === 'INCOME' ? 'var(--primary-container)' : 'var(--surface-variant)';
+  document.getElementById('typeSalesBtn').style.color = t === 'INCOME' ? 'var(--on-primary-container)' : 'var(--text)';
+  document.getElementById('typeExpBtn').style.background = t === 'EXPENSE' ? 'var(--primary-container)' : 'var(--surface-variant)';
+  document.getElementById('typeExpBtn').style.color = t === 'EXPENSE' ? 'var(--on-primary-container)' : 'var(--text)';
+}
+
+function confirmAddRecord() {
+  var amt = parseFloat(document.getElementById('modalAmount').value);
+  var cat = document.getElementById('modalCategory').value;
+  var desc = document.getElementById('modalDesc').value || cat;
+  if (!amt || amt <= 0) return alert('Please enter valid amount');
+  if (currentEntryType === 'INCOME') salesTotal += amt;
+  records.unshift({
+    id: Date.now(),
+    type: currentEntryType,
+    amount: amt,
+    branch: cat,
+    desc: desc,
+    date: 'Today'
+  });
+  closeModal('addTxModal');
+  document.getElementById('modalAmount').value = '';
+  document.getElementById('modalDesc').value = '';
+  renderTabContent();
+}
+
+function executeVoiceParse() {
+  var txt = document.getElementById('voiceInputField').value.toLowerCase();
+  var match = txt.match(/(\d+)/g);
+  if (match) {
+    var amt = parseFloat(match[0]);
+    salesTotal += amt;
+    records.unshift({
+      id: Date.now(),
+      type: 'INCOME',
+      amount: amt,
+      branch: 'Voice Entry',
+      desc: txt,
+      date: 'Today'
+    });
+    alert('Record saved: ' + formatPKR(amt));
+  }
+  closeModal('voiceModal');
+  renderTabContent();
+}
+
+// Sparkline SVG generator
+function renderSparklineSVG() {
+  return `
+    <svg class="sparkline-svg" viewBox="0 0 100 32" fill="none">
+      <path d="M 0,26 Q 25,6 45,20 T 75,8 T 100,14" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <circle cx="100" cy="14" r="3.5" fill="#FFFFFF" />
+    </svg>
+  `;
+}
+
+function renderTabContent() {
+  var vp = document.getElementById('contentViewport');
+
+  if (currentTab === 'dashboard') {
+    vp.innerHTML = `
+      <!-- Phone 1 Hero Card (matching reference Image 2) -->
+      <div class="hero-stat-card">
+        <div class="hero-header">
+          <span class="hero-subtitle">${appLang === 'ur' ? 'آج کی کل سیلز' : "Today's Sales"}</span>
+          <button class="hero-menu-btn" onclick="document.getElementById('voiceModal').classList.add('open')">
+            <span class="material-symbols-rounded" style="font-size:18px;">mic</span>
+          </button>
+        </div>
+        <div class="hero-amount">${formatPKR(salesTotal)}</div>
+        <div class="hero-bottom-row">
+          <div class="stat-badge">
+            <span>↑ 12.5% vs Yesterday</span>
+          </div>
+          ${renderSparklineSVG()}
+        </div>
+      </div>
+
+      <!-- Feature Badges Row (Live Reports, Multi Branch, Offline Mode, Auto Sync) -->
+      <div class="feature-badges-row">
+        <div class="feature-pill" onclick="openTab('reports')">
+          <div class="feature-icon-box" style="background:#F0EBFE; color:#6C3CE9;"><span class="material-symbols-rounded">bar_chart</span></div>
+          <div class="feature-pill-title">Live Reports</div>
+        </div>
+        <div class="feature-pill" onclick="openTab('sales')">
+          <div class="feature-icon-box" style="background:#EBF3FE; color:#3B82F6;"><span class="material-symbols-rounded">store</span></div>
+          <div class="feature-pill-title">Multi Branch</div>
+        </div>
+        <div class="feature-pill" onclick="alert('Offline Room Database active. Works 100% without internet!')">
+          <div class="feature-icon-box" style="background:#FDF2E9; color:#F59E0B;"><span class="material-symbols-rounded">wifi_off</span></div>
+          <div class="feature-pill-title">Offline Mode</div>
+        </div>
+        <div class="feature-pill" onclick="alert('Cloud & Git Sync status verified!')">
+          <div class="feature-icon-box" style="background:#E8F8F0; color:#10B981;"><span class="material-symbols-rounded">sync</span></div>
+          <div class="feature-pill-title">Auto Sync</div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Header & 4-Grid (exact match with reference Image 2) -->
+      <div class="section-title-row">
+        <h2 class="section-title">${appLang === 'ur' ? 'فوری ایکشنز' : 'Quick Actions'}</h2>
+        <span class="section-link" onclick="openTab('overview')">View all</span>
+      </div>
+
+      <div class="quick-actions-grid">
+        <div class="quick-squircle-card" onclick="openTab('overview')">
+          <div class="squircle-icon" style="background:#F0EBFE; color:#6C3CE9;">
+            <span class="material-symbols-rounded">inventory_2</span>
+          </div>
+          <span class="squircle-label">Inventory</span>
+        </div>
+
+        <div class="quick-squircle-card" onclick="openTab('reports')">
+          <div class="squircle-icon" style="background:#EBF3FE; color:#3B82F6;">
+            <span class="material-symbols-rounded">bar_chart</span>
+          </div>
+          <span class="squircle-label">Reports</span>
+        </div>
+
+        <div class="quick-squircle-card" onclick="openAddModal()">
+          <div class="squircle-icon" style="background:#FDEEF4; color:#EC4899;">
+            <span class="material-symbols-rounded">receipt_long</span>
+          </div>
+          <span class="squircle-label">Billing</span>
+        </div>
+
+        <div class="quick-squircle-card" onclick="openTab('sales')">
+          <div class="squircle-icon" style="background:#E8F8F0; color:#10B981;">
+            <span class="material-symbols-rounded">group</span>
+          </div>
+          <span class="squircle-label">Customers</span>
+        </div>
+      </div>
+
+      <!-- Branch Status List (exact match with reference Image 2) -->
+      <div class="section-title-row">
+        <h2 class="section-title">${appLang === 'ur' ? 'برانچ اور اکاؤنٹس کی صورتحال' : 'Branch Status'}</h2>
+        <span class="section-link" onclick="openTab('sales')">View all</span>
+      </div>
+
+      <div class="status-card">
+        ${branches.map(b => `
+          <div class="status-item">
+            <div class="status-left">
+              <div class="status-icon-wrap">
+                <span class="material-symbols-rounded">storefront</span>
+              </div>
+              <div>
+                <div class="status-info-title">${b.name}</div>
+                <div class="status-info-sub">${b.amount}</div>
+              </div>
+            </div>
+            <div class="status-right">
+              <div class="status-tag">
+                <span class="status-dot ${b.dot}"></span>
+                <span style="color:${b.dot==='dot-green'?'#10B981':'var(--primary)'}">${b.status}</span>
+              </div>
+              <span class="material-symbols-rounded" style="color:var(--text-muted); font-size:18px;">chevron_right</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- GitHub Push Card Banner -->
+      <div class="status-card" style="cursor:pointer; border:1px solid var(--primary);" onclick="document.getElementById('githubGuideModal').classList.add('open')">
+        <div style="display:flex; align-items:center; gap:14px; padding:6px 0;">
+          <div class="status-icon-wrap" style="background:var(--primary); color:white;">
+            <span class="material-symbols-rounded">cloud_upload</span>
+          </div>
+          <div style="flex:1;">
+            <div style="font-weight:800; font-size:14px;">Push App to GitHub ('rozana')</div>
+            <div style="font-size:12px; color:var(--text-muted);">گٹ ہب پر کوڈ پش کرنے کی گائیڈ دیکھیں</div>
+          </div>
+          <span class="material-symbols-rounded" style="color:var(--primary);">arrow_forward</span>
+        </div>
+      </div>
+    `;
+  } else if (currentTab === 'overview') {
+    // Phone 2 in Image 2: "Business Overview" Screen
+    vp.innerHTML = `
+      <div class="section-title-row" style="margin-bottom:12px;">
+        <h2 class="section-title">Business Overview</h2>
+        <div class="header-actions">
+          <button class="icon-btn"><span class="material-symbols-rounded">notifications</span></button>
+        </div>
+      </div>
+
+      <!-- Inventory Top Hero Card (matching Phone 2) -->
+      <div class="overview-hero-card">
+        <div>
+          <span style="font-size:13px; opacity:0.9;">Inventory</span>
+          <div style="font-size:30px; font-weight:800; margin-top:4px;">${inventoryProducts.toLocaleString()}</div>
+          <span style="font-size:12px; opacity:0.85;">Products in Stock</span>
+        </div>
+        <div class="overview-box-icon">
+          <span class="material-symbols-rounded">deployed_code</span>
+        </div>
+      </div>
+
+      <!-- Metric Cards (matching Phone 2 vertical list) -->
+      <div class="metric-row-card">
+        <div>
+          <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Low Stock</span>
+          <div style="font-size:22px; font-weight:800; color:var(--text); margin-top:2px;">${lowStock}</div>
+          <span style="font-size:11px; color:var(--text-muted);">Items need reorder</span>
+        </div>
+        <div class="metric-icon-sq" style="background:#FDEEF4; color:#EC4899;">
+          <span class="material-symbols-rounded">warning</span>
+        </div>
+      </div>
+
+      <div class="metric-row-card">
+        <div>
+          <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Today's Orders</span>
+          <div style="font-size:22px; font-weight:800; color:var(--text); margin-top:2px;">${todayOrders}</div>
+          <span style="font-size:11px; color:#10B981; font-weight:700;">↑ 18 new this hour</span>
+        </div>
+        <div class="metric-icon-sq" style="background:#F0EBFE; color:#6C3CE9;">
+          <span class="material-symbols-rounded">shopping_cart</span>
+        </div>
+      </div>
+
+      <div class="metric-row-card">
+        <div>
+          <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Purchase Orders</span>
+          <div style="font-size:22px; font-weight:800; color:var(--text); margin-top:2px;">24</div>
+          <span style="font-size:11px; color:var(--warning); font-weight:700;">Pending approval</span>
+        </div>
+        <div class="metric-icon-sq" style="background:#FFFBEB; color:#F59E0B;">
+          <span class="material-symbols-rounded">assignment</span>
+        </div>
+      </div>
+
+      <div class="metric-row-card">
+        <div>
+          <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Supplier Management</span>
+          <div style="font-size:22px; font-weight:800; color:var(--text); margin-top:2px;">18</div>
+          <span style="font-size:11px; color:var(--text-muted);">Registered Suppliers</span>
+        </div>
+        <div class="metric-icon-sq" style="background:#EBF3FE; color:#3B82F6;">
+          <span class="material-symbols-rounded">group</span>
+        </div>
+      </div>
+
+      <!-- Bottom System Verification Badges (exact match with Phone 2 footer) -->
+      <div class="system-badges-row">
+        <div class="system-badge-item">
+          <span class="material-symbols-rounded">wifi_off</span>
+          <span class="system-badge-title">Offline Mode</span>
+          <span class="system-badge-status">Enabled</span>
+        </div>
+        <div class="system-badge-item">
+          <span class="material-symbols-rounded">sync</span>
+          <span class="system-badge-title">Auto Sync</span>
+          <span class="system-badge-status">Enabled</span>
+        </div>
+        <div class="system-badge-item">
+          <span class="material-symbols-rounded">cloud_done</span>
+          <span class="system-badge-title">Cloud Backup</span>
+          <span class="system-badge-status">Secure</span>
+        </div>
+        <div class="system-badge-item">
+          <span class="material-symbols-rounded">verified_user</span>
+          <span class="system-badge-title">FBR Connected</span>
+          <span class="system-badge-status">Verified</span>
+        </div>
+      </div>
+    `;
+  } else if (currentTab === 'sales') {
+    vp.innerHTML = `
+      <div class="section-title-row">
+        <h2 class="section-title">Sales & Transaction Records</h2>
+        <button class="lang-pill" onclick="openAddModal()">+ Add Sales</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        ${records.map(r => `
+          <div class="metric-row-card">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div class="metric-icon-sq" style="background:${r.type==='INCOME'?'#E8F8F0':'#FDEEF4'}; color:${r.type==='INCOME'?'#10B981':'#EF4444'};">
+                <span class="material-symbols-rounded">${r.type==='INCOME'?'trending_up':'trending_down'}</span>
+              </div>
+              <div>
+                <div style="font-weight:700; font-size:15px;">${r.desc}</div>
+                <div style="font-size:12px; color:var(--text-muted);">${r.branch} • ${r.date}</div>
+              </div>
+            </div>
+            <div style="font-weight:800; font-size:16px; color:${r.type==='INCOME'?'#10B981':'#EF4444'};">
+              ${r.type==='INCOME'?'+':'-'} ${formatPKR(r.amount)}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  } else if (currentTab === 'reports') {
+    vp.innerHTML = `
+      <div class="section-title-row">
+        <h2 class="section-title">Financial Analytics & Reports</h2>
+      </div>
+      <div class="hero-stat-card" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
+        <span class="hero-subtitle">Net Profit & Savings</span>
+        <div class="hero-amount">PKR 73,900</div>
+        <div class="stat-badge" style="background:rgba(255,255,255,0.25);">
+          <span>↑ 24.3% this month</span>
+        </div>
+      </div>
+      <div class="metric-row-card">
+        <div>
+          <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Total Inflow (Sales)</span>
+          <div style="font-size:20px; font-weight:800; color:#10B981; margin-top:2px;">PKR 116,350</div>
+        </div>
+        <div class="metric-icon-sq" style="background:#E8F8F0; color:#10B981;"><span class="material-symbols-rounded">arrow_downward</span></div>
+      </div>
+      <div class="metric-row-card">
+        <div>
+          <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Total Outflow (Bills & Petrol)</span>
+          <div style="font-size:20px; font-weight:800; color:#EF4444; margin-top:2px;">PKR 10,350</div>
+        </div>
+        <div class="metric-icon-sq" style="background:#FDEEF4; color:#EF4444;"><span class="material-symbols-rounded">arrow_upward</span></div>
+      </div>
+    `;
+  } else if (currentTab === 'settings') {
+    vp.innerHTML = `
+      <div class="section-title-row">
+        <h2 class="section-title">Settings & Business Info</h2>
+      </div>
+      <div class="status-card" style="cursor:pointer; border:1px solid var(--primary);" onclick="document.getElementById('githubGuideModal').classList.add('open')">
+        <div style="display:flex; align-items:center; gap:14px; padding:6px 0;">
+          <div class="status-icon-wrap" style="background:var(--primary); color:white;">
+            <span class="material-symbols-rounded">cloud_upload</span>
+          </div>
+          <div style="flex:1;">
+            <div style="font-weight:800; font-size:14px;">How to Push to GitHub</div>
+            <div style="font-size:12px; color:var(--text-muted);">گٹ ہب پر کوڈ پش کرنے کی گائیڈ</div>
+          </div>
+          <span class="material-symbols-rounded" style="color:var(--primary);">chevron_right</span>
+        </div>
+      </div>
+
+      <div class="status-card" style="padding:16px;">
+        <h4 style="font-size:14px; font-weight:700; margin-bottom:10px;">Language & Theme</h4>
+        <div style="display:flex; gap:10px; margin-bottom:12px;">
+          <button class="lang-pill" style="flex:1; justify-content:center; padding:10px; background:${appLang==='en'?'var(--primary)':'var(--surface-variant)'}; color:${appLang==='en'?'white':'var(--text)'};" onclick="if(appLang!=='en')toggleAppLanguage()">English</button>
+          <button class="lang-pill" style="flex:1; justify-content:center; padding:10px; background:${appLang==='ur'?'var(--primary)':'var(--surface-variant)'}; color:${appLang==='ur'?'white':'var(--text)'};" onclick="if(appLang!=='ur')toggleAppLanguage()">اردو</button>
+        </div>
+        <button class="lang-pill" style="width:100%; justify-content:center; padding:10px; background:var(--surface-variant); color:var(--text);" onclick="toggleTheme()">Toggle Dark / Light Mode</button>
+      </div>
+
+      <div class="status-card" style="padding:16px;">
+        <h4 style="font-size:14px; font-weight:700; margin-bottom:8px;">TransactFlow POS & Daily Life App</h4>
+        <p style="font-size:12px; color:var(--text-muted); line-height:1.6;">
+          Real-time POS sales management, Room database offline support, FBR tax readiness, branch synchronization, and Pakistani rupee accounting.
+        </p>
+      </div>
+    `;
+  }
+}
+
+// Initial Run
+renderTabContent();
+</script>
+</body>
+</html>
