@@ -31,8 +31,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Initialize local notification channels
-        NotificationHelper.initNotificationChannels(this)
+        // Initialize local notification channels safely
+        try {
+            NotificationHelper.initNotificationChannels(this)
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "Notification channels init skipped: ${e.message}")
+        }
 
         setContent {
             val language by viewModel.language.collectAsState()
