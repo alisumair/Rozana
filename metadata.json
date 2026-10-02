@@ -1,0 +1,6 @@
+{
+  "name": "Rozana – روزانہ",
+  "description": "All-in-One Daily Life, Finance, Bills and Task Manager for Pakistan",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
