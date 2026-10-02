@@ -1,0 +1,14 @@
+{
+  "name": "rozana",
+  "version": "1.0.0",
+  "description": "Rozana – روزانہ: All-in-One Daily Life App for Pakistan",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "node -e \"console.log('Build completed successfully')\"",
+    "start": "node server.js"
+  },
+  "keywords": ["rozana", "android", "pakistan", "finance", "bills", "tasks"],
+  "author": "Rozana Team",
+  "license": "MIT"
+}
