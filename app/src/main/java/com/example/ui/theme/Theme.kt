@@ -4,51 +4,50 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = GreenPrimaryDark,
-    onPrimary = GreenOnPrimaryDark,
-    primaryContainer = GreenPrimaryContainerDark,
-    onPrimaryContainer = GreenOnPrimaryContainerDark,
-    secondary = GreenPrimaryDark,
-    onSecondary = GreenOnPrimaryDark,
-    secondaryContainer = GreenPrimaryContainerDark,
-    onSecondaryContainer = GreenOnPrimaryContainerDark,
-    tertiary = GreenTertiary,
-    background = BackgroundDark,
-    onBackground = Color(0xFFE2EBE4),
-    surface = SurfaceDark,
-    onSurface = Color(0xFFE2EBE4),
-    surfaceVariant = SurfaceVariantDark,
-    onSurfaceVariant = Color(0xFFB0C4B6),
-    outline = OutlineDark
+    primary = VioletBrandDarkTheme,
+    onPrimary = AppBackgroundDark,
+    primaryContainer = VioletBrandDark,
+    onPrimaryContainer = VioletBrandContainer,
+    secondary = VioletBrandLight,
+    onSecondary = AppBackgroundDark,
+    secondaryContainer = AppSurfaceVariantDark,
+    onSecondaryContainer = VioletBrandContainer,
+    tertiary = IconReportsBlue,
+    background = AppBackgroundDark,
+    onBackground = TextPrimaryDark,
+    surface = AppSurfaceDark,
+    onSurface = TextPrimaryDark,
+    surfaceVariant = AppSurfaceVariantDark,
+    onSurfaceVariant = TextSecondaryDark,
+    outline = AppOutlineDark
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = GreenPrimary,
-    onPrimary = GreenOnPrimary,
-    primaryContainer = GreenPrimaryContainer,
-    onPrimaryContainer = GreenOnPrimaryContainer,
-    secondary = GreenSecondary,
-    onSecondary = GreenOnSecondary,
-    secondaryContainer = GreenSecondaryContainer,
-    onSecondaryContainer = GreenOnSecondaryContainer,
-    tertiary = GreenTertiary,
-    background = BackgroundLight,
-    onBackground = Color(0xFF131F16),
-    surface = SurfaceLight,
-    onSurface = Color(0xFF131F16),
-    surfaceVariant = SurfaceVariantLight,
-    onSurfaceVariant = Color(0xFF435A4B),
-    outline = OutlineLight
+    primary = VioletBrand,
+    onPrimary = AppSurfaceLight,
+    primaryContainer = VioletBrandContainer,
+    onPrimaryContainer = VioletBrandOnContainer,
+    secondary = VioletBrandDark,
+    onSecondary = AppSurfaceLight,
+    secondaryContainer = VioletBrandContainer,
+    onSecondaryContainer = VioletBrandOnContainer,
+    tertiary = IconReportsBlue,
+    background = AppBackgroundLight,
+    onBackground = TextPrimaryLight,
+    surface = AppSurfaceLight,
+    onSurface = TextPrimaryLight,
+    surfaceVariant = AppSurfaceVariantLight,
+    onSurfaceVariant = TextSecondaryLight,
+    outline = AppOutlineLight
 )
 
 @Composable
 fun RozanaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false, // Keep signature green and white brand
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

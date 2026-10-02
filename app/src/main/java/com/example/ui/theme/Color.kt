@@ -2,39 +2,47 @@ package com.example.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Primary Pakistan Green Palette
-val GreenPrimary = Color(0xFF116530)
-val GreenOnPrimary = Color(0xFFFFFFFF)
-val GreenPrimaryContainer = Color(0xFFD4EDDA)
-val GreenOnPrimaryContainer = Color(0xFF053316)
+// TransactFlow Signature Violet & Lavender Palette
+val VioletBrand = Color(0xFF6028E4)
+val VioletBrandDark = Color(0xFF4713C6)
+val VioletBrandLight = Color(0xFF8655F7)
+val VioletBrandContainer = Color(0xFFECE6FD)
+val VioletBrandOnContainer = Color(0xFF28076F)
 
-val GreenSecondary = Color(0xFF2E7D32)
-val GreenOnSecondary = Color(0xFFFFFFFF)
-val GreenSecondaryContainer = Color(0xFFE8F5E9)
-val GreenOnSecondaryContainer = Color(0xFF1B5E20)
+// App Background & Surface
+val AppBackgroundLight = Color(0xFFF5F2FC)
+val AppSurfaceLight = Color(0xFFFFFFFF)
+val AppSurfaceVariantLight = Color(0xFFECE7FA)
+val AppOutlineLight = Color(0xFFE4DEF5)
 
-val GreenTertiary = Color(0xFF00796B)
-val GreenOnTertiary = Color(0xFFFFFFFF)
+val TextPrimaryLight = Color(0xFF1E1736)
+val TextSecondaryLight = Color(0xFF7E7799)
 
-// Light Background & Surfaces
-val BackgroundLight = Color(0xFFF7FAF8)
-val SurfaceLight = Color(0xFFFFFFFF)
-val SurfaceVariantLight = Color(0xFFEAF1EC)
-val OutlineLight = Color(0xFFCFDBD2)
+// Dark Theme Variants
+val VioletBrandDarkTheme = Color(0xFFA57DFF)
+val AppBackgroundDark = Color(0xFF120E22)
+val AppSurfaceDark = Color(0xFF1B1630)
+val AppSurfaceVariantDark = Color(0xFF261F40)
+val AppOutlineDark = Color(0xFF383058)
+val TextPrimaryDark = Color(0xFFF5F3FC)
+val TextSecondaryDark = Color(0xFFAAA4C4)
 
-// Dark Palette
-val GreenPrimaryDark = Color(0xFF81C784)
-val GreenOnPrimaryDark = Color(0xFF053316)
-val GreenPrimaryContainerDark = Color(0xFF1B5E20)
-val GreenOnPrimaryContainerDark = Color(0xFFD4EDDA)
+// Category Squircle Colors from TransactFlow
+val IconInventoryViolet = Color(0xFF6028E4)
+val BgInventoryViolet = Color(0xFFECE6FD)
 
-val BackgroundDark = Color(0xFF0F1711)
-val SurfaceDark = Color(0xFF152219)
-val SurfaceVariantDark = Color(0xFF1E3024)
-val OutlineDark = Color(0xFF344E3C)
+val IconReportsBlue = Color(0xFF3355FF)
+val BgReportsBlue = Color(0xFFE8EDFF)
 
-// Semantic Financial Colors
-val IncomeGreen = Color(0xFF2E7D32)
-val ExpenseRed = Color(0xFFC62828)
-val WarningGold = Color(0xFFEF6C00)
-val InfoBlue = Color(0xFF1565C0)
+val IconBillingPink = Color(0xFFE4337F)
+val BgBillingPink = Color(0xFFFCEBF3)
+
+val IconCustomersPurple = Color(0xFF5B3CE0)
+val BgCustomersPurple = Color(0xFFEDEBF9)
+
+// Status Indicators
+val StatusGreen = Color(0xFF00C48C)
+val StatusGreenBg = Color(0xFFE6F9F3)
+val StatusPurple = Color(0xFF6028E4)
+val ExpenseRed = Color(0xFFEF4444)
+val WarningGold = Color(0xFFF59E0B)
