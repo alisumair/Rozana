@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#6028E4">
-  <title>Rozana – روزانہ (TransactFlow Edition)</title>
+  <link rel="manifest" href="/manifest.json">
+  <title>Rozana – روزانہ | All-in-One Life, Finance, Bills & Habits</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
@@ -17,32 +18,45 @@
       --primary-container: #ECE6FD;
       --on-primary-container: #28076F;
       --surface: #FFFFFF;
-      --surface-variant: #ECE7FA;
-      --background: #F5F2FC;
-      --text: #1E1736;
-      --text-muted: #7E7799;
-      --border: #E4DEF5;
+      --surface-variant: #F4F0FD;
+      --background: #F8F6FE;
+      --text: #191233;
+      --text-muted: #736B91;
+      --border: #E5DEF8;
       --income: #00C48C;
+      --income-bg: #E6F9F3;
       --expense: #EF4444;
+      --expense-bg: #FEECEB;
       --warning: #F59E0B;
-      --blue: #3355FF;
-      --pink: #E4337F;
+      --warning-bg: #FEF6E7;
+      --blue: #2563EB;
+      --blue-bg: #EFF6FF;
+      --pink: #E11D48;
+      --pink-bg: #FFF1F2;
+      --purple: #7C3AED;
+      --purple-bg: #F5F3FF;
       --font-en: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
       --font-ur: 'Noto Nastaliq Urdu', 'Plus Jakarta Sans', serif;
     }
 
     body.dark-mode {
-      --primary: #A57DFF;
+      --primary: #A78BFA;
       --primary-dark: #6028E4;
-      --primary-light: #C0A1FF;
-      --primary-container: #291D4C;
-      --on-primary-container: #ECE6FD;
-      --surface: #1B1630;
-      --surface-variant: #261F40;
-      --background: #120E22;
-      --text: #F5F3FC;
-      --text-muted: #AAA4C4;
-      --border: #383058;
+      --primary-light: #C4B5FD;
+      --primary-container: #2E1F5E;
+      --on-primary-container: #EDE9FE;
+      --surface: #1E1738;
+      --surface-variant: #2A214A;
+      --background: #130E26;
+      --text: #F5F3FF;
+      --text-muted: #A39BBF;
+      --border: #3A305D;
+      --income-bg: #064E3B;
+      --expense-bg: #4C0519;
+      --warning-bg: #451A03;
+      --blue-bg: #1E3A8A;
+      --pink-bg: #4C0519;
+      --purple-bg: #2E1F5E;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -56,6 +70,11 @@
       font-family: var(--font-en);
     }
 
+    body.rtl {
+      direction: rtl;
+      font-family: var(--font-ur);
+    }
+
     .app-root {
       width: 100%;
       height: 100%;
@@ -66,7 +85,7 @@
 
     .app-container {
       width: 100%;
-      max-width: 640px;
+      max-width: 600px;
       margin: 0 auto;
       height: 100%;
       display: flex;
@@ -75,41 +94,79 @@
       position: relative;
     }
 
-    /* Top App Bar with Avatar & Greeting */
+    /* Top App Header */
     .top-header {
-      padding: 16px 20px 10px 20px;
+      padding: 14px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
-      z-index: 10;
+      z-index: 20;
     }
 
     .user-greeting {
       display: flex;
       flex-direction: column;
+      cursor: pointer;
     }
     .greeting-sub {
-      font-size: 13px;
-      font-weight: 500;
+      font-size: 12px;
+      font-weight: 600;
       color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
     .greeting-title {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 800;
       color: var(--text);
       letter-spacing: -0.3px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--surface-variant);
+      border: 1px solid var(--border);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.2s ease;
+    }
+    .icon-btn:active { transform: scale(0.92); }
+
+    .lang-pill {
+      height: 36px;
+      padding: 0 12px;
+      border-radius: 18px;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border: none;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Profile Avatar with uploaded pic */
+    .avatar-wrapper {
+      position: relative;
+      cursor: pointer;
     }
     .avatar-btn {
       width: 44px;
@@ -118,397 +175,131 @@
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
       border: 2px solid #FFFFFF;
-      box-shadow: 0 4px 10px rgba(108, 60, 233, 0.25);
+      box-shadow: 0 4px 12px rgba(96, 40, 228, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 800;
-      cursor: pointer;
-      position: relative;
+      overflow: hidden;
     }
-    .avatar-btn::after {
-      content: '';
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .avatar-online-dot {
       position: absolute;
-      bottom: 2px;
-      right: 2px;
-      width: 10px;
-      height: 10px;
-      background: #10B981;
+      bottom: 1px;
+      right: 1px;
+      width: 11px;
+      height: 11px;
+      background: #00C48C;
       border-radius: 50%;
-      border: 2px solid white;
+      border: 2px solid var(--surface);
     }
 
-    .icon-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .icon-btn:hover { background: var(--surface-variant); transform: translateY(-1px); }
-
-    .lang-pill {
-      padding: 6px 12px;
-      border-radius: 20px;
-      background: var(--primary-container);
-      color: var(--on-primary-container);
-      font-weight: 700;
-      font-size: 12px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    /* Scrollable Content */
+    /* Content Scrollable */
     .content-scroll {
       flex: 1;
       overflow-y: auto;
-      padding: 16px 20px;
+      overflow-x: hidden;
+      padding: 16px 16px 90px 16px;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      -webkit-overflow-scrolling: touch;
     }
 
-    /* Hero Gradient Sales / Finance Card (exact match with reference phone 1) */
+    /* TransactFlow Hero Balance Card */
     .hero-stat-card {
       background: linear-gradient(135deg, #6028E4 0%, #4713C6 100%);
-      color: #FFFFFF;
-      border-radius: 24px;
+      border-radius: 26px;
       padding: 22px;
-      box-shadow: 0 14px 34px rgba(96, 40, 228, 0.32);
+      color: white;
+      box-shadow: 0 14px 28px rgba(96, 40, 228, 0.28);
       position: relative;
       overflow: hidden;
     }
-    .hero-stat-card::before {
+    .hero-stat-card::after {
       content: '';
       position: absolute;
-      top: -40px;
-      right: -40px;
-      width: 140px;
-      height: 140px;
-      background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%);
+      top: -30px;
+      right: -30px;
+      width: 130px;
+      height: 130px;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
       border-radius: 50%;
-    }
-
-    .hero-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 6px;
     }
     .hero-subtitle {
       font-size: 13px;
-      font-weight: 500;
-      opacity: 0.9;
-    }
-    .hero-menu-btn {
-      background: rgba(255, 255, 255, 0.15);
-      border: none;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      color: white;
-      cursor: pointer;
+      font-weight: 600;
+      opacity: 0.88;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
     }
-
     .hero-amount {
       font-size: 34px;
       font-weight: 800;
       letter-spacing: -0.5px;
-      margin-bottom: 12px;
+      margin: 8px 0 14px 0;
     }
-
-    .hero-bottom-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .stat-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(8px);
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    /* Wave Sparkline SVG */
-    .sparkline-svg {
-      width: 110px;
-      height: 36px;
-    }
-
-    /* Middle System Feature Badges Row (matching reference image) */
-    .feature-badges-row {
+    .hero-stats-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-    .feature-pill {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.12);
       border-radius: 16px;
-      padding: 12px 6px;
+      padding: 10px 12px;
+      backdrop-filter: blur(8px);
+    }
+    .hero-sub-stat {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
-    .feature-pill:hover {
-      border-color: var(--primary);
-      transform: translateY(-2px);
-    }
-    .feature-icon-box {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-    .feature-pill-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.2;
-    }
+    .sub-stat-lbl { font-size: 11px; opacity: 0.8; font-weight: 500; }
+    .sub-stat-val { font-size: 14px; font-weight: 800; }
 
-    /* Section Headers */
-    .section-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 4px;
-    }
+    /* Quick Action Chips & Buttons */
     .section-title {
       font-size: 16px;
       font-weight: 800;
       color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
     }
-    .section-link {
-      font-size: 13px;
+    .section-title span.badge {
+      font-size: 11px;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      padding: 3px 8px;
+      border-radius: 10px;
       font-weight: 700;
-      color: var(--primary);
-      text-decoration: none;
-      cursor: pointer;
     }
 
-    /* Quick Actions 4-Grid (exact match with reference phone 1) */
-    .quick-actions-grid {
+    .quick-chips-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-    .quick-squircle-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 16px 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       gap: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
     }
-    .quick-squircle-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(108, 60, 233, 0.12);
-      border-color: var(--primary);
-    }
-    .squircle-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-    }
-    .squircle-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text);
-      text-align: center;
-    }
-
-    /* Branch / Account Status List (matching reference image) */
-    .status-card {
+    .chip-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 6px 14px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-    }
-    .status-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 4px;
-      border-bottom: 1px solid var(--border);
-    }
-    .status-item:last-child { border-bottom: none; }
-    .status-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .status-icon-wrap {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      background: var(--primary-container);
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-    }
-    .status-info-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .status-info-sub {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .status-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .status-tag {
-      font-size: 12px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
-    .dot-green { background: #00C48C; }
-    .dot-purple { background: var(--primary); }
-
-    /* Bottom Navigation Bar (exact match with active pill and clear icons) */
-    .bottom-bar {
-      height: 72px;
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 0 12px;
-      flex-shrink: 0;
-      z-index: 10;
-    }
-    .bar-item {
+      border-radius: 18px;
+      padding: 12px 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 4px;
-      background: none;
-      border: none;
-      color: var(--text-muted);
+      gap: 6px;
       cursor: pointer;
-      padding: 8px 14px;
-      border-radius: 18px;
-      font-size: 11px;
-      font-weight: 600;
-      transition: all 0.2s;
+      text-align: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
-    .bar-item.active {
-      color: var(--primary);
-      font-weight: 800;
-    }
-    .bar-item .material-symbols-rounded {
-      font-size: 24px;
-    }
-
-    /* Floating Action Button */
-    .fab-button {
-      position: absolute;
-      bottom: 86px;
-      right: 24px;
-      width: 58px;
-      height: 58px;
-      border-radius: 29px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-      color: white;
-      border: none;
-      box-shadow: 0 8px 24px rgba(96, 40, 228, 0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      cursor: pointer;
-      transition: all 0.2s;
-      z-index: 30;
-    }
-    .fab-button:hover {
-      transform: scale(1.08);
-      box-shadow: 0 10px 28px rgba(96, 40, 228, 0.55);
-    }
-
-    /* Second Screen "Business Overview" (matching Phone 2 in reference image) */
-    .overview-hero-card {
-      background: linear-gradient(135deg, #6028E4 0%, #4713C6 100%);
-      color: white;
-      border-radius: 22px;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 10px 24px rgba(96, 40, 228, 0.25);
-    }
-    .overview-box-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.18);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-    }
-
-    .metric-row-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-    }
-    .metric-icon-sq {
+    .chip-card:active { transform: scale(0.95); }
+    .chip-icon {
       width: 44px;
       height: 44px;
       border-radius: 14px;
@@ -517,719 +308,1262 @@
       justify-content: center;
       font-size: 22px;
     }
-
-    /* Bottom System Verification Badges (exact match with Phone 2 footer) */
-    .system-badges-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-top: 6px;
+    .chip-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
     }
-    .system-badge-item {
+
+    /* Cards */
+    .card {
       background: var(--surface);
       border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Habits & Addiction Recovery Box */
+    .streak-banner {
+      background: linear-gradient(135deg, #10B981, #059669);
+      border-radius: 20px;
+      padding: 18px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 8px 18px rgba(16, 185, 129, 0.25);
+    }
+    .streak-info h3 { font-size: 20px; font-weight: 800; }
+    .streak-info p { font-size: 12px; opacity: 0.9; margin-top: 2px; }
+    .streak-badge {
+      background: rgba(255,255,255,0.25);
       border-radius: 14px;
+      padding: 10px 14px;
+      text-align: center;
+    }
+    .streak-num { font-size: 24px; font-weight: 900; line-height: 1; }
+    .streak-lbl { font-size: 11px; font-weight: 700; }
+
+    /* Water glasses */
+    .water-tracker-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding: 10px 4px;
+      gap: 6px;
+    }
+    .water-glass-btn {
+      flex: 1;
+      height: 48px;
+      border-radius: 12px;
+      border: 2px dashed #93C5FD;
+      background: #EFF6FF;
+      color: #3B82F6;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    .water-glass-btn.filled {
+      border: 2px solid #2563EB;
+      background: #2563EB;
+      color: white;
+    }
+
+    /* List items */
+    .item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      border-radius: 16px;
+      background: var(--surface-variant);
+      border: 1px solid var(--border);
+      gap: 12px;
+    }
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+    .item-icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .item-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .item-title { font-size: 14px; font-weight: 700; color: var(--text); }
+    .item-sub { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .item-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
       gap: 4px;
-      text-align: center;
     }
-    .system-badge-item .material-symbols-rounded {
-      font-size: 20px;
-      color: #00C48C;
-    }
-    .system-badge-title {
-      font-size: 10px;
+    .item-amount { font-size: 15px; font-weight: 800; }
+    .item-status-pill {
+      font-size: 11px;
       font-weight: 700;
-      color: var(--text);
+      padding: 3px 8px;
+      border-radius: 8px;
     }
-    .system-badge-status {
-      font-size: 9px;
-      color: #00C48C;
-      font-weight: 600;
+
+    /* Bottom Navigation Bar */
+    .bottom-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 68px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 30;
+      padding: 0 4px;
     }
+    .bar-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 14px;
+      transition: all 0.2s;
+      flex: 1;
+    }
+    .bar-item.active {
+      color: var(--primary);
+    }
+    .bar-item.active .material-symbols-rounded {
+      font-variation-settings: 'FILL' 1;
+    }
+    .tab-label {
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Floating Action Button */
+    .fab-button {
+      position: absolute;
+      bottom: 82px;
+      right: 20px;
+      width: 54px;
+      height: 54px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      box-shadow: 0 8px 20px rgba(96, 40, 228, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      cursor: pointer;
+      z-index: 25;
+      transition: transform 0.2s;
+    }
+    .fab-button:active { transform: scale(0.92); }
+    body.rtl .fab-button { right: auto; left: 20px; }
 
     /* Modals */
     .modal-backdrop {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 12, 30, 0.65);
-      backdrop-filter: blur(5px);
+      inset: 0;
+      background: rgba(19, 14, 38, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 100;
       display: none;
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
-      padding: 18px;
-      z-index: 1000;
     }
     .modal-backdrop.open { display: flex; }
     .modal-content {
       width: 100%;
-      max-width: 420px;
-      background: var(--surface);
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
-      max-height: 88vh;
+      max-width: 600px;
+      max-height: 85vh;
       overflow-y: auto;
-      border: 1px solid var(--border);
+      background: var(--surface);
+      border-top-left-radius: 28px;
+      border-top-right-radius: 28px;
+      padding: 24px 20px 32px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: slideUp 0.25s ease-out;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .modal-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-title { font-size: 18px; font-weight: 800; color: var(--text); }
+    .close-btn {
+      background: var(--surface-variant);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
     }
 
-    .field-wrap { margin-bottom: 14px; }
-    .field-lbl {
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      display: block;
-      color: var(--text-muted);
-    }
+    /* Form Fields */
+    .field-wrap { display: flex; flex-direction: column; gap: 6px; }
+    .field-lbl { font-size: 12px; font-weight: 700; color: var(--text-muted); }
     .field-control {
       width: 100%;
-      padding: 12px 14px;
+      height: 48px;
+      padding: 0 14px;
       border-radius: 14px;
       border: 1px solid var(--border);
       background: var(--surface-variant);
       color: var(--text);
+      font-size: 14px;
       font-family: inherit;
-      font-size: 15px;
-      outline: none;
     }
-    .field-control:focus { border-color: var(--primary); }
-
-    .primary-btn {
+    .field-control:focus {
+      outline: 2px solid var(--primary);
+      border-color: transparent;
+    }
+    .btn-submit {
       width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      height: 50px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
       border: none;
-      border-radius: 16px;
-      font-weight: 800;
       font-size: 15px;
+      font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 6px 18px rgba(108, 60, 233, 0.35);
-      margin-top: 10px;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-submit:active { transform: scale(0.98); }
+
+    /* Guide Section Cards */
+    .guide-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .guide-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .guide-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .guide-title { font-size: 15px; font-weight: 800; color: var(--text); }
+    .guide-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+    .guide-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12.5px;
+      color: var(--text);
+    }
+    .step-bullet {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
     }
 
-    /* RTL */
-    body.rtl {
-      direction: rtl;
-      font-family: var(--font-ur);
+    /* Profile Pic upload preview */
+    .profile-upload-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--surface-variant);
+      border-radius: 20px;
+      border: 2px dashed var(--border);
     }
-    body.rtl .fab-button {
-      right: auto;
-      left: 24px;
+    .preview-avatar-circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 800;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(96, 40, 228, 0.3);
     }
+    .preview-avatar-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .upload-btn-label {
+      padding: 8px 16px;
+      background: var(--primary);
+      color: white;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hidden-file-input { display: none; }
   </style>
 </head>
 <body>
 
 <div class="app-root">
   <div class="app-container">
-    <!-- Header with Ali 👋 greeting -->
+    
+    <!-- Top Header with Mohsin 👋 Greeting & Profile Picture -->
     <header class="top-header">
-      <div class="user-greeting">
-        <span class="greeting-sub" id="greetingTimeText">Good Morning,</span>
-        <h1 class="greeting-title" id="greetingNameText">Ali 👋</h1>
+      <div class="user-greeting" onclick="openProfileModal()">
+        <span class="greeting-sub" id="greetingTimeText">
+          <span class="material-symbols-rounded" style="font-size:14px; color:#F59E0B;">wb_sunny</span>
+          <span id="greetingTimeLabel">Good Day</span>
+        </span>
+        <h1 class="greeting-title" id="greetingNameText">Mohsin 👋</h1>
       </div>
       <div class="header-actions">
-        <button class="lang-pill" style="background:#00C48C; color:white; display:flex; align-items:center; gap:4px; font-weight:800;" onclick="document.getElementById('apkDownloadModal').classList.add('open')">
-          <span class="material-symbols-rounded" style="font-size:16px;">download</span> APK
+        <button class="icon-btn" onclick="openTab('guide')" title="User Guide / رہنمائی">
+          <span class="material-symbols-rounded" style="color:var(--primary);">help_outline</span>
         </button>
-        <button class="icon-btn" onclick="openTab('calc')" title="Calculator">
-          <span class="material-symbols-rounded">calculate</span>
-        </button>
-        <button class="icon-btn" onclick="openTab('ai')" title="AI Assistant">
-          <span class="material-symbols-rounded">auto_awesome</span>
+        <button class="icon-btn" onclick="toggleTheme()" title="Theme Toggle">
+          <span class="material-symbols-rounded" id="themeIcon">dark_mode</span>
         </button>
         <button class="lang-pill" id="langSwitchBtn" onclick="toggleAppLanguage()">اردو</button>
-        <div class="avatar-btn" onclick="openTab('settings')" title="User Profile">
-          Ali
+        
+        <!-- Profile Picture Avatar -->
+        <div class="avatar-wrapper" onclick="openProfileModal()" title="Mohsin's Profile & Photo">
+          <div class="avatar-btn" id="headerAvatarBtn">
+            <span id="headerAvatarInitial">M</span>
+          </div>
+          <div class="avatar-online-dot"></div>
         </div>
       </div>
     </header>
 
-    <!-- Content Screen Area -->
+    <!-- Main Content Viewport -->
     <main class="content-scroll" id="contentViewport">
-      <!-- Rendered dynamically -->
+      <!-- Injected via JavaScript -->
     </main>
 
     <!-- Floating Action Button -->
-    <button class="fab-button" onclick="openAddModal()">
+    <button class="fab-button" onclick="openAddModal()" title="Add Expense or Bill">
       <span class="material-symbols-rounded">add</span>
     </button>
 
-    <!-- Bottom Navigation Bar (exact match with reference Image 2) -->
+    <!-- Bottom Navigation Bar (5 Hub Tabs) -->
     <nav class="bottom-bar">
       <button class="bar-item active" id="tabBtnDashboard" onclick="openTab('dashboard')">
         <span class="material-symbols-rounded">home</span>
         <span class="tab-label" data-en="Dashboard" data-ur="ڈیش بورڈ">Dashboard</span>
       </button>
-      <button class="bar-item" id="tabBtnSales" onclick="openTab('sales')">
-        <span class="material-symbols-rounded">shopping_bag</span>
-        <span class="tab-label" data-en="Sales" data-ur="آمدن/سیل">Sales</span>
+      <button class="bar-item" id="tabBtnBills" onclick="openTab('bills')">
+        <span class="material-symbols-rounded">receipt_long</span>
+        <span class="tab-label" data-en="Bills & Fees" data-ur="بلز و فیس">Bills & Fees</span>
       </button>
-      <button class="bar-item" id="tabBtnReports" onclick="openTab('reports')">
-        <span class="material-symbols-rounded">bar_chart</span>
-        <span class="tab-label" data-en="Reports" data-ur="رپورٹس">Reports</span>
+      <button class="bar-item" id="tabBtnHabits" onclick="openTab('habits')">
+        <span class="material-symbols-rounded">psychology</span>
+        <span class="tab-label" data-en="Habits & Health" data-ur="عادات و صحت">Habits & Health</span>
       </button>
-      <button class="bar-item" id="tabBtnOverview" onclick="openTab('overview')">
-        <span class="material-symbols-rounded">inventory_2</span>
-        <span class="tab-label" data-en="Overview" data-ur="اوور ویو">Overview</span>
+      <button class="bar-item" id="tabBtnRoutine" onclick="openTab('routine')">
+        <span class="material-symbols-rounded">checklist</span>
+        <span class="tab-label" data-en="Daily Life" data-ur="روزمرہ کام">Daily Life</span>
       </button>
-      <button class="bar-item" id="tabBtnMore" onclick="openTab('settings')">
-        <span class="material-symbols-rounded">grid_view</span>
-        <span class="tab-label" data-en="More" data-ur="مزید">More</span>
+      <button class="bar-item" id="tabBtnGuide" onclick="openTab('guide')">
+        <span class="material-symbols-rounded">menu_book</span>
+        <span class="tab-label" data-en="User Guide" data-ur="رہنمائی">User Guide</span>
       </button>
     </nav>
   </div>
+</div>
 
-  <!-- Add Transaction Modal -->
-  <div class="modal-backdrop" id="addTxModal">
-    <div class="modal-content">
-      <h3 style="font-weight:800; font-size:18px; margin-bottom:14px;">Add New Record</h3>
-      <div class="field-wrap">
-        <label class="field-lbl">Type</label>
-        <div style="display:flex; gap:8px;">
-          <button type="button" class="lang-pill" id="typeSalesBtn" onclick="setEntryType('INCOME')" style="flex:1; padding:10px; justify-content:center;">Sales / Income (+)</button>
-          <button type="button" class="lang-pill" id="typeExpBtn" onclick="setEntryType('EXPENSE')" style="flex:1; padding:10px; justify-content:center; background:var(--surface-variant); color:var(--text);">Expense (-)</button>
-        </div>
-      </div>
-      <div class="field-wrap">
-        <label class="field-lbl">Amount (PKR)</label>
-        <input type="number" class="field-control" id="modalAmount" placeholder="e.g. 84250" required>
-      </div>
-      <div class="field-wrap">
-        <label class="field-lbl">Category / Branch</label>
-        <select class="field-control" id="modalCategory">
-          <option value="Islamabad Branch">Islamabad Branch</option>
-          <option value="Lahore Branch">Lahore Branch</option>
-          <option value="Karachi Branch">Karachi Branch</option>
-          <option value="Online Store">Online Store</option>
-          <option value="Retail Sales">Retail Sales</option>
-          <option value="Food & Grocery">Food & Grocery (راشن)</option>
-          <option value="Petrol / Fuel">Petrol / Fuel (پیٹرول)</option>
-          <option value="Electricity Bill">Electricity Bill (LESCO)</option>
-          <option value="Gas Bill">Gas Bill (SNGPL)</option>
-        </select>
-      </div>
-      <div class="field-wrap">
-        <label class="field-lbl">Description</label>
-        <input type="text" class="field-control" id="modalDesc" placeholder="e.g. Daily Cash Sales">
-      </div>
-      <button class="primary-btn" onclick="confirmAddRecord()">Save Record</button>
-      <button class="primary-btn" style="background:var(--surface-variant); color:var(--text); box-shadow:none; margin-top:8px;" onclick="closeModal('addTxModal')">Cancel</button>
+<!-- Add Record Modal (Quick Categories: School Fee, Food, Electric, Gas, Other Bills, etc.) -->
+<div class="modal-backdrop" id="addTxModal">
+  <div class="modal-content">
+    <div class="modal-header-row">
+      <h3 class="modal-title" id="addModalTitleText">Add New Expense or Bill</h3>
+      <button class="close-btn" onclick="closeModal('addTxModal')">
+        <span class="material-symbols-rounded">close</span>
+      </button>
     </div>
+
+    <div class="field-wrap">
+      <label class="field-lbl">Category / مقصد منتخب کریں</label>
+      <select class="field-control" id="modalCategory" onchange="onCategorySelectChange()">
+        <optgroup label="Essential Bills & Fees (بلز و فیس)">
+          <option value="School Fee">🏫 School Fee (بچوں کی سکول/کالج فیس)</option>
+          <option value="Electricity Bill">⚡ Electric Bill (بجلی کا بل - LESCO/KE/IESCO)</option>
+          <option value="Gas Bill">🔥 Gas Bill (سوئی گیس کا بل - SNGPL/SSGC)</option>
+          <option value="Internet / Wi-Fi">🌐 Internet & Wi-Fi Bill (انٹرنیٹ بل)</option>
+          <option value="Water Bill">💧 Water Bill (پانی کا بل - WASA)</option>
+          <option value="Other Bills">📑 Other Bills (دیگر بلز اور واجبات)</option>
+        </optgroup>
+        <optgroup label="Daily Living Expenses (روزمرہ اخراجات)">
+          <option value="Food & Ration" selected>🍲 Food Expense & Ration (کھانا پینا اور راشن)</option>
+          <option value="Petrol / Transport">⛽ Petrol & Transport (پیٹرول اور کرایہ)</option>
+          <option value="House Rent">🏠 House Rent (گھر کا کرایہ)</option>
+          <option value="Medical & Medicine">💊 Medical & Health (دوائی اور علاج)</option>
+          <option value="Other Expenses">💼 Other Expenses (دیگر متفرق اخراجات)</option>
+        </optgroup>
+        <optgroup label="Income / Sales (آمدنی)">
+          <option value="Salary">💼 Monthly Salary (تنخواہ)</option>
+          <option value="Business Sales">🏪 Daily Business Sales (دکان/کاروبار کی کمائی)</option>
+          <option value="Other Income">💰 Other Income (دیگر آمدنی)</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="field-wrap">
+      <label class="field-lbl">Type (قسم)</label>
+      <div style="display:flex; gap:8px;">
+        <button type="button" class="lang-pill" id="typeExpBtn" onclick="setEntryType('EXPENSE')" style="flex:1; justify-content:center; background:var(--primary-container); color:var(--on-primary-container);">Expense / خرچہ (-)</button>
+        <button type="button" class="lang-pill" id="typeIncBtn" onclick="setEntryType('INCOME')" style="flex:1; justify-content:center; background:var(--surface-variant); color:var(--text);">Income / آمدن (+)</button>
+      </div>
+    </div>
+
+    <div class="field-wrap">
+      <label class="field-lbl">Amount (رقم - PKR)</label>
+      <input type="number" class="field-control" id="modalAmount" placeholder="e.g. 15000" required>
+    </div>
+
+    <div class="field-wrap">
+      <label class="field-lbl">Description / تفصیل</label>
+      <input type="text" class="field-control" id="modalDesc" placeholder="e.g. October School fee for Ahmad / بجلی بل 450 یونٹ">
+    </div>
+
+    <div class="field-wrap">
+      <label class="field-lbl">Due Date / ادائیگی کی تاریخ</label>
+      <input type="date" class="field-control" id="modalDueDate">
+    </div>
+
+    <button class="btn-submit" onclick="confirmAddRecord()">
+      <span class="material-symbols-rounded">check_circle</span>
+      <span id="saveBtnText">محفوظ کریں (Save Record)</span>
+    </button>
   </div>
+</div>
 
-  <!-- Voice Input Modal -->
-  <div class="modal-backdrop" id="voiceModal">
-    <div class="modal-content">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
-        <span class="material-symbols-rounded" style="color:var(--primary); font-size:32px;">mic</span>
-        <h3 style="font-weight:800;">Voice Input</h3>
-      </div>
-      <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">Speak or type your daily sales & expense entry:</p>
-      <input type="text" class="field-control" id="voiceInputField" placeholder="e.g. Aj 84250 rupay ki sales hui aur 3500 petrol par kharch kiye">
-      <div style="display:flex; flex-direction:column; gap:6px; margin:12px 0;">
-        <span style="font-size:11px; font-weight:700;">Sample:</span>
-        <button type="button" class="lang-pill" style="text-align:left; background:var(--surface-variant); color:var(--text);" onclick="document.getElementById('voiceInputField').value = this.innerText;">Aj 84250 rupay ki sales hui aur 3500 petrol par kharch kiye</button>
-      </div>
-      <button class="primary-btn" onclick="executeVoiceParse()">Confirm & Save</button>
-      <button class="primary-btn" style="background:var(--surface-variant); color:var(--text); box-shadow:none; margin-top:8px;" onclick="closeModal('voiceModal')">Cancel</button>
+<!-- Profile & Photo Upload Modal -->
+<div class="modal-backdrop" id="profileModal">
+  <div class="modal-content">
+    <div class="modal-header-row">
+      <h3 class="modal-title">User Profile & Picture (پروفائل و تصویر)</h3>
+      <button class="close-btn" onclick="closeModal('profileModal')">
+        <span class="material-symbols-rounded">close</span>
+      </button>
     </div>
-  </div>
 
-  <!-- GitHub Push Guide Modal -->
-  <div class="modal-backdrop" id="githubGuideModal">
-    <div class="modal-content">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
-        <span class="material-symbols-rounded" style="color:var(--primary); font-size:32px;">cloud_upload</span>
-        <h3 style="font-weight:800;">Push to GitHub</h3>
+    <div class="profile-upload-area">
+      <div class="preview-avatar-circle" id="previewAvatarCircle">
+        <span id="previewAvatarInitial">M</span>
       </div>
-      <div style="font-size:13px; line-height:1.6; margin-bottom:12px;">
-        <p><strong>طریقہ 1 (AI Studio مینو سے):</strong><br>
-        اوپر دائیں Export / Share مینو سے <strong>Push to GitHub</strong> منتخب کریں اور ریپوزٹری کا نام <code>rozana</code> منتخب کریں۔</p>
-        <p style="margin-top:8px;"><strong>طریقہ 2 (Terminal Commands):</strong></p>
-      </div>
-      <div style="background:var(--surface-variant); padding:12px; border-radius:14px; font-size:12px; font-family:monospace; line-height:1.6; margin-bottom:12px;">
-        git remote add origin https://github.com/YOUR_USERNAME/rozana.git<br>
-        git branch -M main<br>
-        git push -u origin main
-      </div>
-      <button class="primary-btn" onclick="closeModal('githubGuideModal')">Got it / سمجھ آگئی</button>
+      <label class="upload-btn-label">
+        <span class="material-symbols-rounded" style="font-size:18px;">photo_camera</span>
+        <span>Choose / Upload Pic (اپنی تصویر لگائیں)</span>
+        <input type="file" accept="image/*" class="hidden-file-input" id="profilePicInput" onchange="handleProfilePicUpload(event)">
+      </label>
+      <button type="button" onclick="removeProfilePic()" style="background:none; border:none; color:var(--expense); font-size:12px; font-weight:700; cursor:pointer;">
+        Remove Photo (تصویر ہٹائیں)
+      </button>
     </div>
-  </div>
 
-  <!-- APK File Download & Installation Modal -->
-  <div class="modal-backdrop" id="apkDownloadModal">
-    <div class="modal-content">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
-        <span class="material-symbols-rounded" style="color:#00C48C; font-size:36px;">android</span>
-        <div>
-          <h3 style="font-weight:800; font-size:18px;">Download APK & Install</h3>
-          <span style="font-size:12px; color:var(--text-muted);">Rozana / TransactFlow Mobile App</span>
-        </div>
-      </div>
-
-      <div style="background:var(--primary-container); border:1px solid var(--primary-light); padding:14px; border-radius:16px; margin-bottom:14px;">
-        <div style="font-size:13px; font-weight:800; color:var(--on-primary-container); margin-bottom:4px;">
-          🚀 براہ راست موبائل میں انسٹالیشن (Direct Mobile App)
-        </div>
-        <p style="font-size:12px; color:var(--on-primary-container); line-height:1.5; margin-bottom:10px;">
-          بغیر کسی فائل ڈاؤن لوڈ کیے اپنے اینڈرائیڈ موبائل پر اصلی ایپ کی طرح انسٹال کریں:
-        </p>
-        <a href="https://ais-pre-csznmc4fckb7mu6v5pcya6-896921133693.asia-southeast1.run.app" target="_blank" style="display:block; text-align:center; padding:10px; background:var(--primary); color:white; border-radius:12px; text-decoration:none; font-weight:700; font-size:13px;">
-          موبائل میں لائیو لنک کھولیں ↗
-        </a>
-      </div>
-
-      <div style="display:flex; flex-direction:column; gap:10px; font-size:13px; line-height:1.6; margin-bottom:14px;">
-        <div style="background:var(--surface-variant); padding:12px; border-radius:14px;">
-          <strong>طریقہ 1 (AI Studio مینو سے APK فائل بنانا):</strong><br>
-          1. اوپر دائیں کونے میں <strong>Settings (⚙️)</strong> یا <strong>Export</strong> بٹن پر کلک کریں۔<br>
-          2. <strong>"Generate APK"</strong> منتخب کریں۔<br>
-          3. سسٹم چند سیکنڈ میں مکمل تیار شدہ <code>.apk</code> ڈاؤن لوڈ لنک اور QR کوڈ بنا دے گا جسے آپ موبائل پر انسٹال کر سکتے ہیں۔
-        </div>
-
-        <div style="background:var(--surface-variant); padding:12px; border-radius:14px;">
-          <strong>طریقہ 2 (موبائل کروم انسٹالر):</strong><br>
-          موبائل کے کروم براؤزر میں لنک کھولیں اور اوپر تین ڈاٹس <strong>(⋮)</strong> دبا کر <strong>"Install App"</strong> یا <strong>"Add to Home screen"</strong> پر کلک کریں۔ ایپ موبائل کی ہوم اسکرین پر آ جائے گی۔
-        </div>
-
-        <div style="background:var(--surface-variant); padding:12px; border-radius:14px;">
-          <strong>طریقہ 3 (Android Studio سے APK):</strong><br>
-          اوپر سے <strong>Export as ZIP</strong> ڈاؤن لوڈ کریں یا <strong>GitHub</strong> پر پش کریں۔ پھر Android Studio میں کھول کر <code>Build &gt; Build APK</code> پر کلک کریں۔
-        </div>
-      </div>
-
-      <button class="primary-btn" onclick="closeModal('apkDownloadModal')">بند کریں (Close)</button>
+    <div class="field-wrap">
+      <label class="field-lbl">Your Name (آپ کا نام)</label>
+      <input type="text" class="field-control" id="profileNameInput" value="Mohsin" placeholder="Enter name">
     </div>
+
+    <div class="field-wrap">
+      <label class="field-lbl">City / شہر</label>
+      <input type="text" class="field-control" id="profileCityInput" value="Lahore, Pakistan">
+    </div>
+
+    <button class="btn-submit" onclick="saveProfileChanges()">
+      <span class="material-symbols-rounded">save</span>
+      <span>Save Profile (تبدیلیاں محفوظ کریں)</span>
+    </button>
   </div>
 </div>
 
 <script>
-var appLang = 'en';
-var currentTab = 'dashboard';
-var currentEntryType = 'INCOME';
+// State & Storage
+let appLang = localStorage.getItem('rozana_lang') || 'en';
+let isDarkMode = localStorage.getItem('rozana_dark') === 'true';
+let userName = localStorage.getItem('rozana_user_name') || 'Mohsin';
+let userPhoto = localStorage.getItem('rozana_user_photo') || '';
+let currentTab = 'dashboard';
+let currentEntryType = 'EXPENSE';
 
-var salesTotal = 84250;
-var todayOrders = 142;
-var lowStock = 7;
-var inventoryProducts = 12548;
-
-var records = [
-  { id: 1, type: 'INCOME', amount: 84250, branch: 'Islamabad Branch', desc: 'Daily POS Sales', date: 'Today' },
-  { id: 2, type: 'INCOME', amount: 32100, branch: 'Lahore Branch', desc: 'Counter Sales', date: 'Today' },
-  { id: 3, type: 'EXPENSE', amount: 6850, branch: 'Islamabad Branch', desc: 'Electricity Bill (LESCO)', date: 'Due in 3d' },
-  { id: 4, type: 'EXPENSE', amount: 3500, branch: 'General', desc: 'Delivery Fuel & Petrol', date: 'Yesterday' }
+// Data collections
+let records = JSON.parse(localStorage.getItem('rozana_records')) || [
+  { id: 1, type: 'EXPENSE', category: 'School Fee', amount: 18500, desc: 'Army Public School Monthly Fee', date: 'Oct 10', isPaid: true },
+  { id: 2, type: 'EXPENSE', category: 'Electricity Bill', amount: 24300, desc: 'LESCO 410 Units Consumer Bill', date: 'Oct 15', isPaid: false },
+  { id: 3, type: 'EXPENSE', category: 'Food & Ration', amount: 35000, desc: 'Monthly Ration, Meat & Dairy', date: 'Oct 02', isPaid: true },
+  { id: 4, type: 'EXPENSE', category: 'Gas Bill', amount: 3800, desc: 'SNGPL Gas Bill', date: 'Oct 18', isPaid: false },
+  { id: 5, type: 'EXPENSE', category: 'Other Expenses', amount: 8500, desc: 'Bike tuning and petrol', date: 'Oct 08', isPaid: true },
+  { id: 6, type: 'INCOME', category: 'Salary', amount: 165000, desc: 'Monthly Executive Salary', date: 'Oct 01', isPaid: true }
 ];
 
-var branches = [
-  { name: 'Islamabad Branch', status: 'Online', dot: 'dot-green', amount: 'PKR 45,200' },
-  { name: 'Lahore Branch', status: 'Online', dot: 'dot-green', amount: 'PKR 32,100' },
-  { name: 'Karachi Branch', status: 'Syncing', dot: 'dot-purple', amount: 'PKR 6,950' }
+let habits = JSON.parse(localStorage.getItem('rozana_habits')) || [
+  { id: 'smoking', name: 'Smoking Free (سگریٹ سے پرہیز)', isBadHabit: true, streakDays: 14, urgesResisted: 22, startDate: '2026-09-28' },
+  { id: 'screen', name: 'No Mindless Screen Time (فضول سکرین سے پرہیز)', isBadHabit: true, streakDays: 5, urgesResisted: 12, startDate: '2026-10-07' },
+  { id: 'junkfood', name: 'No Junk Food & Soda (فاسٹ فوڈ و کولڈ ڈرنک پرہیز)', isBadHabit: true, streakDays: 9, urgesResisted: 16, startDate: '2026-10-03' },
+  { id: 'namaz', name: '5 Times Namaz (پانچ وقت باجماعت نماز)', isBadHabit: false, streakDays: 21, urgesResisted: 0, startDate: '2026-09-20' },
+  { id: 'reading', name: 'Quran / Book Reading (روزانہ تلاوت و مطالعہ)', isBadHabit: false, streakDays: 12, urgesResisted: 0, startDate: '2026-09-30' }
 ];
 
-function formatPKR(num) {
-  return 'PKR ' + num.toLocaleString();
+let waterGlasses = parseInt(localStorage.getItem('rozana_water') || '4', 10);
+
+let routineTasks = JSON.parse(localStorage.getItem('rozana_routine')) || [
+  { id: 101, title: 'Fajr Prayer & Quran Tilawat (نمازِ فجر و تلاوت)', time: '05:30 AM', category: 'Morning', done: true },
+  { id: 102, title: '30 Mins Morning Walk & Pushups (صبح کی واک و ورزش)', time: '06:15 AM', category: 'Morning', done: true },
+  { id: 103, title: 'School Drop & Fee Payment (بچوں کو سکول و فیس جمع)', time: '07:45 AM', category: 'Morning', done: false },
+  { id: 104, title: 'Office / Shop Core Tasks (دکان یا دفتر کے اہم کام)', time: '10:00 AM', category: 'Afternoon', done: false },
+  { id: 105, title: 'Pay LESCO Electricity & Gas Bill (بجلی و گیس بل ادا کرنا)', time: '04:00 PM', category: 'Evening', done: false },
+  { id: 106, title: 'Bring Grocery & Fresh Fruits (راشن اور پھل لانا)', time: '06:30 PM', category: 'Evening', done: false },
+  { id: 107, title: 'Night Family Time & Daily Accounts (حساب کتاب و نیند)', time: '10:30 PM', category: 'Night', done: false }
+];
+
+// Initialize on Load
+window.addEventListener('DOMContentLoaded', () => {
+  applyTheme();
+  applyLanguage();
+  updateProfileUI();
+  renderTabContent();
+});
+
+function applyTheme() {
+  if (isDarkMode) {
+    document.body.classList.add('dark-mode');
+    document.getElementById('themeIcon').innerText = 'light_mode';
+  } else {
+    document.body.classList.remove('dark-mode');
+    document.getElementById('themeIcon').innerText = 'dark_mode';
+  }
+}
+
+function toggleTheme() {
+  isDarkMode = !isDarkMode;
+  localStorage.setItem('rozana_dark', isDarkMode);
+  applyTheme();
+}
+
+function applyLanguage() {
+  if (appLang === 'ur') {
+    document.body.classList.add('rtl');
+    document.getElementById('langSwitchBtn').innerText = 'English';
+    document.getElementById('greetingNameText').innerText = userName + ' صاحب 👋';
+    document.getElementById('greetingTimeLabel').innerText = 'خوش آمدید';
+  } else {
+    document.body.classList.remove('rtl');
+    document.getElementById('langSwitchBtn').innerText = 'اردو';
+    document.getElementById('greetingNameText').innerText = userName + ' 👋';
+    document.getElementById('greetingTimeLabel').innerText = 'Good Day';
+  }
 }
 
 function toggleAppLanguage() {
   appLang = appLang === 'en' ? 'ur' : 'en';
-  document.body.classList.toggle('rtl', appLang === 'ur');
-  document.getElementById('langSwitchBtn').innerText = appLang === 'en' ? 'اردو' : 'English';
-  document.getElementById('greetingNameText').innerText = appLang === 'en' ? 'Ali 👋' : 'علی صاحب 👋';
-  document.getElementById('greetingTimeText').innerText = appLang === 'en' ? 'Good Morning,' : 'صبح بخیر،';
-  document.querySelectorAll('.tab-label').forEach(function(el) {
-    el.innerText = el.getAttribute('data-' + appLang);
-  });
+  localStorage.setItem('rozana_lang', appLang);
+  applyLanguage();
   renderTabContent();
 }
 
-function toggleTheme() {
-  document.body.classList.toggle('dark-mode');
+function updateProfileUI() {
+  const initial = userName.charAt(0).toUpperCase();
+  document.getElementById('headerAvatarInitial').innerText = initial;
+  document.getElementById('previewAvatarInitial').innerText = initial;
+
+  const headerBtn = document.getElementById('headerAvatarBtn');
+  const previewCircle = document.getElementById('previewAvatarCircle');
+
+  if (userPhoto) {
+    headerBtn.innerHTML = `<img src="${userPhoto}" class="avatar-img" alt="${userName}">`;
+    previewCircle.innerHTML = `<img src="${userPhoto}" class="avatar-img" alt="${userName}">`;
+  } else {
+    headerBtn.innerHTML = `<span id="headerAvatarInitial">${initial}</span>`;
+    previewCircle.innerHTML = `<span id="previewAvatarInitial">${initial}</span>`;
+  }
+  document.getElementById('profileNameInput').value = userName;
 }
 
-function openTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.bar-item').forEach(function(b) { b.classList.remove('active'); });
-  if (tab === 'dashboard') document.getElementById('tabBtnDashboard').classList.add('active');
-  if (tab === 'sales') document.getElementById('tabBtnSales').classList.add('active');
-  if (tab === 'reports') document.getElementById('tabBtnReports').classList.add('active');
-  if (tab === 'overview') document.getElementById('tabBtnOverview').classList.add('active');
-  if (tab === 'settings') document.getElementById('tabBtnMore').classList.add('active');
-  renderTabContent();
+function handleProfilePicUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    userPhoto = e.target.result;
+    localStorage.setItem('rozana_user_photo', userPhoto);
+    updateProfileUI();
+  };
+  reader.readAsDataURL(file);
 }
 
-function openAddModal() {
-  document.getElementById('addTxModal').classList.add('open');
+function removeProfilePic() {
+  userPhoto = '';
+  localStorage.removeItem('rozana_user_photo');
+  updateProfileUI();
 }
+
+function saveProfileChanges() {
+  const newName = document.getElementById('profileNameInput').value.trim();
+  if (newName) {
+    userName = newName;
+    localStorage.setItem('rozana_user_name', userName);
+    applyLanguage();
+    updateProfileUI();
+  }
+  closeModal('profileModal');
+}
+
+function openProfileModal() {
+  document.getElementById('profileModal').classList.add('open');
+}
+
 function closeModal(id) {
   document.getElementById(id).classList.remove('open');
 }
 
+function openAddModal(preCategory = null) {
+  if (preCategory) {
+    document.getElementById('modalCategory').value = preCategory;
+    onCategorySelectChange();
+  }
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('modalDueDate').value = today;
+  document.getElementById('addTxModal').classList.add('open');
+}
+
+function onCategorySelectChange() {
+  const cat = document.getElementById('modalCategory').value;
+  if (cat.includes('Salary') || cat.includes('Sales') || cat.includes('Income')) {
+    setEntryType('INCOME');
+  } else {
+    setEntryType('EXPENSE');
+  }
+}
+
 function setEntryType(t) {
   currentEntryType = t;
-  document.getElementById('typeSalesBtn').style.background = t === 'INCOME' ? 'var(--primary-container)' : 'var(--surface-variant)';
-  document.getElementById('typeSalesBtn').style.color = t === 'INCOME' ? 'var(--on-primary-container)' : 'var(--text)';
-  document.getElementById('typeExpBtn').style.background = t === 'EXPENSE' ? 'var(--primary-container)' : 'var(--surface-variant)';
-  document.getElementById('typeExpBtn').style.color = t === 'EXPENSE' ? 'var(--on-primary-container)' : 'var(--text)';
+  const expBtn = document.getElementById('typeExpBtn');
+  const incBtn = document.getElementById('typeIncBtn');
+  if (t === 'EXPENSE') {
+    expBtn.style.background = 'var(--primary-container)';
+    expBtn.style.color = 'var(--on-primary-container)';
+    incBtn.style.background = 'var(--surface-variant)';
+    incBtn.style.color = 'var(--text)';
+  } else {
+    incBtn.style.background = 'var(--primary-container)';
+    incBtn.style.color = 'var(--on-primary-container)';
+    expBtn.style.background = 'var(--surface-variant)';
+    expBtn.style.color = 'var(--text)';
+  }
 }
 
 function confirmAddRecord() {
-  var amt = parseFloat(document.getElementById('modalAmount').value);
-  var cat = document.getElementById('modalCategory').value;
-  var desc = document.getElementById('modalDesc').value || cat;
-  if (!amt || amt <= 0) return alert('Please enter valid amount');
-  if (currentEntryType === 'INCOME') salesTotal += amt;
+  const amt = parseFloat(document.getElementById('modalAmount').value);
+  const cat = document.getElementById('modalCategory').value;
+  const desc = document.getElementById('modalDesc').value || cat;
+  const dueDate = document.getElementById('modalDueDate').value || 'Today';
+
+  if (!amt || amt <= 0) {
+    alert(appLang === 'ur' ? 'برائے مہربانی درست رقم درج کریں' : 'Please enter a valid amount');
+    return;
+  }
+
   records.unshift({
     id: Date.now(),
     type: currentEntryType,
+    category: cat,
     amount: amt,
-    branch: cat,
     desc: desc,
-    date: 'Today'
+    date: dueDate,
+    isPaid: currentEntryType === 'EXPENSE' ? false : true
   });
+
+  localStorage.setItem('rozana_records', JSON.stringify(records));
   closeModal('addTxModal');
   document.getElementById('modalAmount').value = '';
   document.getElementById('modalDesc').value = '';
   renderTabContent();
 }
 
-function executeVoiceParse() {
-  var txt = document.getElementById('voiceInputField').value.toLowerCase();
-  var match = txt.match(/(\d+)/g);
-  if (match) {
-    var amt = parseFloat(match[0]);
-    salesTotal += amt;
-    records.unshift({
-      id: Date.now(),
-      type: 'INCOME',
-      amount: amt,
-      branch: 'Voice Entry',
-      desc: txt,
-      date: 'Today'
-    });
-    alert('Record saved: ' + formatPKR(amt));
+function toggleBillPaid(id) {
+  const item = records.find(r => r.id === id);
+  if (item) {
+    item.isPaid = !item.isPaid;
+    localStorage.setItem('rozana_records', JSON.stringify(records));
+    renderTabContent();
   }
-  closeModal('voiceModal');
+}
+
+function toggleTaskDone(id) {
+  const t = routineTasks.find(x => x.id === id);
+  if (t) {
+    t.done = !t.done;
+    localStorage.setItem('rozana_routine', JSON.stringify(routineTasks));
+    renderTabContent();
+  }
+}
+
+function addCustomTask() {
+  const title = prompt(appLang === 'ur' ? 'نیا کام درج کریں:' : 'Enter task name:');
+  if (!title) return;
+  const time = prompt(appLang === 'ur' ? 'وقت (مثلاً 04:30 PM):' : 'Time (e.g. 04:30 PM):') || 'Anytime';
+  routineTasks.push({
+    id: Date.now(),
+    title: title,
+    time: time,
+    category: 'Daily',
+    done: false
+  });
+  localStorage.setItem('rozana_routine', JSON.stringify(routineTasks));
   renderTabContent();
 }
 
-// Sparkline SVG generator
-function renderSparklineSVG() {
-  return `
-    <svg class="sparkline-svg" viewBox="0 0 100 32" fill="none">
-      <path d="M 0,26 Q 25,6 45,20 T 75,8 T 100,14" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-      <circle cx="100" cy="14" r="3.5" fill="#FFFFFF" />
-    </svg>
-  `;
+function fillWaterGlass(index) {
+  waterGlasses = index;
+  localStorage.setItem('rozana_water', waterGlasses);
+  renderTabContent();
 }
 
+function resistUrge(habitId) {
+  const h = habits.find(x => x.id === habitId);
+  if (h) {
+    h.urgesResisted = (h.urgesResisted || 0) + 1;
+    localStorage.setItem('rozana_habits', JSON.stringify(habits));
+    alert(appLang === 'ur' ? `ماشاءاللہ! آپ نے ایک اور وسوسہ شکست دیا (+1 کامیابی)! کل کامیابیاں: ${h.urgesResisted}` : `Awesome! You resisted the urge (+1 Victory)! Total resists: ${h.urgesResisted}`);
+    renderTabContent();
+  }
+}
+
+function resetHabitStreak(habitId) {
+  if (confirm(appLang === 'ur' ? 'کیا آپ اسٹریک ری سیٹ کرنا چاہتے ہیں؟ گھبرائیں نہیں، دوبارہ عزم سے شروع کریں!' : 'Reset streak? Stay strong, every fresh start is a step to victory!')) {
+    const h = habits.find(x => x.id === habitId);
+    if (h) {
+      h.streakDays = 0;
+      h.startDate = new Date().toISOString().split('T')[0];
+      localStorage.setItem('rozana_habits', JSON.stringify(habits));
+      renderTabContent();
+    }
+  }
+}
+
+function openTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.bar-item').forEach(b => b.classList.remove('active'));
+  if (tab === 'dashboard') document.getElementById('tabBtnDashboard').classList.add('active');
+  if (tab === 'bills') document.getElementById('tabBtnBills').classList.add('active');
+  if (tab === 'habits') document.getElementById('tabBtnHabits').classList.add('active');
+  if (tab === 'routine') document.getElementById('tabBtnRoutine').classList.add('active');
+  if (tab === 'guide') document.getElementById('tabBtnGuide').classList.add('active');
+  renderTabContent();
+}
+
+function formatPKR(num) {
+  return 'Rs. ' + Math.round(num).toLocaleString('en-US');
+}
+
+// Main Render Function
 function renderTabContent() {
-  var vp = document.getElementById('contentViewport');
+  const vp = document.getElementById('contentViewport');
+  const isUr = appLang === 'ur';
+
+  const totalIncome = records.filter(r => r.type === 'INCOME').reduce((a, b) => a + b.amount, 0);
+  const totalExpense = records.filter(r => r.type === 'EXPENSE').reduce((a, b) => a + b.amount, 0);
+  const balance = totalIncome - totalExpense;
 
   if (currentTab === 'dashboard') {
     vp.innerHTML = `
-      <!-- Phone 1 Hero Card (matching reference Image 2) -->
+      <!-- Hero Financial Card -->
       <div class="hero-stat-card">
-        <div class="hero-header">
-          <span class="hero-subtitle">${appLang === 'ur' ? 'آج کی کل سیلز' : "Today's Sales"}</span>
-          <button class="hero-menu-btn" onclick="document.getElementById('voiceModal').classList.add('open')">
-            <span class="material-symbols-rounded" style="font-size:18px;">mic</span>
-          </button>
+        <div class="hero-subtitle">
+          <span>${isUr ? 'کل بچت / بیلنس' : 'Net Cash Balance'}</span>
+          <span style="background:rgba(255,255,255,0.2); padding:3px 8px; border-radius:10px; font-size:11px;">Pakistan PKR</span>
         </div>
-        <div class="hero-amount">${formatPKR(salesTotal)}</div>
-        <div class="hero-bottom-row">
-          <div class="stat-badge">
-            <span>↑ 12.5% vs Yesterday</span>
+        <div class="hero-amount">${formatPKR(balance)}</div>
+        <div class="hero-stats-row">
+          <div class="hero-sub-stat">
+            <span class="sub-stat-lbl">${isUr ? 'آمدنی' : 'Income'}</span>
+            <span class="sub-stat-val" style="color:#6EE7B7;">+${formatPKR(totalIncome)}</span>
           </div>
-          ${renderSparklineSVG()}
+          <div class="hero-sub-stat">
+            <span class="sub-stat-lbl">${isUr ? 'کل خرچے' : 'Expenses'}</span>
+            <span class="sub-stat-val" style="color:#FCA5A5;">-${formatPKR(totalExpense)}</span>
+          </div>
+          <div class="hero-sub-stat">
+            <span class="sub-stat-lbl">${isUr ? 'بلز و فیس' : 'Pending Bills'}</span>
+            <span class="sub-stat-val" style="color:#FDE68A;">${records.filter(r => r.type === 'EXPENSE' && !r.isPaid).length} Due</span>
+          </div>
         </div>
       </div>
 
-      <!-- Feature Badges Row (Live Reports, Multi Branch, Offline Mode, Auto Sync) -->
-      <div class="feature-badges-row">
-        <div class="feature-pill" onclick="openTab('reports')">
-          <div class="feature-icon-box" style="background:#F0EBFE; color:#6C3CE9;"><span class="material-symbols-rounded">bar_chart</span></div>
-          <div class="feature-pill-title">Live Reports</div>
+      <!-- Quick Action Buttons for requested categories -->
+      <div class="section-title">
+        <span>${isUr ? 'فوری اخراجات و بلز' : 'Quick Expenses & Bills'}</span>
+        <span class="badge">${isUr ? 'ایک کلک اندراج' : '1-Tap Entry'}</span>
+      </div>
+
+      <div class="quick-chips-grid">
+        <div class="chip-card" onclick="openAddModal('School Fee')">
+          <div class="chip-icon" style="background:#ECE6FD; color:#6028E4;">
+            <span class="material-symbols-rounded">school</span>
+          </div>
+          <span class="chip-title">${isUr ? 'سکول فیس' : 'School Fee'}</span>
         </div>
-        <div class="feature-pill" onclick="openTab('sales')">
-          <div class="feature-icon-box" style="background:#EBF3FE; color:#3B82F6;"><span class="material-symbols-rounded">store</span></div>
-          <div class="feature-pill-title">Multi Branch</div>
+
+        <div class="chip-card" onclick="openAddModal('Food & Ration')">
+          <div class="chip-icon" style="background:#E6F9F3; color:#00C48C;">
+            <span class="material-symbols-rounded">restaurant</span>
+          </div>
+          <span class="chip-title">${isUr ? 'کھانا راشن' : 'Food & Ration'}</span>
         </div>
-        <div class="feature-pill" onclick="alert('Offline Room Database active. Works 100% without internet!')">
-          <div class="feature-icon-box" style="background:#FDF2E9; color:#F59E0B;"><span class="material-symbols-rounded">wifi_off</span></div>
-          <div class="feature-pill-title">Offline Mode</div>
+
+        <div class="chip-card" onclick="openAddModal('Electricity Bill')">
+          <div class="chip-icon" style="background:#FEF6E7; color:#F59E0B;">
+            <span class="material-symbols-rounded">electric_bolt</span>
+          </div>
+          <span class="chip-title">${isUr ? 'بجلی بل' : 'Electric Bill'}</span>
         </div>
-        <div class="feature-pill" onclick="alert('Cloud & Git Sync status verified!')">
-          <div class="feature-icon-box" style="background:#E8F8F0; color:#10B981;"><span class="material-symbols-rounded">sync</span></div>
-          <div class="feature-pill-title">Auto Sync</div>
+
+        <div class="chip-card" onclick="openAddModal('Gas Bill')">
+          <div class="chip-icon" style="background:#FEECEB; color:#EF4444;">
+            <span class="material-symbols-rounded">local_fire_department</span>
+          </div>
+          <span class="chip-title">${isUr ? 'گیس بل' : 'Gas Bill'}</span>
+        </div>
+
+        <div class="chip-card" onclick="openAddModal('Internet / Wi-Fi')">
+          <div class="chip-icon" style="background:#EFF6FF; color:#2563EB;">
+            <span class="material-symbols-rounded">wifi</span>
+          </div>
+          <span class="chip-title">${isUr ? 'انٹرنیٹ بل' : 'Internet Bill'}</span>
+        </div>
+
+        <div class="chip-card" onclick="openAddModal('Water Bill')">
+          <div class="chip-icon" style="background:#E0F2FE; color:#0284C7;">
+            <span class="material-symbols-rounded">water_drop</span>
+          </div>
+          <span class="chip-title">${isUr ? 'پانی کا بل' : 'Water Bill'}</span>
+        </div>
+
+        <div class="chip-card" onclick="openAddModal('Other Expenses')">
+          <div class="chip-icon" style="background:#F5F3FF; color:#7C3AED;">
+            <span class="material-symbols-rounded">receipt</span>
+          </div>
+          <span class="chip-title">${isUr ? 'دیگر خرچ' : 'Other Expense'}</span>
+        </div>
+
+        <div class="chip-card" onclick="openAddModal('Other Bills')">
+          <div class="chip-icon" style="background:#FFF1F2; color:#E11D48;">
+            <span class="material-symbols-rounded">folder_open</span>
+          </div>
+          <span class="chip-title">${isUr ? 'دیگر بلز' : 'Other Bills'}</span>
         </div>
       </div>
 
-      <!-- Quick Actions Header & 4-Grid (exact match with reference Image 2) -->
-      <div class="section-title-row">
-        <h2 class="section-title">${appLang === 'ur' ? 'فوری ایکشنز' : 'Quick Actions'}</h2>
-        <span class="section-link" onclick="openTab('overview')">View all</span>
+      <!-- Clean Streak & Addiction Highlights -->
+      <div class="streak-banner" onclick="openTab('habits')">
+        <div class="streak-info">
+          <h3>${isUr ? 'بد عادتوں سے نجات کا سفر' : 'Clean & Healthy Streaks'}</h3>
+          <p>${isUr ? 'سگریٹ، سکرین ٹائم اور فاسٹ فوڈ سے پرہیز' : 'Smoking, Screen time & Junk food free'}</p>
+        </div>
+        <div class="streak-badge">
+          <div class="streak-num">14</div>
+          <div class="streak-lbl">${isUr ? 'دن کلین' : 'Days Clean'}</div>
+        </div>
       </div>
 
-      <div class="quick-actions-grid">
-        <div class="quick-squircle-card" onclick="openTab('overview')">
-          <div class="squircle-icon" style="background:#F0EBFE; color:#6C3CE9;">
-            <span class="material-symbols-rounded">inventory_2</span>
+      <!-- Daily Routine Quick View -->
+      <div class="card">
+        <div class="section-title">
+          <span>${isUr ? 'آج کے روزمرہ کام' : "Today's Routine & Tasks"}</span>
+          <span class="badge" onclick="openTab('routine')" style="cursor:pointer;">${isUr ? 'مکمل دیکھیں' : 'View All'}</span>
+        </div>
+        ${routineTasks.slice(0, 3).map(t => `
+          <div class="item-row" onclick="toggleTaskDone(${t.id})" style="cursor:pointer;">
+            <div class="item-left">
+              <span class="material-symbols-rounded" style="color:${t.done ? '#00C48C' : '#A39BBF'};">
+                ${t.done ? 'check_circle' : 'radio_button_unchecked'}
+              </span>
+              <div class="item-meta">
+                <span class="item-title" style="text-decoration:${t.done ? 'line-through' : 'none'}; opacity:${t.done ? 0.6 : 1};">${t.title}</span>
+                <span class="item-sub">${t.time} • ${t.category}</span>
+              </div>
+            </div>
           </div>
-          <span class="squircle-label">Inventory</span>
+        `).join('')}
+      </div>
+
+      <!-- Recent Expenses & Bills List -->
+      <div class="card">
+        <div class="section-title">
+          <span>${isUr ? 'حالیہ اخراجات و بلز' : 'Recent Expenses & Bills'}</span>
+          <span class="badge" onclick="openTab('bills')" style="cursor:pointer;">${isUr ? 'تفصیل' : 'Details'}</span>
+        </div>
+        ${records.slice(0, 5).map(r => `
+          <div class="item-row">
+            <div class="item-left">
+              <div class="item-icon-box" style="background:${r.type === 'INCOME' ? 'var(--income-bg)' : 'var(--expense-bg)'}; color:${r.type === 'INCOME' ? 'var(--income)' : 'var(--expense)'};">
+                <span class="material-symbols-rounded">${r.type === 'INCOME' ? 'trending_up' : 'payments'}</span>
+              </div>
+              <div class="item-meta">
+                <span class="item-title">${r.category}</span>
+                <span class="item-sub">${r.desc} • ${r.date}</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <span class="item-amount" style="color:${r.type === 'INCOME' ? 'var(--income)' : 'var(--expense)'};">
+                ${r.type === 'INCOME' ? '+' : '-'}${formatPKR(r.amount)}
+              </span>
+              ${r.type === 'EXPENSE' ? `
+                <span class="item-status-pill" onclick="toggleBillPaid(${r.id})" style="cursor:pointer; background:${r.isPaid ? 'var(--income-bg)' : 'var(--warning-bg)'}; color:${r.isPaid ? 'var(--income)' : 'var(--warning)'};">
+                  ${r.isPaid ? (isUr ? 'ادا شدہ ✓' : 'Paid ✓') : (isUr ? 'غیر ادا شدہ ⏱' : 'Unpaid ⏱')}
+                </span>
+              ` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // 2. Bills & Fees Tab
+  else if (currentTab === 'bills') {
+    vp.innerHTML = `
+      <div class="section-title">
+        <span>${isUr ? 'سکول فیس، بجلی، گیس اور دیگر بلز' : 'School Fees, Utilities & Bills'}</span>
+        <button class="lang-pill" onclick="openAddModal()"><span class="material-symbols-rounded">add</span> ${isUr ? 'نیا بل' : 'Add Bill'}</button>
+      </div>
+
+      <div class="card">
+        <div class="section-title">
+          <span>${isUr ? 'واجب الادا بلز (Pending Bills)' : 'Unpaid Bills & Fees'}</span>
+          <span class="badge">${records.filter(r => r.type === 'EXPENSE' && !r.isPaid).length} Due</span>
+        </div>
+        ${records.filter(r => r.type === 'EXPENSE' && !r.isPaid).length === 0 ? `
+          <p style="font-size:13px; color:var(--text-muted); text-align:center; padding:12px;">${isUr ? 'تمام بلز ادا ہو چکے ہیں! ماشاءاللہ' : 'All bills and school fees are cleared!'}</p>
+        ` : records.filter(r => r.type === 'EXPENSE' && !r.isPaid).map(r => `
+          <div class="item-row" style="border-left:4px solid var(--warning);">
+            <div class="item-left">
+              <div class="item-icon-box" style="background:var(--warning-bg); color:var(--warning);">
+                <span class="material-symbols-rounded">pending_actions</span>
+              </div>
+              <div class="item-meta">
+                <span class="item-title">${r.category}</span>
+                <span class="item-sub">${r.desc} • Due: ${r.date}</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <span class="item-amount" style="color:var(--expense);">${formatPKR(r.amount)}</span>
+              <button class="lang-pill" style="height:28px; font-size:11px; background:var(--income); color:white;" onclick="toggleBillPaid(${r.id})">
+                ${isUr ? 'ادائیگی کریں ✓' : 'Mark Paid ✓'}
+              </button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="card">
+        <div class="section-title">
+          <span>${isUr ? 'ادا شدہ بلز اور اخراجات (Paid Bills)' : 'Paid History'}</span>
+          <span class="badge">${records.filter(r => r.type === 'EXPENSE' && r.isPaid).length} Paid</span>
+        </div>
+        ${records.filter(r => r.type === 'EXPENSE' && r.isPaid).map(r => `
+          <div class="item-row">
+            <div class="item-left">
+              <div class="item-icon-box" style="background:var(--income-bg); color:var(--income);">
+                <span class="material-symbols-rounded">task_alt</span>
+              </div>
+              <div class="item-meta">
+                <span class="item-title">${r.category}</span>
+                <span class="item-sub">${r.desc} • ${r.date}</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <span class="item-amount" style="color:var(--income);">${formatPKR(r.amount)}</span>
+              <span class="item-status-pill" style="background:var(--income-bg); color:var(--income);">${isUr ? 'ادا شدہ' : 'Paid'}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // 3. Habits, Bad Addictions & Health Tab
+  else if (currentTab === 'habits') {
+    vp.innerHTML = `
+      <div class="section-title">
+        <span>${isUr ? 'بد عادتوں سے نجات اور صحت و عادات' : 'Habit & Addiction Recovery'}</span>
+        <span class="badge">${isUr ? 'روزانہ ٹریکر' : 'Daily Life Tracker'}</span>
+      </div>
+
+      <!-- Water Tracker (8 glasses) -->
+      <div class="card">
+        <div class="section-title">
+          <span>${isUr ? 'روزانہ 8 گلاس پانی کا استعمال' : 'Daily Water Tracker (8 Glasses)'}</span>
+          <span class="badge">${waterGlasses} / 8 Glasses</span>
+        </div>
+        <div class="water-tracker-row">
+          ${[1,2,3,4,5,6,7,8].map(i => `
+            <button class="water-glass-btn ${i <= waterGlasses ? 'filled' : ''}" onclick="fillWaterGlass(${i})" title="Glass ${i}">
+              <span class="material-symbols-rounded" style="font-size:18px;">local_drink</span>
+              <span style="font-size:10px; font-weight:800;">${i}</span>
+            </button>
+          `).join('')}
+        </div>
+        <p style="font-size:12px; color:var(--text-muted);">${isUr ? 'پانی پینے کے بعد گلاس پر کلک کریں تاکہ صحت برقرار رہے۔' : 'Tap glasses as you drink to stay energized.'}</p>
+      </div>
+
+      <!-- Bad Habits / Addiction Recovery -->
+      <div class="card">
+        <div class="section-title">
+          <span>${isUr ? 'بد عادات چھوڑنے کا کاؤنٹر (Addiction Streaks)' : 'Bad Addiction Recovery'}</span>
+          <span class="badge" style="background:var(--expense-bg); color:var(--expense);">${isUr ? 'عزم و استقلال' : 'Stay Clean'}</span>
         </div>
 
-        <div class="quick-squircle-card" onclick="openTab('reports')">
-          <div class="squircle-icon" style="background:#EBF3FE; color:#3B82F6;">
-            <span class="material-symbols-rounded">bar_chart</span>
+        ${habits.filter(h => h.isBadHabit).map(h => `
+          <div class="item-row" style="flex-direction:column; align-items:stretch; gap:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <h4 style="font-size:15px; font-weight:800;">${h.name}</h4>
+                <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Started: ${h.startDate} • Urges defeated: <b>${h.urgesResisted}</b></p>
+              </div>
+              <div style="background:linear-gradient(135deg, #10B981, #059669); color:white; padding:6px 12px; border-radius:12px; text-align:center;">
+                <span style="font-size:18px; font-weight:900;">${h.streakDays}</span>
+                <span style="font-size:10px; display:block;">${isUr ? 'دن کلین' : 'Days Clean'}</span>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:8px;">
+              <button class="lang-pill" style="flex:1; justify-content:center; background:#00C48C; color:white; font-size:12px;" onclick="resistUrge('${h.id}')">
+                <span class="material-symbols-rounded" style="font-size:16px;">shield</span> ${isUr ? 'وسوسہ روکا! (+1 فتح)' : 'Resisted Urge! (+1)'}
+              </button>
+              <button class="lang-pill" style="background:var(--surface-variant); color:var(--text-muted); font-size:12px;" onclick="resetHabitStreak('${h.id}')">
+                ${isUr ? 'ری سیٹ' : 'Reset'}
+              </button>
+            </div>
           </div>
-          <span class="squircle-label">Reports</span>
+        `).join('')}
+      </div>
+
+      <!-- Exercise & Positive Habits -->
+      <div class="card">
+        <div class="section-title">
+          <span>${isUr ? 'مثبت عادات و ورزش (Fitness & Habits)' : 'Positive Habits & Fitness'}</span>
+          <span class="badge" style="background:var(--income-bg); color:var(--income);">${isUr ? 'روزانہ معمول' : 'Routine'}</span>
         </div>
 
-        <div class="quick-squircle-card" onclick="openAddModal()">
-          <div class="squircle-icon" style="background:#FDEEF4; color:#EC4899;">
+        ${habits.filter(h => !h.isBadHabit).map(h => `
+          <div class="item-row">
+            <div class="item-left">
+              <div class="item-icon-box" style="background:var(--income-bg); color:var(--income);">
+                <span class="material-symbols-rounded">verified</span>
+              </div>
+              <div class="item-meta">
+                <span class="item-title">${h.name}</span>
+                <span class="item-sub">${isUr ? 'مسلسل کامیابی:' : 'Current streak:'} ${h.streakDays} ${isUr ? 'دن' : 'Days'}</span>
+              </div>
+            </div>
+            <span class="item-status-pill" style="background:var(--income-bg); color:var(--income);">Active ✓</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // 4. Daily Routine & Tasks Hub
+  else if (currentTab === 'routine') {
+    vp.innerHTML = `
+      <div class="section-title">
+        <span>${isUr ? 'روزمرہ معمولات اور ٹاسک مینیجر' : 'Daily Life & Routine Hub'}</span>
+        <button class="lang-pill" onclick="addCustomTask()"><span class="material-symbols-rounded">add</span> ${isUr ? 'نیا کام' : 'Add Task'}</button>
+      </div>
+
+      <div class="card">
+        <div class="section-title">
+          <span>${isUr ? 'صبح سے رات تک کے تمام کام' : 'Today Checklist'}</span>
+          <span class="badge">${routineTasks.filter(t => t.done).length} / ${routineTasks.length} Done</span>
+        </div>
+
+        ${routineTasks.map(t => `
+          <div class="item-row" onclick="toggleTaskDone(${t.id})" style="cursor:pointer;">
+            <div class="item-left">
+              <span class="material-symbols-rounded" style="color:${t.done ? '#00C48C' : '#A39BBF'}; font-size:24px;">
+                ${t.done ? 'check_circle' : 'radio_button_unchecked'}
+              </span>
+              <div class="item-meta">
+                <span class="item-title" style="text-decoration:${t.done ? 'line-through' : 'none'}; opacity:${t.done ? 0.6 : 1};">${t.title}</span>
+                <span class="item-sub">${t.time} • ${t.category}</span>
+              </div>
+            </div>
+            <span class="item-status-pill" style="background:${t.done ? 'var(--income-bg)' : 'var(--surface-variant)'}; color:${t.done ? 'var(--income)' : 'var(--text-muted)'};">
+              ${t.done ? (isUr ? 'مکمل' : 'Done') : (isUr ? 'باقی' : 'Pending')}
+            </span>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- Emergency Helpline Directory -->
+      <div class="card">
+        <div class="section-title">
+          <span>${isUr ? 'اہم ایمرجنسی ہیلپ لائنز (پاکستان)' : 'Emergency Helplines (Pakistan)'}</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <a href="tel:1122" class="item-row" style="text-decoration:none; padding:10px;">
+            <div class="item-left">
+              <span class="material-symbols-rounded" style="color:#EF4444;">emergency</span>
+              <div class="item-meta"><span class="item-title">Rescue 1122</span><span class="item-sub">ریسکیو ایمبولینس</span></div>
+            </div>
+          </a>
+          <a href="tel:15" class="item-row" style="text-decoration:none; padding:10px;">
+            <div class="item-left">
+              <span class="material-symbols-rounded" style="color:#2563EB;">local_police</span>
+              <div class="item-meta"><span class="item-title">Police 15</span><span class="item-sub">مددگار پولیس</span></div>
+            </div>
+          </a>
+          <a href="tel:1198" class="item-row" style="text-decoration:none; padding:10px;">
+            <div class="item-left">
+              <span class="material-symbols-rounded" style="color:#F59E0B;">bolt</span>
+              <div class="item-meta"><span class="item-title">WAPDA 1198</span><span class="item-sub">بجلی شکایت</span></div>
+            </div>
+          </a>
+          <a href="tel:1199" class="item-row" style="text-decoration:none; padding:10px;">
+            <div class="item-left">
+              <span class="material-symbols-rounded" style="color:#EF4444;">local_fire_department</span>
+              <div class="item-meta"><span class="item-title">SNGPL 1199</span><span class="item-sub">سوئی گیس شکایت</span></div>
+            </div>
+          </a>
+        </div>
+      </div>
+    `;
+  }
+
+  // 5. Complete User Guide & How to Use Tab
+  else if (currentTab === 'guide') {
+    vp.innerHTML = `
+      <div class="section-title">
+        <span>${isUr ? 'روزانہ ایپ استعمال کرنے کی مکمل رہنمائی' : 'Rozana App User Guide & Tutorial'}</span>
+        <span class="badge" style="background:#6028E4; color:white;">All-in-One</span>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-header">
+          <div class="guide-icon-box" style="background:#ECE6FD; color:#6028E4;">
+            <span class="material-symbols-rounded">account_circle</span>
+          </div>
+          <div>
+            <h4 class="guide-title">${isUr ? '1. اپنی تصویر اور نام لگانا' : '1. Profile Photo & Name Setup'}</h4>
+            <span style="font-size:11px; color:var(--text-muted);">${isUr ? 'محسن صاحب کے لیے خصوصی سیٹنگ' : 'Personalized for Mohsin'}</span>
+          </div>
+        </div>
+        <p class="guide-desc">${isUr ? 'اوپر دائیں کونے میں اپنی پروفائل پر کلک کریں اور "Choose / Upload Pic" دبا کر اپنے موبائل کی گیلری یا کیمرے سے اپنی تصویر لگائیں۔ آپ کسی بھی وقت اپنا نام اور شہر بھی تبدیل کر سکتے ہیں۔' : 'Click the top right profile avatar to upload your own picture from gallery/camera and update your name.'}</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-header">
+          <div class="guide-icon-box" style="background:#FEF6E7; color:#F59E0B;">
             <span class="material-symbols-rounded">receipt_long</span>
           </div>
-          <span class="squircle-label">Billing</span>
-        </div>
-
-        <div class="quick-squircle-card" onclick="openTab('sales')">
-          <div class="squircle-icon" style="background:#E8F8F0; color:#10B981;">
-            <span class="material-symbols-rounded">group</span>
+          <div>
+            <h4 class="guide-title">${isUr ? '2. سکول فیس، بجلی، گیس اور راشن کا اندراج' : '2. Bills, School Fees & Daily Expenses'}</h4>
+            <span style="font-size:11px; color:var(--text-muted);">${isUr ? 'بجلی، گیس، سکول فیس اور راشن' : 'Utilities & Household Spending'}</span>
           </div>
-          <span class="squircle-label">Customers</span>
         </div>
+        <div class="guide-step"><div class="step-bullet">1</div><span>${isUr ? 'ڈیش بورڈ پر موجود 8 چپس میں سے مطلوبہ بٹن دبائیں (مثلاً سکول فیس، بجلی بل، گیس بل وغیرہ)۔' : 'Tap any 1-tap chip on the dashboard (e.g. School Fee, Electric Bill, Gas Bill).'}</span></div>
+        <div class="guide-step"><div class="step-bullet">2</div><span>${isUr ? 'رقم اور تفصیل لکھ کر تاریخ منتخب کریں اور محفوظ کریں۔' : 'Enter amount in PKR, description and due date, then hit save.'}</span></div>
+        <div class="guide-step"><div class="step-bullet">3</div><span>${isUr ? 'بلز والے ٹیب میں جا کر بل کو ادا شدہ (Paid) یا غیر ادا شدہ (Unpaid) مارک کریں۔' : 'In the Bills tab, easily toggle between Paid and Due.'}</span></div>
       </div>
 
-      <!-- Branch Status List (exact match with reference Image 2) -->
-      <div class="section-title-row">
-        <h2 class="section-title">${appLang === 'ur' ? 'برانچ اور اکاؤنٹس کی صورتحال' : 'Branch Status'}</h2>
-        <span class="section-link" onclick="openTab('sales')">View all</span>
-      </div>
-
-      <div class="status-card">
-        ${branches.map(b => `
-          <div class="status-item">
-            <div class="status-left">
-              <div class="status-icon-wrap">
-                <span class="material-symbols-rounded">storefront</span>
-              </div>
-              <div>
-                <div class="status-info-title">${b.name}</div>
-                <div class="status-info-sub">${b.amount}</div>
-              </div>
-            </div>
-            <div class="status-right">
-              <div class="status-tag">
-                <span class="status-dot ${b.dot}"></span>
-                <span style="color:${b.dot==='dot-green'?'#10B981':'var(--primary)'}">${b.status}</span>
-              </div>
-              <span class="material-symbols-rounded" style="color:var(--text-muted); font-size:18px;">chevron_right</span>
-            </div>
+      <div class="guide-card">
+        <div class="guide-header">
+          <div class="guide-icon-box" style="background:#E6F9F3; color:#00C48C;">
+            <span class="material-symbols-rounded">psychology</span>
           </div>
-        `).join('')}
-      </div>
-
-      <!-- GitHub Push Card Banner -->
-      <div class="status-card" style="cursor:pointer; border:1px solid var(--primary);" onclick="document.getElementById('githubGuideModal').classList.add('open')">
-        <div style="display:flex; align-items:center; gap:14px; padding:6px 0;">
-          <div class="status-icon-wrap" style="background:var(--primary); color:white;">
-            <span class="material-symbols-rounded">cloud_upload</span>
+          <div>
+            <h4 class="guide-title">${isUr ? '3. بد عادتوں سے نجات اور اسٹریک کاؤنٹر' : '3. Bad Addiction Recovery Tracker'}</h4>
+            <span style="font-size:11px; color:var(--text-muted);">${isUr ? 'سگریٹ، سکرین ٹائم، فاسٹ فوڈ پرہیز' : 'Clean Days & Defeating Urges'}</span>
           </div>
-          <div style="flex:1;">
-            <div style="font-weight:800; font-size:14px;">Push App to GitHub ('rozana')</div>
-            <div style="font-size:12px; color:var(--text-muted);">گٹ ہب پر کوڈ پش کرنے کی گائیڈ دیکھیں</div>
+        </div>
+        <p class="guide-desc">${isUr ? 'اگر آپ سگریٹ نوشی، فضول موبائل اسکرین ٹائم یا جنک فوڈ چھوڑنا چاہتے ہیں تو "Habits & Health" ٹیب میں ہر عادت کا اسٹریک کاؤنٹر چلتا ہے۔ جب بھی آپ کے دل میں برا خیال آئے اور آپ اس سے بچ جائیں تو "وسوسہ روکا (+1)" پر کلک کریں۔' : 'Track days clean from smoking, binge screen time and junk food. Tap "Resisted Urge" whenever you conquer temptation.'}</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-header">
+          <div class="guide-icon-box" style="background:#EFF6FF; color:#2563EB;">
+            <span class="material-symbols-rounded">checklist</span>
           </div>
-          <span class="material-symbols-rounded" style="color:var(--primary);">arrow_forward</span>
-        </div>
-      </div>
-    `;
-  } else if (currentTab === 'overview') {
-    // Phone 2 in Image 2: "Business Overview" Screen
-    vp.innerHTML = `
-      <div class="section-title-row" style="margin-bottom:12px;">
-        <h2 class="section-title">Business Overview</h2>
-        <div class="header-actions">
-          <button class="icon-btn"><span class="material-symbols-rounded">notifications</span></button>
-        </div>
-      </div>
-
-      <!-- Inventory Top Hero Card (matching Phone 2) -->
-      <div class="overview-hero-card">
-        <div>
-          <span style="font-size:13px; opacity:0.9;">Inventory</span>
-          <div style="font-size:30px; font-weight:800; margin-top:4px;">${inventoryProducts.toLocaleString()}</div>
-          <span style="font-size:12px; opacity:0.85;">Products in Stock</span>
-        </div>
-        <div class="overview-box-icon">
-          <span class="material-symbols-rounded">deployed_code</span>
-        </div>
-      </div>
-
-      <!-- Metric Cards (matching Phone 2 vertical list) -->
-      <div class="metric-row-card">
-        <div>
-          <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Low Stock</span>
-          <div style="font-size:22px; font-weight:800; color:var(--text); margin-top:2px;">${lowStock}</div>
-          <span style="font-size:11px; color:var(--text-muted);">Items need reorder</span>
-        </div>
-        <div class="metric-icon-sq" style="background:#FDEEF4; color:#EC4899;">
-          <span class="material-symbols-rounded">warning</span>
-        </div>
-      </div>
-
-      <div class="metric-row-card">
-        <div>
-          <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Today's Orders</span>
-          <div style="font-size:22px; font-weight:800; color:var(--text); margin-top:2px;">${todayOrders}</div>
-          <span style="font-size:11px; color:#10B981; font-weight:700;">↑ 18 new this hour</span>
-        </div>
-        <div class="metric-icon-sq" style="background:#F0EBFE; color:#6C3CE9;">
-          <span class="material-symbols-rounded">shopping_cart</span>
-        </div>
-      </div>
-
-      <div class="metric-row-card">
-        <div>
-          <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Purchase Orders</span>
-          <div style="font-size:22px; font-weight:800; color:var(--text); margin-top:2px;">24</div>
-          <span style="font-size:11px; color:var(--warning); font-weight:700;">Pending approval</span>
-        </div>
-        <div class="metric-icon-sq" style="background:#FFFBEB; color:#F59E0B;">
-          <span class="material-symbols-rounded">assignment</span>
-        </div>
-      </div>
-
-      <div class="metric-row-card">
-        <div>
-          <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Supplier Management</span>
-          <div style="font-size:22px; font-weight:800; color:var(--text); margin-top:2px;">18</div>
-          <span style="font-size:11px; color:var(--text-muted);">Registered Suppliers</span>
-        </div>
-        <div class="metric-icon-sq" style="background:#EBF3FE; color:#3B82F6;">
-          <span class="material-symbols-rounded">group</span>
-        </div>
-      </div>
-
-      <!-- Bottom System Verification Badges (exact match with Phone 2 footer) -->
-      <div class="system-badges-row">
-        <div class="system-badge-item">
-          <span class="material-symbols-rounded">wifi_off</span>
-          <span class="system-badge-title">Offline Mode</span>
-          <span class="system-badge-status">Enabled</span>
-        </div>
-        <div class="system-badge-item">
-          <span class="material-symbols-rounded">sync</span>
-          <span class="system-badge-title">Auto Sync</span>
-          <span class="system-badge-status">Enabled</span>
-        </div>
-        <div class="system-badge-item">
-          <span class="material-symbols-rounded">cloud_done</span>
-          <span class="system-badge-title">Cloud Backup</span>
-          <span class="system-badge-status">Secure</span>
-        </div>
-        <div class="system-badge-item">
-          <span class="material-symbols-rounded">verified_user</span>
-          <span class="system-badge-title">FBR Connected</span>
-          <span class="system-badge-status">Verified</span>
-        </div>
-      </div>
-    `;
-  } else if (currentTab === 'sales') {
-    vp.innerHTML = `
-      <div class="section-title-row">
-        <h2 class="section-title">Sales & Transaction Records</h2>
-        <button class="lang-pill" onclick="openAddModal()">+ Add Sales</button>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:10px;">
-        ${records.map(r => `
-          <div class="metric-row-card">
-            <div style="display:flex; align-items:center; gap:12px;">
-              <div class="metric-icon-sq" style="background:${r.type==='INCOME'?'#E8F8F0':'#FDEEF4'}; color:${r.type==='INCOME'?'#10B981':'#EF4444'};">
-                <span class="material-symbols-rounded">${r.type==='INCOME'?'trending_up':'trending_down'}</span>
-              </div>
-              <div>
-                <div style="font-weight:700; font-size:15px;">${r.desc}</div>
-                <div style="font-size:12px; color:var(--text-muted);">${r.branch} • ${r.date}</div>
-              </div>
-            </div>
-            <div style="font-weight:800; font-size:16px; color:${r.type==='INCOME'?'#10B981':'#EF4444'};">
-              ${r.type==='INCOME'?'+':'-'} ${formatPKR(r.amount)}
-            </div>
+          <div>
+            <h4 class="guide-title">${isUr ? '4. روزمرہ معمولات اور نماز و ورزش' : '4. Daily Life Tasks, Prayers & Exercise'}</h4>
+            <span style="font-size:11px; color:var(--text-muted);">${isUr ? 'صبح سے رات تک تمام کام ایک جگہ' : 'All daily life activities in one app'}</span>
           </div>
-        `).join('')}
-      </div>
-    `;
-  } else if (currentTab === 'reports') {
-    vp.innerHTML = `
-      <div class="section-title-row">
-        <h2 class="section-title">Financial Analytics & Reports</h2>
-      </div>
-      <div class="hero-stat-card" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
-        <span class="hero-subtitle">Net Profit & Savings</span>
-        <div class="hero-amount">PKR 73,900</div>
-        <div class="stat-badge" style="background:rgba(255,255,255,0.25);">
-          <span>↑ 24.3% this month</span>
         </div>
-      </div>
-      <div class="metric-row-card">
-        <div>
-          <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Total Inflow (Sales)</span>
-          <div style="font-size:20px; font-weight:800; color:#10B981; margin-top:2px;">PKR 116,350</div>
-        </div>
-        <div class="metric-icon-sq" style="background:#E8F8F0; color:#10B981;"><span class="material-symbols-rounded">arrow_downward</span></div>
-      </div>
-      <div class="metric-row-card">
-        <div>
-          <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Total Outflow (Bills & Petrol)</span>
-          <div style="font-size:20px; font-weight:800; color:#EF4444; margin-top:2px;">PKR 10,350</div>
-        </div>
-        <div class="metric-icon-sq" style="background:#FDEEF4; color:#EF4444;"><span class="material-symbols-rounded">arrow_upward</span></div>
-      </div>
-    `;
-  } else if (currentTab === 'settings') {
-    vp.innerHTML = `
-      <div class="section-title-row">
-        <h2 class="section-title">Settings & Business Info</h2>
-      </div>
-      <div class="status-card" style="cursor:pointer; border:1px solid var(--primary);" onclick="document.getElementById('githubGuideModal').classList.add('open')">
-        <div style="display:flex; align-items:center; gap:14px; padding:6px 0;">
-          <div class="status-icon-wrap" style="background:var(--primary); color:white;">
-            <span class="material-symbols-rounded">cloud_upload</span>
-          </div>
-          <div style="flex:1;">
-            <div style="font-weight:800; font-size:14px;">How to Push to GitHub</div>
-            <div style="font-size:12px; color:var(--text-muted);">گٹ ہب پر کوڈ پش کرنے کی گائیڈ</div>
-          </div>
-          <span class="material-symbols-rounded" style="color:var(--primary);">chevron_right</span>
-        </div>
-      </div>
-
-      <div class="status-card" style="padding:16px;">
-        <h4 style="font-size:14px; font-weight:700; margin-bottom:10px;">Language & Theme</h4>
-        <div style="display:flex; gap:10px; margin-bottom:12px;">
-          <button class="lang-pill" style="flex:1; justify-content:center; padding:10px; background:${appLang==='en'?'var(--primary)':'var(--surface-variant)'}; color:${appLang==='en'?'white':'var(--text)'};" onclick="if(appLang!=='en')toggleAppLanguage()">English</button>
-          <button class="lang-pill" style="flex:1; justify-content:center; padding:10px; background:${appLang==='ur'?'var(--primary)':'var(--surface-variant)'}; color:${appLang==='ur'?'white':'var(--text)'};" onclick="if(appLang!=='ur')toggleAppLanguage()">اردو</button>
-        </div>
-        <button class="lang-pill" style="width:100%; justify-content:center; padding:10px; background:var(--surface-variant); color:var(--text);" onclick="toggleTheme()">Toggle Dark / Light Mode</button>
-      </div>
-
-      <div class="status-card" style="padding:16px;">
-        <h4 style="font-size:14px; font-weight:700; margin-bottom:8px;">TransactFlow POS & Daily Life App</h4>
-        <p style="font-size:12px; color:var(--text-muted); line-height:1.6;">
-          Real-time POS sales management, Room database offline support, FBR tax readiness, branch synchronization, and Pakistani rupee accounting.
-        </p>
+        <p class="guide-desc">${isUr ? 'آپ کو کسی اور ایپ کی ضرورت نہیں پڑے گی! "Daily Life" ٹیب میں فجر، مارننگ واک، بچوں کے سکول، دکان و دفتر، بلز جمع کروانے اور خریداری کے تمام کام ٹاسک لسٹ میں شامل ہیں۔ آپ نیا کام بھی شامل کر سکتے ہیں اور روزانہ 8 گلاس پانی کا کاؤنٹر بھی چلا سکتے ہیں۔' : 'Manage your entire day from morning to night, including prayers, workouts, water intake and Pakistani emergency numbers.'}</p>
       </div>
     `;
   }
 }
-
-// Initial Run
-renderTabContent();
 </script>
 </body>
 </html>

@@ -79,7 +79,7 @@ fun DashboardScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = if (language == AppLanguage.URDU) "علی صاحب 👋" else "Ali 👋",
+                        text = if (language == AppLanguage.URDU) "محسن صاحب 👋" else "Mohsin 👋",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.ExtraBold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -111,10 +111,10 @@ fun DashboardScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "Ali",
+                            text = "Mohsin",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp
+                            fontSize = 13.sp
                         )
                     }
                 }

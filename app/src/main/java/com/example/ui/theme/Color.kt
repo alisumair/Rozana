@@ -42,6 +42,8 @@ val BgCustomersPurple = Color(0xFFEDEBF9)
 
 // Status Indicators
 val StatusGreen = Color(0xFF00C48C)
+val IncomeGreen = Color(0xFF00C48C)
+val PurplePrimary = Color(0xFF6028E4)
 val StatusGreenBg = Color(0xFFE6F9F3)
 val StatusPurple = Color(0xFF6028E4)
 val ExpenseRed = Color(0xFFEF4444)

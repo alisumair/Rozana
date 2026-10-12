@@ -9,12 +9,14 @@ enum class TransactionType {
 
 enum class ExpenseCategory(val displayNameEn: String, val displayNameUr: String, val iconName: String) {
     FOOD("Food & Grocery", "کھانا پینا اور راشن", "Restaurant"),
+    SCHOOL_FEE("School Fee", "سکول فیس", "School"),
     TRANSPORT("Transport", "ٹرانسپورٹ", "DirectionsBus"),
     PETROL("Petrol / Fuel", "پیٹرول اور ایندھن", "LocalGasStation"),
     SHOPPING("Shopping", "خریداری", "ShoppingBag"),
     ELECTRICITY("Electricity Bill", "بجلی کا بل", "ElectricBolt"),
     GAS("Gas Bill", "گیس کا بل", "LocalFireDepartment"),
     INTERNET("Internet & Cable", "انٹرنیٹ اور کیبل", "Wifi"),
+    WATER("Water Bill", "پانی کا بل", "WaterDrop"),
     EDUCATION("Education / Fees", "تعلیم اور فیس", "School"),
     MEDICAL("Medical & Health", "دوا اور صحت", "LocalHospital"),
     RENT("House / Shop Rent", "گھر یا دکان کا کرایہ", "Home"),
@@ -22,6 +24,7 @@ enum class ExpenseCategory(val displayNameEn: String, val displayNameUr: String,
     MAINTENANCE("Home Maintenance", "گھر کی مرمت", "Build"),
     LOAN("Loan Repayment", "قرض یا کمیٹی", "AccountBalance"),
     CHARITY("Sadqah & Charity", "صدقہ اور خیرات", "VolunteerActivism"),
+    OTHER_BILLS("Other Bills", "دیگر بلز", "Receipt"),
     OTHER("Other Expense", "دیگر اخراجات", "Category");
 
     companion object {
