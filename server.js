@@ -59,6 +59,23 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Direct APK Download support (Rozana.apk)
+  if (urlPath === '/rozana.apk' || urlPath === '/download-apk' || urlPath === '/Rozana.apk') {
+    const apkPath = path.join(__dirname, 'rozana.apk');
+    if (fs.existsSync(apkPath)) {
+      const stat = fs.statSync(apkPath);
+      res.writeHead(200, {
+        'Content-Type': 'application/vnd.android.package-archive',
+        'Content-Length': stat.size,
+        'Content-Disposition': 'attachment; filename="Rozana.apk"',
+        'Cache-Control': 'public, max-age=3600'
+      });
+      const readStream = fs.createReadStream(apkPath);
+      readStream.pipe(res);
+      return;
+    }
+  }
+
   // Web manifest request
   if (urlPath === '/manifest.json') {
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });

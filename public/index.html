@@ -805,6 +805,13 @@
         <h1 class="greeting-title" id="greetingNameText">Mohsin 👋</h1>
       </div>
       <div class="header-actions">
+        <!-- Direct 1-Tap APK Download Link -->
+        <a href="/rozana.apk" download="Rozana.apk" class="lang-pill" style="background:#00C48C; color:white; text-decoration:none; display:flex; align-items:center; gap:4px; font-weight:800; font-size:11px; height:34px; padding:0 10px;" title="Download Android APK">
+          <span class="material-symbols-rounded" style="font-size:16px;">download</span> APK
+        </a>
+        <button class="icon-btn" onclick="openShareModal()" title="Share & Install App">
+          <span class="material-symbols-rounded" style="color:#00C48C;">share</span>
+        </button>
         <button class="icon-btn" id="headerNotifBtn" onclick="toggleGlobalNotifications()" title="Notifications (Namaz, Lunch & Dinner)">
           <span class="material-symbols-rounded">notifications_active</span>
         </button>
@@ -962,6 +969,78 @@
       <span class="material-symbols-rounded">save</span>
       <span>Save Profile (تبدیلیاں محفوظ کریں)</span>
     </button>
+  </div>
+</div>
+
+<!-- Modal: Share & Install Rozana App -->
+<div class="modal-backdrop" id="shareModal">
+  <div class="modal-content">
+    <div class="modal-header-row">
+      <h3 class="modal-title">📲 Share & Install Rozana (شیئر اور انسٹال کریں)</h3>
+      <button class="close-btn" onclick="closeModal('shareModal')"><span class="material-symbols-rounded">close</span></button>
+    </div>
+
+    <!-- Explanation of AI Studio 10 viewer limitation & Solution -->
+    <div style="background:#FEF3C7; border:1px solid #FCD34D; border-radius:16px; padding:12px; color:#92400E; font-size:12px; line-height:1.5;">
+      <b>⚠️ گوگل اے آئی اسٹوڈیو کی 10 ویورز والی حد کی وضاحت:</b><br>
+      گوگل اے آئی اسٹوڈیو میں اینڈرائیڈ ایپس کا لائیو ورک اسپیس زیادہ سے زیادہ 10 مخصوص ای میل ایڈریسز کے ساتھ ہی شیئر ہو سکتا ہے۔ اسی لیے پبلک کرنے پر وہ میسج آتا ہے۔<br><br>
+      <b>✅ لیکن آپ بغیر کسی حد کے مکمل ایپ انسٹال اور شیئر کر سکتے ہیں:</b><br>
+      نیچے دیے گئے <b>"Download APK"</b> بٹن سے 21 MB کی مکمل اینڈرائیڈ انسٹالیشن فائل ڈاؤنلوڈ کر لیں اور اپنے موبائل میں انسٹال کریں۔ پھر اس فائل کو واٹس ایپ یا بلوٹوتھ کے ذریعے جس کے ساتھ چاہیں شیئر کریں!
+    </div>
+
+    <!-- Direct APK Download Card -->
+    <div class="card" style="border:2px solid #00C48C; background:#F0FDF4;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:48px; height:48px; border-radius:14px; background:#00C48C; color:white; display:flex; align-items:center; justify-content:center; font-size:26px;">
+          <span class="material-symbols-rounded">android</span>
+        </div>
+        <div style="flex:1;">
+          <h4 style="font-size:15px; font-weight:800; color:#065F46;">Rozana Official Android APK</h4>
+          <p style="font-size:12px; color:#047857;">ورژن 1.0 • سائز: 21 MB • مکمل آف لائن</p>
+        </div>
+      </div>
+
+      <a href="/rozana.apk" download="Rozana.apk" class="btn-submit" style="background:#00C48C; text-decoration:none; margin-top:4px;">
+        <span class="material-symbols-rounded">download</span>
+        <span>Download Rozana.apk (21 MB)</span>
+      </a>
+      <p style="font-size:11.5px; color:#065F46; text-align:center;">ڈاؤنلوڈ مکمل ہونے پر فائل کھول کر "Install" پر ٹیپ کریں!</p>
+    </div>
+
+    <!-- Share Options -->
+    <div class="card">
+      <h4 style="font-size:14px; font-weight:800;">شیئر کرنے کے آسان طریقے:</h4>
+      
+      <div class="item-row" onclick="shareViaWebAPI()" style="cursor:pointer;">
+        <div class="item-left">
+          <div class="item-icon-box" style="background:#25D366; color:white;"><span class="material-symbols-rounded">share</span></div>
+          <div class="item-meta">
+            <span class="item-title">Share App via WhatsApp / Bluetooth</span>
+            <span class="item-sub">واٹس ایپ، بلوٹوتھ یا میسج کے ذریعے شیئر کریں</span>
+          </div>
+        </div>
+        <span class="material-symbols-rounded" style="color:var(--primary);">arrow_forward_ios</span>
+      </div>
+
+      <div class="item-row" onclick="copyAppDirectLink()" style="cursor:pointer;">
+        <div class="item-left">
+          <div class="item-icon-box" style="background:var(--primary-container); color:var(--primary);"><span class="material-symbols-rounded">content_copy</span></div>
+          <div class="item-meta">
+            <span class="item-title">Copy App Link</span>
+            <span class="item-sub">ایپ کا ڈائریکٹ ویب ایڈریس کاپی کریں</span>
+          </div>
+        </div>
+        <span class="material-symbols-rounded" style="color:var(--primary);">link</span>
+      </div>
+    </div>
+
+    <!-- How to add to home screen (PWA) -->
+    <div class="card">
+      <h4 style="font-size:13.5px; font-weight:800;">موبائل ہوم اسکرین پر شامل کرنے کا طریقہ (PWA):</h4>
+      <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">
+        موبائل کروم میں اوپر دائیں جانب موجود <b>تھری ڈاٹس (⋮)</b> دبائیں اور <b>"Install app"</b> یا <b>"Add to Home screen" (ہوم اسکرین پر شامل کریں)</b> کا انتخاب کریں۔ ایپ بغیر کسی فریم کے اصلی موبائل ایپ کی طرح چل پڑے گی۔
+      </p>
+    </div>
   </div>
 </div>
 
@@ -1260,6 +1339,34 @@ function saveProfileChanges() {
 }
 
 function openProfileModal() { document.getElementById('profileModal').classList.add('open'); }
+function openShareModal() { document.getElementById('shareModal').classList.add('open'); }
+
+function copyAppDirectLink() {
+  const url = window.location.origin + '/';
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => {
+      alert(appLang === 'ur' ? 'ایپ کا لنک کاپی ہو گیا ہے: ' + url : 'App link copied to clipboard: ' + url);
+    }).catch(() => {
+      prompt(appLang === 'ur' ? 'لنک کاپی کریں:' : 'Copy link:', url);
+    });
+  } else {
+    prompt(appLang === 'ur' ? 'لنک کاپی کریں:' : 'Copy link:', url);
+  }
+}
+
+function shareViaWebAPI() {
+  const shareData = {
+    title: 'Rozana – روزانہ',
+    text: 'Rozana App: محسن صاحب کا آل اِن ون لائف، اوقاتِ نماز، قرآن مجید، اذکار، بلز اور عادات ٹریکر۔ یہاں سے ڈاؤنلوڈ یا اوپن کریں:',
+    url: window.location.origin + '/'
+  };
+  if (navigator.share) {
+    navigator.share(shareData).catch(err => console.log('Share dismissed', err));
+  } else {
+    copyAppDirectLink();
+  }
+}
+
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 function openAddModal(preCategory = null) {
@@ -1456,6 +1563,27 @@ function renderTabContent() {
             <span class="sub-stat-lbl">${isUr ? 'بلز و فیس' : 'Pending Bills'}</span>
             <span class="sub-stat-val" style="color:#FDE68A;">${records.filter(r => r.type === 'EXPENSE' && !r.isPaid).length} Due</span>
           </div>
+        </div>
+      </div>
+
+      <!-- Direct 1-Tap APK Install & Unlimited Share Action Bar -->
+      <div style="background:linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); border:1.5px solid #10B981; border-radius:18px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px; flex:1;">
+          <div style="width:38px; height:38px; border-radius:12px; background:#10B981; color:white; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;">
+            <span class="material-symbols-rounded">android</span>
+          </div>
+          <div>
+            <h4 style="font-size:13.5px; font-weight:800; color:#065F46;">${isUr ? 'اینڈرائیڈ ایپ ڈاؤنلوڈ و شیئر کریں' : 'Install & Share Rozana App'}</h4>
+            <p style="font-size:11px; color:#047857;">${isUr ? '21 MB • بغیر کسی حد کے واٹس ایپ پر شیئر کریں' : '21 MB APK • Share freely with anyone'}</p>
+          </div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <a href="/rozana.apk" download="Rozana.apk" class="lang-pill" style="background:#059669; color:white; text-decoration:none; height:34px; font-size:12px; padding:0 12px;">
+            <span class="material-symbols-rounded" style="font-size:16px;">download</span> ${isUr ? 'انسٹال' : 'Install'}
+          </a>
+          <button class="icon-btn" onclick="openShareModal()" style="width:34px; height:34px; border-radius:12px; background:white; color:#059669; border-color:#6EE7B7;">
+            <span class="material-symbols-rounded" style="font-size:18px;">share</span>
+          </button>
         </div>
       </div>
 

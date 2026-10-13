@@ -1,6 +1,12 @@
 package com.example.ui.screens
 
+import android.content.Intent
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,6 +28,8 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,6 +39,8 @@ import com.example.ui.theme.*
 import com.example.ui.viewmodel.RozanaViewModel
 import com.example.ui.viewmodel.Screen
 import com.example.util.FormatUtils
+import com.example.util.ImageUtils
+import com.example.util.NotificationHelper
 import java.util.Calendar
 
 @Composable
@@ -42,11 +52,30 @@ fun DashboardScreen(
     onOpenSetBudget: () -> Unit,
     onOpenVoiceDialog: () -> Unit
 ) {
+    val context = LocalContext.current
     val language by viewModel.language.collectAsState()
+    val isUr = language == AppLanguage.URDU
     val transactions by viewModel.allTransactions.collectAsState()
     val bills by viewModel.allBills.collectAsState()
     val tasks by viewModel.allTasks.collectAsState()
     val budget by viewModel.currentBudget.collectAsState()
+
+    val userName by viewModel.userName.collectAsState()
+    val profileImageUri by viewModel.profileImageUri.collectAsState()
+    val profileBitmap = ImageUtils.rememberUriBitmap(profileImageUri)
+
+    val cleanDays by viewModel.habitDaysClean.collectAsState()
+    val urgesResisted by viewModel.urgesResisted.collectAsState()
+    val waterGlasses by viewModel.waterGlasses.collectAsState()
+
+    val fajrAlert by viewModel.fajrAlert.collectAsState()
+    val dhuhrAlert by viewModel.dhuhrAlert.collectAsState()
+    val asrAlert by viewModel.asrAlert.collectAsState()
+    val maghribAlert by viewModel.maghribAlert.collectAsState()
+    val ishaAlert by viewModel.ishaAlert.collectAsState()
+    val breakfastAlert by viewModel.breakfastAlert.collectAsState()
+    val lunchAlert by viewModel.lunchAlert.collectAsState()
+    val dinnerAlert by viewModel.dinnerAlert.collectAsState()
 
     val totalIncome = transactions.filter { it.type == TransactionType.INCOME }.sumOf { it.amount }
     val totalExpense = transactions.filter { it.type == TransactionType.EXPENSE }.sumOf { it.amount }
@@ -56,6 +85,20 @@ fun DashboardScreen(
     val pendingBills = bills.filter { !it.isPaid }.sortedBy { it.dueDate }
     val todaysTasks = tasks.filter { !it.isCompleted }.take(4)
 
+    var showEditProfileDialog by remember { mutableStateOf(false) }
+    var showShareAppDialog by remember { mutableStateOf(false) }
+
+    // Android Photo Picker launcher
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            if (uri != null) {
+                viewModel.updateProfileImage(uri.toString())
+                Toast.makeText(context, if (isUr) "پروفائل تصویر کامیابی سے لگ گئی!" else "Profile photo updated successfully!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    )
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -63,7 +106,7 @@ fun DashboardScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(top = 8.dp, bottom = 80.dp)
     ) {
-        // 1. User Greeting & Avatar Row (Good Morning, Ali 👋)
+        // 1. User Greeting & Avatar Row (Mohsin 👋)
         item {
             Row(
                 modifier = Modifier
@@ -74,12 +117,12 @@ fun DashboardScreen(
             ) {
                 Column {
                     Text(
-                        text = if (language == AppLanguage.URDU) "صبح بخیر،" else "Good Morning,",
+                        text = if (isUr) "صبح بخیر،" else "Good Morning,",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = if (language == AppLanguage.URDU) "محسن صاحب 👋" else "Mohsin 👋",
+                        text = if (isUr) "$userName صاحب 👋" else "$userName 👋",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.ExtraBold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -87,6 +130,7 @@ fun DashboardScreen(
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    // Voice Input Button
                     IconButton(
                         onClick = onOpenVoiceDialog,
                         modifier = Modifier
@@ -102,20 +146,177 @@ fun DashboardScreen(
                         )
                     }
 
+                    // Mohsin Profile Photo / Avatar (Tappable to pick image from gallery)
                     Box(
                         modifier = Modifier
-                            .size(44.dp)
+                            .size(46.dp)
                             .clip(CircleShape)
                             .background(Brush.linearGradient(listOf(VioletBrand, VioletBrandDark)))
-                            .clickable { viewModel.navigateTo(Screen.Settings) },
+                            .clickable { showEditProfileDialog = true }
+                            .testTag("profile_avatar_btn"),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "Mohsin",
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp
-                        )
+                        if (profileBitmap != null) {
+                            Image(
+                                bitmap = profileBitmap,
+                                contentDescription = "Mohsin's Profile Picture",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Text(
+                                text = userName.take(1).ifEmpty { "M" },
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // 1b. Direct Action Quick Bar: [📸 تصویر لگائیں / Profile Photo] & [📲 ایپ شیئر و انسٹال کریں / Share APK]
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                FilledTonalButton(
+                    onClick = {
+                        photoPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    },
+                    modifier = Modifier.weight(1f).testTag("btn_quick_pick_photo"),
+                    shape = RoundedCornerShape(12.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
+                ) {
+                    Icon(Icons.Default.PhotoCamera, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = if (isUr) "اپنی تصویر لگائیں" else "Add Profile Pic",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 11.sp
+                    )
+                }
+
+                Button(
+                    onClick = { showShareAppDialog = true },
+                    modifier = Modifier.weight(1f).testTag("btn_quick_share_apk"),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00C48C)),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
+                ) {
+                    Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(16.dp), tint = Color.White)
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = if (isUr) "ایپ شیئر و انسٹال" else "Share & Install",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        fontSize = 11.sp
+                    )
+                }
+            }
+        }
+
+        // 1c. Top Quick Access Hub (سب کچھ ایک کلک پر - نماز، قرآن، اذکار، گائیڈ، بلز، عادات)
+        item {
+            Column {
+                Text(
+                    text = if (isUr) "✨ سب کچھ ڈسپلے پر (Quick Access Hub)" else "✨ All Features Display Hub",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // Quran Folder
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFD97706)),
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { viewModel.navigateTo(Screen.Quran) }
+                            .testTag("hub_quran_card")
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(Icons.Default.MenuBook, contentDescription = null, tint = Color.White, modifier = Modifier.size(24.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = if (isUr) "قرآن مجید" else "Quran",
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp
+                            )
+                            Text(
+                                text = if (isUr) "114 سورتیں" else "114 Surahs",
+                                color = Color.White.copy(alpha = 0.85f),
+                                fontSize = 10.sp
+                            )
+                        }
+                    }
+
+                    // Azkar Folder
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF2563EB)),
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { viewModel.navigateTo(Screen.Azkar) }
+                            .testTag("hub_azkar_card")
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(Icons.Default.Star, contentDescription = null, tint = Color.White, modifier = Modifier.size(24.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = if (isUr) "صبح کے اذکار" else "Azkar",
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp
+                            )
+                            Text(
+                                text = if (isUr) "حصن المسلم" else "Daily Duas",
+                                color = Color.White.copy(alpha = 0.85f),
+                                fontSize = 10.sp
+                            )
+                        }
+                    }
+
+                    // User Guide Folder
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF7C3AED)),
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { viewModel.navigateTo(Screen.Guide) }
+                            .testTag("hub_guide_card")
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(Icons.Default.HelpOutline, contentDescription = null, tint = Color.White, modifier = Modifier.size(24.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = if (isUr) "یوزر گائیڈ" else "Guide",
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp
+                            )
+                            Text(
+                                text = if (isUr) "استعمال کی تفصیل" else "How to use",
+                                color = Color.White.copy(alpha = 0.85f),
+                                fontSize = 10.sp
+                            )
+                        }
                     }
                 }
             }
@@ -232,6 +433,553 @@ fun DashboardScreen(
                                     center = Offset(size.width, size.height * 0.35f)
                                 )
                             }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2b. Namaz & Prayer Times Widget with Azan notification toggles
+        item {
+            Card(
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF065F46)),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(
+                                text = if (language == AppLanguage.URDU) "🕌 اوقاتِ نماز و اذان نوٹیفیکیشنز" else "🕌 Prayer Times & Azan Alerts",
+                                color = Color.White,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = if (language == AppLanguage.URDU) "اگلی نماز: عصر (04:45 PM)" else "Next: Asr (04:45 PM)",
+                                color = Color.White.copy(alpha = 0.85f),
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = Color.White.copy(alpha = 0.2f)
+                        ) {
+                            Text(
+                                text = if (language == AppLanguage.URDU) "فعال ✓" else "Active ✓",
+                                color = Color.White,
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        listOf(
+                            Triple("فجر", "05:00 AM", fajrAlert),
+                            Triple("ظہر", "01:15 PM", dhuhrAlert),
+                            Triple("عصر", "04:45 PM", asrAlert),
+                            Triple("مغرب", "06:05 PM", maghribAlert),
+                            Triple("عشاء", "07:45 PM", ishaAlert)
+                        ).forEachIndexed { idx, (pName, pTime, isAlert) ->
+                            val isCurrent = idx == 2
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = if (isCurrent) Color.White else Color.White.copy(alpha = 0.14f),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clickable {
+                                        viewModel.togglePrayerAlert(idx)
+                                        NotificationHelper.showNamazAlertNotification(context, pName, pTime)
+                                        Toast.makeText(context, if (isUr) "$pName اذان الرٹ تبدیل ہو گیا" else "$pName Azan alert updated", Toast.LENGTH_SHORT).show()
+                                    }
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 2.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = pName,
+                                        color = if (isCurrent) Color(0xFF065F46) else Color.White,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 11.sp
+                                    )
+                                    Text(
+                                        text = pTime.replace(" ", "\n"),
+                                        color = if (isCurrent) Color(0xFF065F46) else Color.White.copy(alpha = 0.9f),
+                                        fontSize = 10.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        lineHeight = 12.sp,
+                                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                    )
+                                    Icon(
+                                        imageVector = if (isAlert) Icons.Default.NotificationsActive else Icons.Default.NotificationsOff,
+                                        contentDescription = null,
+                                        tint = if (isCurrent) Color(0xFF065F46) else Color.White.copy(alpha = 0.8f),
+                                        modifier = Modifier.size(13.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2c. Meals (Lunch & Dinner) Notification Card
+        item {
+            Card(
+                shape = RoundedCornerShape(18.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(14.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = if (language == AppLanguage.URDU) "🍽️ کھانے اور لنچ / ڈینر کے نوٹیفیکیشنز" else "🍽️ Lunch & Dinner Meal Reminders",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = Color(0xFFFEF3C7)
+                        ) {
+                            Text(
+                                text = "Auto Alerts",
+                                color = Color(0xFFD97706),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 10.sp,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        listOf(
+                            Triple(if (language == AppLanguage.URDU) "ناشتہ" else "Breakfast", "08:00 AM", breakfastAlert),
+                            Triple(if (language == AppLanguage.URDU) "دوپہر لنچ" else "Lunch", "01:30 PM", lunchAlert),
+                            Triple(if (language == AppLanguage.URDU) "رات ڈینر" else "Dinner", "08:30 PM", dinnerAlert)
+                        ).forEachIndexed { idx, (mName, mTime, isAlert) ->
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = MaterialTheme.colorScheme.surfaceVariant,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clickable {
+                                        viewModel.toggleMealAlert(idx)
+                                        NotificationHelper.showMealAlertNotification(context, mName, mTime)
+                                        Toast.makeText(context, if (isUr) "$mName ریمائنڈر الرٹ تبدیل ہو گیا" else "$mName reminder updated", Toast.LENGTH_SHORT).show()
+                                    }
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(8.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Restaurant,
+                                        contentDescription = null,
+                                        tint = Color(0xFFD97706),
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                    Spacer(modifier = Modifier.height(2.dp))
+                                    Text(
+                                        text = mName,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 11.sp
+                                    )
+                                    Text(
+                                        text = mTime,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        fontSize = 10.sp
+                                    )
+                                    Text(
+                                        text = if (isAlert) "آن ✓" else "بند ✕",
+                                        color = if (isAlert) Color(0xFF059669) else Color.Gray,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 9.sp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2d. Quran Majeed & Subah k Azkar Folders (1-Tap direct display cards)
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                // Quran Majeed Folder
+                Card(
+                    shape = RoundedCornerShape(18.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFD97706)),
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { viewModel.navigateTo(Screen.Quran) }
+                ) {
+                    Column(modifier = Modifier.padding(14.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Surface(
+                                shape = RoundedCornerShape(10.dp),
+                                color = Color.White.copy(alpha = 0.22f)
+                            ) {
+                                Icon(
+                                    Icons.Default.MenuBook,
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier.padding(6.dp).size(20.dp)
+                                )
+                            }
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = Color.White.copy(alpha = 0.25f)
+                            ) {
+                                Text(
+                                    text = "114 سورتیں",
+                                    color = Color.White,
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                            text = if (language == AppLanguage.URDU) "قرآن مجید" else "Holy Quran",
+                            color = Color.White,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = if (language == AppLanguage.URDU) "سورۃ یٰسین، الملک، الفاتحہ و ترجمہ" else "Surah Ya-Sin, Mulk & Urdu",
+                            color = Color.White.copy(alpha = 0.88f),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontSize = 11.sp
+                        )
+                    }
+                }
+
+                // Subah k Azkar Folder
+                Card(
+                    shape = RoundedCornerShape(18.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF2563EB)),
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { viewModel.navigateTo(Screen.Azkar) }
+                ) {
+                    Column(modifier = Modifier.padding(14.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Surface(
+                                shape = RoundedCornerShape(10.dp),
+                                color = Color.White.copy(alpha = 0.22f)
+                            ) {
+                                Icon(
+                                    Icons.Default.Star,
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier.padding(6.dp).size(20.dp)
+                                )
+                            }
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = Color.White.copy(alpha = 0.25f)
+                            ) {
+                                Text(
+                                    text = "حصن المسلم",
+                                    color = Color.White,
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                            text = if (language == AppLanguage.URDU) "صبح و شام کے اذکار" else "Masnoon Azkar",
+                            color = Color.White,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = if (language == AppLanguage.URDU) "صبح کے اذکار اور ڈیجیٹل تسبیح" else "Morning Azkar & Tasbeeh",
+                            color = Color.White.copy(alpha = 0.88f),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontSize = 11.sp
+                        )
+                    }
+                }
+            }
+        }
+
+        // 2e. User Guide Banner
+        item {
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = VioletBrandContainer),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { viewModel.navigateTo(Screen.Guide) }
+            ) {
+                Row(
+                    modifier = Modifier.padding(14.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(10.dp),
+                        color = VioletBrand,
+                        modifier = Modifier.size(36.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(Icons.Default.HelpOutline, contentDescription = null, tint = Color.White, modifier = Modifier.size(20.dp))
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = if (language == AppLanguage.URDU) "ایپ استعمال کی مکمل گائیڈ (User Guide)" else "Rozana App User Guide",
+                            fontWeight = FontWeight.Bold,
+                            color = VioletBrandOnContainer,
+                            style = MaterialTheme.typography.titleSmall
+                        )
+                        Text(
+                            text = if (language == AppLanguage.URDU) "نماز، قرآن، اذکار، فیس اور بلز کا طریقہ کار" else "Tap here to learn how to use all features",
+                            color = VioletBrandOnContainer.copy(alpha = 0.8f),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontSize = 11.sp
+                        )
+                    }
+                    Icon(Icons.Default.ChevronRight, contentDescription = null, tint = VioletBrand)
+                }
+            }
+        }
+
+        // 2f. 8-Chip Quick Grid for School Fee, Food, Electric, Gas, Water, Internet, Other
+        item {
+            Column {
+                Text(
+                    text = if (language == AppLanguage.URDU) "فوری اخراجات و بلز (Quick Entries)" else "Quick Expenses & Bills",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    QuickEntryChip("سکول فیس", "School Fee", Icons.Default.School, Color(0xFF6028E4), Color(0xFFECE6FD), Modifier.weight(1f)) {
+                        onOpenAddTransaction(TransactionType.EXPENSE)
+                    }
+                    QuickEntryChip("کھانا راشن", "Food", Icons.Default.Restaurant, Color(0xFF00C48C), Color(0xFFE6F9F3), Modifier.weight(1f)) {
+                        onOpenAddTransaction(TransactionType.EXPENSE)
+                    }
+                    QuickEntryChip("بجلی بل", "Electric", Icons.Default.ElectricBolt, Color(0xFFF59E0B), Color(0xFFFEF6E7), Modifier.weight(1f)) {
+                        onOpenAddBill()
+                    }
+                    QuickEntryChip("گیس بل", "Gas Bill", Icons.Default.LocalFireDepartment, Color(0xFFEF4444), Color(0xFFFEECEB), Modifier.weight(1f)) {
+                        onOpenAddBill()
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    QuickEntryChip("انٹرنیٹ", "Internet", Icons.Default.Wifi, Color(0xFF2563EB), Color(0xFFEFF6FF), Modifier.weight(1f)) {
+                        onOpenAddBill()
+                    }
+                    QuickEntryChip("پانی بل", "Water", Icons.Default.WaterDrop, Color(0xFF0284C7), Color(0xFFE0F2FE), Modifier.weight(1f)) {
+                        onOpenAddBill()
+                    }
+                    QuickEntryChip("دیگر خرچ", "Other Exp", Icons.Default.Receipt, Color(0xFF7C3AED), Color(0xFFF5F3FF), Modifier.weight(1f)) {
+                        onOpenAddTransaction(TransactionType.EXPENSE)
+                    }
+                    QuickEntryChip("دیگر بلز", "Other Bills", Icons.Default.FolderOpen, Color(0xFFE11D48), Color(0xFFFFF1F2), Modifier.weight(1f)) {
+                        onOpenAddBill()
+                    }
+                }
+            }
+        }
+
+        // 2g. Bad Addiction Recovery Card
+        item {
+            Card(
+                shape = RoundedCornerShape(18.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF10B981)),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = if (language == AppLanguage.URDU) "بد عادتوں سے نجات کا سفر" else "Clean & Healthy Streaks",
+                            color = Color.White,
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = if (language == AppLanguage.URDU) "سگریٹ، سکرین ٹائم اور فاسٹ فوڈ پرہیز" else "Smoking, Screen time & Junk food free",
+                            color = Color.White.copy(alpha = 0.88f),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontSize = 11.sp
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        FilledTonalButton(
+                            onClick = {
+                                viewModel.incrementUrgesResisted()
+                                Toast.makeText(context, if (isUr) "ماشاءاللہ! وسوسہ کامیابی سے روکا گیا" else "Urge resisted successfully!", Toast.LENGTH_SHORT).show()
+                            },
+                            colors = ButtonDefaults.filledTonalButtonColors(containerColor = Color.White, contentColor = Color(0xFF065F46)),
+                            shape = RoundedCornerShape(10.dp),
+                            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp)
+                        ) {
+                            Icon(Icons.Default.Shield, contentDescription = null, modifier = Modifier.size(14.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(if (isUr) "وسوسہ روکا! ($urgesResisted)" else "Resisted ($urgesResisted)", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        }
+                    }
+
+                    Surface(
+                        shape = RoundedCornerShape(14.dp),
+                        color = Color.White.copy(alpha = 0.25f),
+                        modifier = Modifier.clickable {
+                            viewModel.incrementCleanDays()
+                            Toast.makeText(context, if (isUr) "مبارک ہو! ایک اور دن صاف رہا" else "Clean day added!", Toast.LENGTH_SHORT).show()
+                        }
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "$cleanDays",
+                                color = Color.White,
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.ExtraBold
+                            )
+                            Text(
+                                text = if (isUr) "دن کلین (+)" else "Days Clean (+)",
+                                color = Color.White,
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2h. Daily Water & Exercise Tracker (پانی اور ورزش کا روزانہ ٹریکر)
+        item {
+            Card(
+                shape = RoundedCornerShape(18.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(14.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = if (isUr) "💧 روزانہ پانی (8 گلاس) اور ورزش" else "💧 Daily Water (8 Glasses) & Workout",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "$waterGlasses / 8 Glasses",
+                            color = Color(0xFF0284C7),
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 12.sp
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        for (i in 1..8) {
+                            val filled = i <= waterGlasses
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = if (filled) Color(0xFF0284C7) else MaterialTheme.colorScheme.surfaceVariant,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(34.dp)
+                                    .clickable {
+                                        if (filled && i == waterGlasses) {
+                                            viewModel.resetWaterGlasses()
+                                        } else {
+                                            viewModel.addWaterGlass()
+                                        }
+                                    }
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        Icons.Default.WaterDrop,
+                                        contentDescription = null,
+                                        tint = if (filled) Color.White else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = if (isUr) "گلاس پر کلک کر کے پانی کا اضافہ کریں" else "Tap glass to log +1 water intake",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 11.sp
+                        )
+                        FilledTonalButton(
+                            onClick = {
+                                viewModel.addWaterGlass()
+                                Toast.makeText(context, if (isUr) "شاباش! ایک اور گلاس پانی پیا" else "+1 Glass logged!", Toast.LENGTH_SHORT).show()
+                            },
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
+                        ) {
+                            Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(14.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(if (isUr) "پانی پیا" else "+1 Glass", fontSize = 10.sp, fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -467,6 +1215,149 @@ fun DashboardScreen(
             }
         }
     }
+
+    if (showEditProfileDialog) {
+        var tempName by remember { mutableStateOf(userName) }
+        AlertDialog(
+            onDismissRequest = { showEditProfileDialog = false },
+            title = {
+                Text(
+                    text = if (isUr) "پروفائل اور تصویر سیٹ کریں" else "Edit Profile & Photo",
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(72.dp)
+                            .clip(CircleShape)
+                            .background(VioletBrand),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (profileBitmap != null) {
+                            Image(
+                                bitmap = profileBitmap,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Text(
+                                text = tempName.take(1).ifEmpty { "M" },
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 28.sp
+                            )
+                        }
+                    }
+
+                    FilledTonalButton(
+                        onClick = {
+                            photoPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(Icons.Default.PhotoLibrary, contentDescription = null)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(if (isUr) "گیلری سے تصویر منتخب کریں" else "Pick Photo from Gallery")
+                    }
+
+                    OutlinedTextField(
+                        value = tempName,
+                        onValueChange = { tempName = it },
+                        label = { Text(if (isUr) "آپ کا نام" else "Your Name") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.updateUserName(tempName)
+                        showEditProfileDialog = false
+                        Toast.makeText(context, if (isUr) "نام محفوظ ہو گیا" else "Profile saved!", Toast.LENGTH_SHORT).show()
+                    }
+                ) {
+                    Text(if (isUr) "محفوظ کریں" else "Save")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEditProfileDialog = false }) {
+                    Text(if (isUr) "منسوخ" else "Cancel")
+                }
+            }
+        )
+    }
+
+    if (showShareAppDialog) {
+        AlertDialog(
+            onDismissRequest = { showShareAppDialog = false },
+            title = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.Share, contentDescription = null, tint = Color(0xFF00C48C))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = if (isUr) "ایپ انسٹال اور شیئر کریں" else "Install & Share Rozana App",
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        text = if (isUr)
+                            "1. اپنے موبائل میں انسٹال کرنے کے لیے APK فائل ڈائریکٹ حاصل کریں یا ڈاؤنلوڈ کریں۔\n2. واٹس ایپ پر کسی بھی دوست یا فیملی کو بغیر کسی پابندی کے شیئر کریں۔"
+                        else
+                            "1. Download Rozana.apk directly to install on any Android phone.\n2. Share the APK file or download link via WhatsApp with anyone!"
+                    )
+                    Surface(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Rozana.apk (21 MB) - 100% Offline, Fast & Free",
+                            modifier = Modifier.padding(10.dp),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showShareAppDialog = false
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(
+                                Intent.EXTRA_TEXT,
+                                "Rozana – روزانہ (All-in-One Daily Life, Namaz, Quran, Azkar & Bills App for Pakistan)\nDownload & Install directly: https://ais-pre-csznmc4fckb7mu6v5pcya6-896921133693.asia-southeast1.run.app/rozana.apk"
+                            )
+                        }
+                        context.startActivity(Intent.createChooser(shareIntent, "Share Rozana App via"))
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00C48C))
+                ) {
+                    Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(if (isUr) "شیئر کریں (Share)" else "Share Now")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showShareAppDialog = false }) {
+                    Text(if (isUr) "بند کریں" else "Close")
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -592,6 +1483,55 @@ fun BranchStatusRow(
                 color = if (isGreen) StatusGreen else VioletBrand
             )
             Icon(Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.outline, modifier = Modifier.size(18.dp))
+        }
+    }
+}
+
+@Composable
+fun QuickEntryChip(
+    titleUr: String,
+    titleEn: String,
+    icon: ImageVector,
+    iconColor: Color,
+    bgColor: Color,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Card(
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        modifier = modifier.clickable { onClick() }
+    ) {
+        Column(
+            modifier = Modifier.padding(vertical = 10.dp, horizontal = 4.dp).fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(34.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(bgColor),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(icon, contentDescription = null, tint = iconColor, modifier = Modifier.size(18.dp))
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = titleUr,
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                fontSize = 10.sp
+            )
+            Text(
+                text = titleEn,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                fontSize = 9.sp
+            )
         }
     }
 }

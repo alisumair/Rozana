@@ -240,14 +240,16 @@ fun AddEditBillDialog(
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     val categories = listOf(
-        "Electricity" to ("بجلی" to "Electricity"),
-        "Gas" to ("گیس" to "Gas"),
+        "School Fee" to ("سکول فیس" to "School Fee"),
+        "Electricity" to ("بجلی بل" to "Electricity Bill"),
+        "Gas" to ("گیس بل" to "Gas Bill"),
+        "Food" to ("کھانا راشن" to "Food & Ration"),
+        "Water" to ("پانی بل" to "Water Bill"),
         "Internet" to ("انٹرنیٹ" to "Internet"),
         "Mobile" to ("موبائل لوڈ/بل" to "Mobile"),
         "Rent" to ("کرایہ" to "Rent"),
-        "School Fee" to ("اسکول فیس" to "School Fee"),
         "Loan" to ("قرض / کمیٹی" to "Loan"),
-        "Other" to ("دیگر" to "Other")
+        "Other" to ("دیگر بلز" to "Other Bills")
     )
 
     AlertDialog(

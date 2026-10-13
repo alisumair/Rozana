@@ -1,6 +1,7 @@
 package com.example.ui.viewmodel
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.db.RozanaDatabase
@@ -30,10 +31,53 @@ sealed class Screen(val route: String) {
     data object AiAssistant : Screen("ai_assistant")
     data object Reports : Screen("reports")
     data object Settings : Screen("settings")
+    data object Quran : Screen("quran")
+    data object Azkar : Screen("azkar")
+    data object Guide : Screen("guide")
 }
 
 class RozanaViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = RozanaRepository(RozanaDatabase.getDatabase(application))
+    private val prefs = application.getSharedPreferences("rozana_user_prefs", Context.MODE_PRIVATE)
+
+    private val _userName = MutableStateFlow(prefs.getString("user_name", "Mohsin") ?: "Mohsin")
+    val userName: StateFlow<String> = _userName.asStateFlow()
+
+    private val _profileImageUri = MutableStateFlow<String?>(prefs.getString("profile_image_uri", null))
+    val profileImageUri: StateFlow<String?> = _profileImageUri.asStateFlow()
+
+    private val _habitDaysClean = MutableStateFlow(prefs.getInt("habit_days_clean", 14))
+    val habitDaysClean: StateFlow<Int> = _habitDaysClean.asStateFlow()
+
+    private val _urgesResisted = MutableStateFlow(prefs.getInt("urges_resisted", 22))
+    val urgesResisted: StateFlow<Int> = _urgesResisted.asStateFlow()
+
+    private val _waterGlasses = MutableStateFlow(prefs.getInt("water_glasses", 5))
+    val waterGlasses: StateFlow<Int> = _waterGlasses.asStateFlow()
+
+    private val _fajrAlert = MutableStateFlow(prefs.getBoolean("fajr_alert", true))
+    val fajrAlert: StateFlow<Boolean> = _fajrAlert.asStateFlow()
+
+    private val _dhuhrAlert = MutableStateFlow(prefs.getBoolean("dhuhr_alert", true))
+    val dhuhrAlert: StateFlow<Boolean> = _dhuhrAlert.asStateFlow()
+
+    private val _asrAlert = MutableStateFlow(prefs.getBoolean("asr_alert", true))
+    val asrAlert: StateFlow<Boolean> = _asrAlert.asStateFlow()
+
+    private val _maghribAlert = MutableStateFlow(prefs.getBoolean("maghrib_alert", true))
+    val maghribAlert: StateFlow<Boolean> = _maghribAlert.asStateFlow()
+
+    private val _ishaAlert = MutableStateFlow(prefs.getBoolean("isha_alert", true))
+    val ishaAlert: StateFlow<Boolean> = _ishaAlert.asStateFlow()
+
+    private val _breakfastAlert = MutableStateFlow(prefs.getBoolean("breakfast_alert", true))
+    val breakfastAlert: StateFlow<Boolean> = _breakfastAlert.asStateFlow()
+
+    private val _lunchAlert = MutableStateFlow(prefs.getBoolean("lunch_alert", true))
+    val lunchAlert: StateFlow<Boolean> = _lunchAlert.asStateFlow()
+
+    private val _dinnerAlert = MutableStateFlow(prefs.getBoolean("dinner_alert", true))
+    val dinnerAlert: StateFlow<Boolean> = _dinnerAlert.asStateFlow()
 
     private val _language = MutableStateFlow(AppLanguage.ENGLISH)
     val language: StateFlow<AppLanguage> = _language.asStateFlow()
@@ -94,6 +138,90 @@ class RozanaViewModel(application: Application) : AndroidViewModel(application) 
 
     fun setDarkMode(dark: Boolean?) {
         _isDarkMode.value = dark
+    }
+
+    fun updateUserName(name: String) {
+        val clean = name.trim().ifEmpty { "Mohsin" }
+        _userName.value = clean
+        prefs.edit().putString("user_name", clean).apply()
+    }
+
+    fun updateProfileImage(uriString: String?) {
+        _profileImageUri.value = uriString
+        prefs.edit().putString("profile_image_uri", uriString).apply()
+    }
+
+    fun incrementCleanDays() {
+        val next = _habitDaysClean.value + 1
+        _habitDaysClean.value = next
+        prefs.edit().putInt("habit_days_clean", next).apply()
+    }
+
+    fun incrementUrgesResisted() {
+        val next = _urgesResisted.value + 1
+        _urgesResisted.value = next
+        prefs.edit().putInt("urges_resisted", next).apply()
+    }
+
+    fun addWaterGlass() {
+        val next = (_waterGlasses.value + 1).coerceAtMost(12)
+        _waterGlasses.value = next
+        prefs.edit().putInt("water_glasses", next).apply()
+    }
+
+    fun resetWaterGlasses() {
+        _waterGlasses.value = 0
+        prefs.edit().putInt("water_glasses", 0).apply()
+    }
+
+    fun togglePrayerAlert(prayerIdx: Int) {
+        when (prayerIdx) {
+            0 -> {
+                val next = !_fajrAlert.value
+                _fajrAlert.value = next
+                prefs.edit().putBoolean("fajr_alert", next).apply()
+            }
+            1 -> {
+                val next = !_dhuhrAlert.value
+                _dhuhrAlert.value = next
+                prefs.edit().putBoolean("dhuhr_alert", next).apply()
+            }
+            2 -> {
+                val next = !_asrAlert.value
+                _asrAlert.value = next
+                prefs.edit().putBoolean("asr_alert", next).apply()
+            }
+            3 -> {
+                val next = !_maghribAlert.value
+                _maghribAlert.value = next
+                prefs.edit().putBoolean("maghrib_alert", next).apply()
+            }
+            4 -> {
+                val next = !_ishaAlert.value
+                _ishaAlert.value = next
+                prefs.edit().putBoolean("isha_alert", next).apply()
+            }
+        }
+    }
+
+    fun toggleMealAlert(mealIdx: Int) {
+        when (mealIdx) {
+            0 -> {
+                val next = !_breakfastAlert.value
+                _breakfastAlert.value = next
+                prefs.edit().putBoolean("breakfast_alert", next).apply()
+            }
+            1 -> {
+                val next = !_lunchAlert.value
+                _lunchAlert.value = next
+                prefs.edit().putBoolean("lunch_alert", next).apply()
+            }
+            2 -> {
+                val next = !_dinnerAlert.value
+                _dinnerAlert.value = next
+                prefs.edit().putBoolean("dinner_alert", next).apply()
+            }
+        }
     }
 
     // Transaction CRUD

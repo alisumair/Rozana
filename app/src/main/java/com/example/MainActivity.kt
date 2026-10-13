@@ -83,6 +83,12 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onOpenAi = {
                                     viewModel.navigateTo(Screen.AiAssistant)
+                                },
+                                onOpenGuide = {
+                                    viewModel.navigateTo(Screen.Guide)
+                                },
+                                onOpenQuran = {
+                                    viewModel.navigateTo(Screen.Quran)
                                 }
                             )
                         },
@@ -173,6 +179,15 @@ class MainActivity : ComponentActivity() {
                                 }
                                 Screen.Settings -> {
                                     SettingsScreen(viewModel = viewModel)
+                                }
+                                Screen.Quran -> {
+                                    QuranScreen(viewModel = viewModel)
+                                }
+                                Screen.Azkar -> {
+                                    AzkarScreen(viewModel = viewModel)
+                                }
+                                Screen.Guide -> {
+                                    GuideScreen(viewModel = viewModel)
                                 }
                             }
                         }

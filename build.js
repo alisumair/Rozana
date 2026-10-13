@@ -40,6 +40,11 @@ targetDirs.forEach((dirName) => {
   fs.writeFileSync(path.join(dirPath, 'index.html'), htmlContent, 'utf8');
   fs.writeFileSync(path.join(dirPath, 'manifest.json'), manifestContent, 'utf8');
   fs.writeFileSync(path.join(dirPath, 'robots.txt'), robotsContent, 'utf8');
+  
+  const sourceApk = path.join(__dirname, 'rozana.apk');
+  if (fs.existsSync(sourceApk)) {
+    fs.copyFileSync(sourceApk, path.join(dirPath, 'rozana.apk'));
+  }
   console.log(`Created output in ${dirName}/`);
 });
 
