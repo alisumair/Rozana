@@ -2,8 +2,8 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-// Determine port: Cloud Run sets PORT (e.g., 8080). Dev server uses DEFAULT_APP_PORT (3000) or PORT.
-const PORT = parseInt(process.env.PORT || process.env.DEFAULT_APP_PORT || '8080', 10);
+// Determine port: In this container, nginx listens on 8080 and proxies to 3000
+const PORT = parseInt(process.env.DEFAULT_APP_PORT || (process.env.PORT === '8080' ? '3000' : (process.env.PORT || '3000')), 10);
 const HOST = '0.0.0.0';
 
 // Locate index.html across multiple possible locations (root, dist, public, build)

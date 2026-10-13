@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#6028E4">
   <link rel="manifest" href="/manifest.json">
-  <title>Rozana – روزانہ | All-in-One Life, Finance, Bills & Habits</title>
+  <title>Rozana – روزانہ | Mohsin's All-in-One Life, Namaz, Quran, Azkar & Bills</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
   <style>
     :root {
@@ -31,12 +31,13 @@
       --warning-bg: #FEF6E7;
       --blue: #2563EB;
       --blue-bg: #EFF6FF;
-      --pink: #E11D48;
-      --pink-bg: #FFF1F2;
-      --purple: #7C3AED;
-      --purple-bg: #F5F3FF;
+      --emerald: #059669;
+      --emerald-bg: #ECFDF5;
+      --quran-gold: #D97706;
+      --quran-bg: #FFFBEB;
       --font-en: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
       --font-ur: 'Noto Nastaliq Urdu', 'Plus Jakarta Sans', serif;
+      --font-ar: 'Amiri', serif;
     }
 
     body.dark-mode {
@@ -55,8 +56,8 @@
       --expense-bg: #4C0519;
       --warning-bg: #451A03;
       --blue-bg: #1E3A8A;
-      --pink-bg: #4C0519;
-      --purple-bg: #2E1F5E;
+      --emerald-bg: #064E3B;
+      --quran-bg: #3B2A08;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -96,7 +97,7 @@
 
     /* Top App Header */
     .top-header {
-      padding: 14px 18px;
+      padding: 12px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -112,7 +113,7 @@
       cursor: pointer;
     }
     .greeting-sub {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       color: var(--text-muted);
       display: flex;
@@ -129,12 +130,12 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .icon-btn {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 12px;
       background: var(--surface-variant);
       border: 1px solid var(--border);
@@ -143,20 +144,25 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 20px;
+      font-size: 19px;
       transition: all 0.2s ease;
     }
     .icon-btn:active { transform: scale(0.92); }
+    .icon-btn.active-bell {
+      background: #FEF3C7;
+      color: #D97706;
+      border-color: #FCD34D;
+    }
 
     .lang-pill {
-      height: 36px;
-      padding: 0 12px;
-      border-radius: 18px;
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 17px;
       background: var(--primary-container);
       color: var(--on-primary-container);
       border: none;
       font-weight: 700;
-      font-size: 13px;
+      font-size: 12px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -169,17 +175,17 @@
       cursor: pointer;
     }
     .avatar-btn {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
       border: 2px solid #FFFFFF;
-      box-shadow: 0 4px 12px rgba(96, 40, 228, 0.25);
+      box-shadow: 0 4px 10px rgba(96, 40, 228, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       overflow: hidden;
     }
@@ -192,8 +198,8 @@
       position: absolute;
       bottom: 1px;
       right: 1px;
-      width: 11px;
-      height: 11px;
+      width: 10px;
+      height: 10px;
       background: #00C48C;
       border-radius: 50%;
       border: 2px solid var(--surface);
@@ -204,115 +210,10 @@
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 16px 16px 90px 16px;
+      padding: 14px 16px 88px 16px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-    }
-
-    /* TransactFlow Hero Balance Card */
-    .hero-stat-card {
-      background: linear-gradient(135deg, #6028E4 0%, #4713C6 100%);
-      border-radius: 26px;
-      padding: 22px;
-      color: white;
-      box-shadow: 0 14px 28px rgba(96, 40, 228, 0.28);
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-stat-card::after {
-      content: '';
-      position: absolute;
-      top: -30px;
-      right: -30px;
-      width: 130px;
-      height: 130px;
-      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-      border-radius: 50%;
-    }
-    .hero-subtitle {
-      font-size: 13px;
-      font-weight: 600;
-      opacity: 0.88;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .hero-amount {
-      font-size: 34px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin: 8px 0 14px 0;
-    }
-    .hero-stats-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.12);
-      border-radius: 16px;
-      padding: 10px 12px;
-      backdrop-filter: blur(8px);
-    }
-    .hero-sub-stat {
-      display: flex;
-      flex-direction: column;
-    }
-    .sub-stat-lbl { font-size: 11px; opacity: 0.8; font-weight: 500; }
-    .sub-stat-val { font-size: 14px; font-weight: 800; }
-
-    /* Quick Action Chips & Buttons */
-    .section-title {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 4px;
-    }
-    .section-title span.badge {
-      font-size: 11px;
-      background: var(--primary-container);
-      color: var(--on-primary-container);
-      padding: 3px 8px;
-      border-radius: 10px;
-      font-weight: 700;
-    }
-
-    .quick-chips-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-    .chip-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 12px 6px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-    }
-    .chip-card:active { transform: scale(0.95); }
-    .chip-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-    }
-    .chip-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.2;
+      gap: 14px;
     }
 
     /* Cards */
@@ -327,39 +228,290 @@
       gap: 12px;
     }
 
-    /* Habits & Addiction Recovery Box */
+    /* TransactFlow Hero Balance Card */
+    .hero-stat-card {
+      background: linear-gradient(135deg, #6028E4 0%, #4713C6 100%);
+      border-radius: 24px;
+      padding: 20px;
+      color: white;
+      box-shadow: 0 12px 26px rgba(96, 40, 228, 0.28);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-stat-card::after {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-subtitle {
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0.9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .hero-amount {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin: 6px 0 12px 0;
+    }
+    .hero-stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 10px 12px;
+      backdrop-filter: blur(8px);
+    }
+    .hero-sub-stat {
+      display: flex;
+      flex-direction: column;
+    }
+    .sub-stat-lbl { font-size: 10.5px; opacity: 0.8; font-weight: 500; }
+    .sub-stat-val { font-size: 13.5px; font-weight: 800; }
+
+    /* Section Titles */
+    .section-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-title span.badge {
+      font-size: 11px;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    /* Namaz & Prayer Times Display Widget */
+    .namaz-widget-card {
+      background: linear-gradient(135deg, #065F46 0%, #047857 100%);
+      border-radius: 22px;
+      padding: 18px;
+      color: white;
+      box-shadow: 0 10px 22px rgba(6, 95, 70, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .namaz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .namaz-title-box h3 { font-size: 17px; font-weight: 800; }
+    .namaz-title-box p { font-size: 11px; opacity: 0.85; }
+    .prayer-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+    .prayer-slot {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 8px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .prayer-slot.next-active {
+      background: #FFFFFF;
+      color: #065F46;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+    .prayer-name { font-size: 11px; font-weight: 700; }
+    .prayer-time { font-size: 12px; font-weight: 800; margin: 2px 0; }
+    .prayer-bell { font-size: 14px; opacity: 0.8; }
+    .prayer-slot.next-active .prayer-bell { color: #059669; opacity: 1; }
+
+    /* Meals (Lunch & Dinner) Reminder Card */
+    .meals-widget-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .meals-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .meal-box {
+      background: var(--surface-variant);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 4px;
+      cursor: pointer;
+      position: relative;
+    }
+    .meal-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .meal-name { font-size: 11.5px; font-weight: 800; color: var(--text); }
+    .meal-time { font-size: 11px; font-weight: 600; color: var(--text-muted); }
+    .meal-bell-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00C48C;
+    }
+
+    /* Quran & Azkar Display Folders */
+    .islamic-folders-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .islamic-folder-card {
+      border-radius: 20px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .islamic-folder-card:active { transform: scale(0.96); }
+    .quran-folder {
+      background: linear-gradient(135deg, #B45309 0%, #D97706 100%);
+      color: white;
+    }
+    .azkar-folder {
+      background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+      color: white;
+    }
+    .folder-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .folder-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .folder-badge {
+      font-size: 10px;
+      font-weight: 800;
+      background: rgba(255,255,255,0.25);
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+    .folder-title { font-size: 15px; font-weight: 800; }
+    .folder-sub { font-size: 11px; opacity: 0.88; line-height: 1.3; }
+
+    /* Quick Action Chips */
+    .quick-chips-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+    }
+    .chip-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .chip-card:active { transform: scale(0.94); }
+    .chip-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .chip-title {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    /* Habits & Clean Streak */
     .streak-banner {
       background: linear-gradient(135deg, #10B981, #059669);
       border-radius: 20px;
-      padding: 18px;
+      padding: 16px;
       color: white;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 8px 18px rgba(16, 185, 129, 0.25);
+      box-shadow: 0 8px 18px rgba(16, 185, 129, 0.22);
+      cursor: pointer;
     }
-    .streak-info h3 { font-size: 20px; font-weight: 800; }
-    .streak-info p { font-size: 12px; opacity: 0.9; margin-top: 2px; }
+    .streak-info h3 { font-size: 18px; font-weight: 800; }
+    .streak-info p { font-size: 11.5px; opacity: 0.9; margin-top: 2px; }
     .streak-badge {
       background: rgba(255,255,255,0.25);
       border-radius: 14px;
-      padding: 10px 14px;
+      padding: 8px 12px;
       text-align: center;
     }
-    .streak-num { font-size: 24px; font-weight: 900; line-height: 1; }
-    .streak-lbl { font-size: 11px; font-weight: 700; }
+    .streak-num { font-size: 22px; font-weight: 900; line-height: 1; }
+    .streak-lbl { font-size: 10px; font-weight: 700; }
 
     /* Water glasses */
     .water-tracker-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 4px;
-      gap: 6px;
+      gap: 5px;
     }
     .water-glass-btn {
       flex: 1;
-      height: 48px;
+      height: 44px;
       border-radius: 12px;
       border: 2px dashed #93C5FD;
       background: #EFF6FF;
@@ -369,7 +521,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 15px;
       transition: all 0.2s;
     }
     .water-glass-btn.filled {
@@ -383,47 +535,38 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px;
-      border-radius: 16px;
+      padding: 11px 12px;
+      border-radius: 15px;
       background: var(--surface-variant);
       border: 1px solid var(--border);
-      gap: 12px;
+      gap: 10px;
     }
     .item-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex: 1;
     }
     .item-icon-box {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 20px;
       flex-shrink: 0;
     }
-    .item-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .item-title { font-size: 14px; font-weight: 700; color: var(--text); }
-    .item-sub { font-size: 12px; color: var(--text-muted); font-weight: 500; }
-    .item-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 4px;
-    }
-    .item-amount { font-size: 15px; font-weight: 800; }
+    .item-meta { display: flex; flex-direction: column; gap: 2px; }
+    .item-title { font-size: 13.5px; font-weight: 700; color: var(--text); }
+    .item-sub { font-size: 11.5px; color: var(--text-muted); font-weight: 500; }
+    .item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+    .item-amount { font-size: 14.5px; font-weight: 800; }
     .item-status-pill {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 8px;
+      padding: 2px 7px;
+      border-radius: 7px;
     }
 
     /* Bottom Navigation Bar */
@@ -451,7 +594,7 @@
       border: none;
       color: var(--text-muted);
       cursor: pointer;
-      padding: 6px 12px;
+      padding: 6px 8px;
       border-radius: 14px;
       transition: all 0.2s;
       flex: 1;
@@ -463,18 +606,18 @@
       font-variation-settings: 'FILL' 1;
     }
     .tab-label {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
     }
 
     /* Floating Action Button */
     .fab-button {
       position: absolute;
-      bottom: 82px;
-      right: 20px;
-      width: 54px;
-      height: 54px;
-      border-radius: 20px;
+      bottom: 80px;
+      right: 18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
       border: none;
@@ -482,19 +625,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
+      font-size: 26px;
       cursor: pointer;
       z-index: 25;
       transition: transform 0.2s;
     }
     .fab-button:active { transform: scale(0.92); }
-    body.rtl .fab-button { right: auto; left: 20px; }
+    body.rtl .fab-button { right: auto; left: 18px; }
 
     /* Modals */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(19, 14, 38, 0.6);
+      background: rgba(19, 14, 38, 0.65);
       backdrop-filter: blur(4px);
       z-index: 100;
       display: none;
@@ -505,16 +648,16 @@
     .modal-content {
       width: 100%;
       max-width: 600px;
-      max-height: 85vh;
+      max-height: 88vh;
       overflow-y: auto;
       background: var(--surface);
-      border-top-left-radius: 28px;
-      border-top-right-radius: 28px;
-      padding: 24px 20px 32px 20px;
+      border-top-left-radius: 26px;
+      border-top-right-radius: 26px;
+      padding: 22px 18px 32px 18px;
       border-top: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       animation: slideUp 0.25s ease-out;
     }
     @keyframes slideUp {
@@ -526,7 +669,7 @@
       justify-content: space-between;
       align-items: center;
     }
-    .modal-title { font-size: 18px; font-weight: 800; color: var(--text); }
+    .modal-title { font-size: 17px; font-weight: 800; color: var(--text); }
     .close-btn {
       background: var(--surface-variant);
       border: none;
@@ -540,88 +683,66 @@
       color: var(--text);
     }
 
-    /* Form Fields */
-    .field-wrap { display: flex; flex-direction: column; gap: 6px; }
-    .field-lbl { font-size: 12px; font-weight: 700; color: var(--text-muted); }
+    /* Forms */
+    .field-wrap { display: flex; flex-direction: column; gap: 5px; }
+    .field-lbl { font-size: 11.5px; font-weight: 700; color: var(--text-muted); }
     .field-control {
       width: 100%;
-      height: 48px;
+      height: 46px;
       padding: 0 14px;
-      border-radius: 14px;
+      border-radius: 13px;
       border: 1px solid var(--border);
       background: var(--surface-variant);
       color: var(--text);
       font-size: 14px;
       font-family: inherit;
     }
-    .field-control:focus {
-      outline: 2px solid var(--primary);
-      border-color: transparent;
-    }
     .btn-submit {
       width: 100%;
-      height: 50px;
-      border-radius: 16px;
+      height: 48px;
+      border-radius: 15px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
       border: none;
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 800;
       cursor: pointer;
-      margin-top: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
     }
-    .btn-submit:active { transform: scale(0.98); }
 
-    /* Guide Section Cards */
-    .guide-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .guide-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .guide-icon-box {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-    }
-    .guide-title { font-size: 15px; font-weight: 800; color: var(--text); }
-    .guide-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
-    .guide-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      font-size: 12.5px;
+    /* Quran & Azkar Cards */
+    .arabic-text {
+      font-family: var(--font-ar);
+      font-size: 21px;
+      line-height: 1.8;
       color: var(--text);
+      text-align: right;
+      direction: rtl;
     }
-    .step-bullet {
-      width: 20px;
-      height: 20px;
+    .urdu-meaning {
+      font-family: var(--font-ur);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      direction: rtl;
+    }
+    .zikr-counter-btn {
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background: var(--primary-container);
-      color: var(--on-primary-container);
-      font-size: 11px;
+      background: var(--primary);
+      color: white;
+      border: none;
       font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      margin-top: 1px;
     }
 
     /* Profile Pic upload preview */
@@ -629,25 +750,25 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      padding: 16px;
+      gap: 10px;
+      padding: 14px;
       background: var(--surface-variant);
-      border-radius: 20px;
+      border-radius: 18px;
       border: 2px dashed var(--border);
     }
     .preview-avatar-circle {
-      width: 90px;
-      height: 90px;
+      width: 85px;
+      height: 85px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 800;
       overflow: hidden;
-      box-shadow: 0 6px 16px rgba(96, 40, 228, 0.3);
+      box-shadow: 0 4px 14px rgba(96, 40, 228, 0.28);
     }
     .preview-avatar-circle img {
       width: 100%;
@@ -655,11 +776,11 @@
       object-fit: cover;
     }
     .upload-btn-label {
-      padding: 8px 16px;
+      padding: 7px 15px;
       background: var(--primary);
       color: white;
-      border-radius: 14px;
-      font-size: 13px;
+      border-radius: 12px;
+      font-size: 12px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
@@ -674,7 +795,7 @@
 <div class="app-root">
   <div class="app-container">
     
-    <!-- Top Header with Mohsin 👋 Greeting & Profile Picture -->
+    <!-- Top Header: Mohsin, Notification Alert Bell & Profile Photo -->
     <header class="top-header">
       <div class="user-greeting" onclick="openProfileModal()">
         <span class="greeting-sub" id="greetingTimeText">
@@ -684,7 +805,10 @@
         <h1 class="greeting-title" id="greetingNameText">Mohsin 👋</h1>
       </div>
       <div class="header-actions">
-        <button class="icon-btn" onclick="openTab('guide')" title="User Guide / رہنمائی">
+        <button class="icon-btn" id="headerNotifBtn" onclick="toggleGlobalNotifications()" title="Notifications (Namaz, Lunch & Dinner)">
+          <span class="material-symbols-rounded">notifications_active</span>
+        </button>
+        <button class="icon-btn" onclick="openTab('guide')" title="User Guide / استعمال کی تفصیل">
           <span class="material-symbols-rounded" style="color:var(--primary);">help_outline</span>
         </button>
         <button class="icon-btn" onclick="toggleTheme()" title="Theme Toggle">
@@ -702,7 +826,7 @@
       </div>
     </header>
 
-    <!-- Main Content Viewport -->
+    <!-- Main Display Viewport (All Features Rendered on Display) -->
     <main class="content-scroll" id="contentViewport">
       <!-- Injected via JavaScript -->
     </main>
@@ -716,7 +840,15 @@
     <nav class="bottom-bar">
       <button class="bar-item active" id="tabBtnDashboard" onclick="openTab('dashboard')">
         <span class="material-symbols-rounded">home</span>
-        <span class="tab-label" data-en="Dashboard" data-ur="ڈیش بورڈ">Dashboard</span>
+        <span class="tab-label" data-en="Display" data-ur="مین ڈسپلے">Display</span>
+      </button>
+      <button class="bar-item" id="tabBtnQuran" onclick="openTab('quran')">
+        <span class="material-symbols-rounded">menu_book</span>
+        <span class="tab-label" data-en="Quran" data-ur="قرآن مجید">Quran</span>
+      </button>
+      <button class="bar-item" id="tabBtnAzkar" onclick="openTab('azkar')">
+        <span class="material-symbols-rounded">star</span>
+        <span class="tab-label" data-en="Azkar" data-ur="اذکار">Azkar</span>
       </button>
       <button class="bar-item" id="tabBtnBills" onclick="openTab('bills')">
         <span class="material-symbols-rounded">receipt_long</span>
@@ -724,28 +856,18 @@
       </button>
       <button class="bar-item" id="tabBtnHabits" onclick="openTab('habits')">
         <span class="material-symbols-rounded">psychology</span>
-        <span class="tab-label" data-en="Habits & Health" data-ur="عادات و صحت">Habits & Health</span>
-      </button>
-      <button class="bar-item" id="tabBtnRoutine" onclick="openTab('routine')">
-        <span class="material-symbols-rounded">checklist</span>
-        <span class="tab-label" data-en="Daily Life" data-ur="روزمرہ کام">Daily Life</span>
-      </button>
-      <button class="bar-item" id="tabBtnGuide" onclick="openTab('guide')">
-        <span class="material-symbols-rounded">menu_book</span>
-        <span class="tab-label" data-en="User Guide" data-ur="رہنمائی">User Guide</span>
+        <span class="tab-label" data-en="Habits" data-ur="عادات و صحت">Habits</span>
       </button>
     </nav>
   </div>
 </div>
 
-<!-- Add Record Modal (Quick Categories: School Fee, Food, Electric, Gas, Other Bills, etc.) -->
+<!-- Modal: Add Expense / Bill (School Fee, Electric, Gas, Food, etc.) -->
 <div class="modal-backdrop" id="addTxModal">
   <div class="modal-content">
     <div class="modal-header-row">
       <h3 class="modal-title" id="addModalTitleText">Add New Expense or Bill</h3>
-      <button class="close-btn" onclick="closeModal('addTxModal')">
-        <span class="material-symbols-rounded">close</span>
-      </button>
+      <button class="close-btn" onclick="closeModal('addTxModal')"><span class="material-symbols-rounded">close</span></button>
     </div>
 
     <div class="field-wrap">
@@ -789,7 +911,7 @@
 
     <div class="field-wrap">
       <label class="field-lbl">Description / تفصیل</label>
-      <input type="text" class="field-control" id="modalDesc" placeholder="e.g. October School fee for Ahmad / بجلی بل 450 یونٹ">
+      <input type="text" class="field-control" id="modalDesc" placeholder="e.g. October School fee for Ahmad / بجلی بل">
     </div>
 
     <div class="field-wrap">
@@ -799,19 +921,17 @@
 
     <button class="btn-submit" onclick="confirmAddRecord()">
       <span class="material-symbols-rounded">check_circle</span>
-      <span id="saveBtnText">محفوظ کریں (Save Record)</span>
+      <span>محفوظ کریں (Save Record)</span>
     </button>
   </div>
 </div>
 
-<!-- Profile & Photo Upload Modal -->
+<!-- Modal: Profile & Picture Upload -->
 <div class="modal-backdrop" id="profileModal">
   <div class="modal-content">
     <div class="modal-header-row">
       <h3 class="modal-title">User Profile & Picture (پروفائل و تصویر)</h3>
-      <button class="close-btn" onclick="closeModal('profileModal')">
-        <span class="material-symbols-rounded">close</span>
-      </button>
+      <button class="close-btn" onclick="closeModal('profileModal')"><span class="material-symbols-rounded">close</span></button>
     </div>
 
     <div class="profile-upload-area">
@@ -819,7 +939,7 @@
         <span id="previewAvatarInitial">M</span>
       </div>
       <label class="upload-btn-label">
-        <span class="material-symbols-rounded" style="font-size:18px;">photo_camera</span>
+        <span class="material-symbols-rounded" style="font-size:17px;">photo_camera</span>
         <span>Choose / Upload Pic (اپنی تصویر لگائیں)</span>
         <input type="file" accept="image/*" class="hidden-file-input" id="profilePicInput" onchange="handleProfilePicUpload(event)">
       </label>
@@ -830,7 +950,7 @@
 
     <div class="field-wrap">
       <label class="field-lbl">Your Name (آپ کا نام)</label>
-      <input type="text" class="field-control" id="profileNameInput" value="Mohsin" placeholder="Enter name">
+      <input type="text" class="field-control" id="profileNameInput" value="Mohsin">
     </div>
 
     <div class="field-wrap">
@@ -846,15 +966,110 @@
 </div>
 
 <script>
-// State & Storage
+// State
 let appLang = localStorage.getItem('rozana_lang') || 'en';
 let isDarkMode = localStorage.getItem('rozana_dark') === 'true';
 let userName = localStorage.getItem('rozana_user_name') || 'Mohsin';
 let userPhoto = localStorage.getItem('rozana_user_photo') || '';
 let currentTab = 'dashboard';
 let currentEntryType = 'EXPENSE';
+let notificationsEnabled = localStorage.getItem('rozana_notif_enabled') === 'true';
 
-// Data collections
+// Namaz Times with Notification states
+let prayerSchedule = JSON.parse(localStorage.getItem('rozana_prayers')) || [
+  { id: 'fajr', nameEn: 'Fajr', nameUr: 'فجر', time: '05:00 AM', alert: true },
+  { id: 'dhuhr', nameEn: 'Dhuhr', nameUr: 'ظہر', time: '01:15 PM', alert: true },
+  { id: 'asr', nameEn: 'Asr', nameUr: 'عصر', time: '04:45 PM', alert: true },
+  { id: 'maghrib', nameEn: 'Maghrib', nameUr: 'مغرب', time: '06:05 PM', alert: true },
+  { id: 'isha', nameEn: 'Isha', nameUr: 'عشاء', time: '07:45 PM', alert: true }
+];
+
+// Meals Notification Schedule
+let mealSchedule = JSON.parse(localStorage.getItem('rozana_meals')) || [
+  { id: 'breakfast', nameEn: 'Breakfast', nameUr: 'ناشتہ', time: '08:00 AM', icon: 'bakery_dining', alert: true },
+  { id: 'lunch', nameEn: 'Lunch', nameUr: 'لنچ (دوپہر کا کھانا)', time: '01:30 PM', icon: 'lunch_dining', alert: true },
+  { id: 'dinner', nameEn: 'Dinner', nameUr: 'ڈینر (رات کا کھانا)', time: '08:30 PM', icon: 'dinner_dining', alert: true }
+];
+
+// Quran Surahs Data
+const quranSurahs = [
+  {
+    num: 1, nameAr: 'سُورَةُ الفَاتِحَة', nameEn: 'Al-Fatihah', versesCount: 7,
+    verses: [
+      { ar: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', ur: 'شروع اللہ کے نام سے جو بڑا مہربان نہایت رحم والا ہے' },
+      { ar: 'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ', ur: 'سب تعریفیں اللہ کے لیے ہیں جو تمام جہانوں کا پالنے والا ہے' },
+      { ar: 'الرَّحْمَٰنِ الرَّحِيمِ', ur: 'بڑا مہربان نہایت رحم فرمانے والا' },
+      { ar: 'مَالِكِ يَوْمِ الدِّينِ', ur: 'روز جزا کا مالک' },
+      { ar: 'إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ', ur: 'ہم تیری ہی عبادت کرتے ہیں اور تجھ ہی سے مدد مانگتے ہیں' },
+      { ar: 'اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ', ur: 'ہمیں سیدھے راستے پر چلا' },
+      { ar: 'صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ', ur: 'ان لوگوں کے راستے پر جن پر تو نے انعام فرمایا، نہ ان کے جن پر غضب کیا گیا اور نہ گمراہوں کے راستے پر' }
+    ]
+  },
+  {
+    num: 36, nameAr: 'سُورَةُ يس', nameEn: 'Ya-Sin', versesCount: 83,
+    verses: [
+      { ar: 'يس ۝ وَالْقُرْآنِ الْحَكِيمِ ۝ إِنَّكَ لَمِنَ الْمُرْسَلِينَ', ur: 'یس۔ قسم ہے حکمت والے قرآن کی۔ بیشک آپ ضرور رسولوں میں سے ہیں' },
+      { ar: 'عَلَىٰ صِرَاطٍ مُسْتَقِيمٍ ۝ تَنزِيلَ الْعَزِيزِ الرَّحِيمِ', ur: 'سیدھے راستے پر۔ یہ زبردست رحم والے کی طرف سے نازل کیا ہوا ہے' }
+    ]
+  },
+  {
+    num: 67, nameAr: 'سُورَةُ المُلْك', nameEn: 'Al-Mulk', versesCount: 30,
+    verses: [
+      { ar: 'تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ', ur: 'نہایت بابرکت ہے وہ ذات جس کے ہاتھ میں ساری بادشاہی ہے اور وہ ہر چیز پر قادر ہے' },
+      { ar: 'الَّذِي خَلَقَ الْمَوْتَ وَالْحَيَاةَ لِيَبْلُوَكُمْ أَيُّكُمْ أَحْسَنُ عَمَلًا ۚ وَهُوَ الْعَزِيزُ الْغَفُورُ', ur: 'جس نے موت اور زندگی کو پیدا کیا تاکہ تمہیں آزمائے کہ تم میں سے کون اچھے عمل والا ہے' }
+    ]
+  },
+  {
+    num: 112, nameAr: 'سُورَةُ الإِخْلَاص', nameEn: 'Al-Ikhlas', versesCount: 4,
+    verses: [
+      { ar: 'قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ', ur: 'کہہ دیجیے کہ وہ اللہ ایک ہے۔ اللہ بے نیاز ہے' },
+      { ar: 'لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ', ur: 'نہ اس سے کوئی پیدا ہوا اور نہ وہ کسی سے پیدا ہوا، اور نہ کوئی اس کا ہمسر ہے' }
+    ]
+  },
+  {
+    num: 113, nameAr: 'سُورَةُ الفَلَق', nameEn: 'Al-Falaq', versesCount: 5,
+    verses: [
+      { ar: 'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ', ur: 'کہہ دیجیے کہ میں صبح کے رب کی پناہ مانگتا ہوں، اس کی تمام مخلوقات کے شر سے' }
+    ]
+  },
+  {
+    num: 114, nameAr: 'سُورَةُ النَّاس', nameEn: 'An-Nas', versesCount: 6,
+    verses: [
+      { ar: 'قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ', ur: 'کہہ دیجیے کہ میں تمام انسانوں کے رب، انسانوں کے بادشاہ، انسانوں کے معبود کی پناہ مانگتا ہوں' }
+    ]
+  }
+];
+
+// Subah & Sham k Azkar Data
+let azkarData = [
+  {
+    id: 'z1', category: 'Subah (صبح کے مسنون اذکار)', count: 0, target: 1,
+    ar: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ',
+    ur: 'ہم نے صبح کی اور اللہ کے سارے ملک نے صبح کی، اور تمام تعریف اللہ ہی کے لیے ہے، اللہ کے سوا کوئی معبود نہیں وہ اکیلا ہے اس کا کوئی شریک نہیں'
+  },
+  {
+    id: 'z2', category: 'Subah (صبح کے مسنون اذکار)', count: 0, target: 3,
+    ar: 'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ',
+    ur: 'اللہ کے نام سے جس کے نام کے ساتھ زمین و آسمان کی کوئی چیز نقصان نہیں پہنچا سکتی اور وہ خوب سننے اور جاننے والا ہے (3 مرتبہ)'
+  },
+  {
+    id: 'z3', category: 'Subah (صبح کے مسنون اذکار)', count: 0, target: 3,
+    ar: 'رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا',
+    ur: 'میں اللہ کے رب ہونے پر، اسلام کے دین ہونے پر، اور محمد ﷺ کے نبی ہونے پر راضی اور خوش ہوا (3 مرتبہ)'
+  },
+  {
+    id: 'z4', category: 'Sham (شام کے اذکار)', count: 0, target: 1,
+    ar: 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ',
+    ur: 'ہم نے شام کی اور اللہ کے سارے ملک نے شام کی، اور سب تعریف اللہ کے لیے ہے'
+  },
+  {
+    id: 'z5', category: 'Tasbeeh (تسبیح فاطمہ)', count: 0, target: 33,
+    ar: 'سُبْحَانَ اللَّهِ (33) • الْحَمْدُ لِلَّهِ (33) • اللَّهُ أَكْبَرُ (34)',
+    ur: 'اللہ پاک ہے (33 بار)، سب تعریفیں اللہ کے لیے ہیں (33 بار)، اللہ سب سے بڑا ہے (34 بار)'
+  }
+];
+
+// Records, Habits, Routine
 let records = JSON.parse(localStorage.getItem('rozana_records')) || [
   { id: 1, type: 'EXPENSE', category: 'School Fee', amount: 18500, desc: 'Army Public School Monthly Fee', date: 'Oct 10', isPaid: true },
   { id: 2, type: 'EXPENSE', category: 'Electricity Bill', amount: 24300, desc: 'LESCO 410 Units Consumer Bill', date: 'Oct 15', isPaid: false },
@@ -876,12 +1091,12 @@ let waterGlasses = parseInt(localStorage.getItem('rozana_water') || '4', 10);
 
 let routineTasks = JSON.parse(localStorage.getItem('rozana_routine')) || [
   { id: 101, title: 'Fajr Prayer & Quran Tilawat (نمازِ فجر و تلاوت)', time: '05:30 AM', category: 'Morning', done: true },
-  { id: 102, title: '30 Mins Morning Walk & Pushups (صبح کی واک و ورزش)', time: '06:15 AM', category: 'Morning', done: true },
-  { id: 103, title: 'School Drop & Fee Payment (بچوں کو سکول و فیس جمع)', time: '07:45 AM', category: 'Morning', done: false },
-  { id: 104, title: 'Office / Shop Core Tasks (دکان یا دفتر کے اہم کام)', time: '10:00 AM', category: 'Afternoon', done: false },
-  { id: 105, title: 'Pay LESCO Electricity & Gas Bill (بجلی و گیس بل ادا کرنا)', time: '04:00 PM', category: 'Evening', done: false },
-  { id: 106, title: 'Bring Grocery & Fresh Fruits (راشن اور پھل لانا)', time: '06:30 PM', category: 'Evening', done: false },
-  { id: 107, title: 'Night Family Time & Daily Accounts (حساب کتاب و نیند)', time: '10:30 PM', category: 'Night', done: false }
+  { id: 102, title: 'Morning Masnoon Azkar (صبح کے مسنون اذکار)', time: '06:00 AM', category: 'Morning', done: true },
+  { id: 103, title: 'Healthy Breakfast (صبح کا ناشتہ)', time: '08:00 AM', category: 'Morning', done: true },
+  { id: 104, title: 'School Drop & Fee Payment (بچوں کو سکول و فیس جمع)', time: '08:30 AM', category: 'Morning', done: false },
+  { id: 105, title: 'Lunch & Dhuhr Prayer (دوپہر کا کھانا و نمازِ ظہر)', time: '01:30 PM', category: 'Afternoon', done: false },
+  { id: 106, title: 'Pay LESCO Electricity & Gas Bill (بجلی و گیس بل ادا کرنا)', time: '04:00 PM', category: 'Evening', done: false },
+  { id: 107, title: 'Dinner with Family (رات کا کھانا)', time: '08:30 PM', category: 'Night', done: false }
 ];
 
 // Initialize on Load
@@ -889,7 +1104,9 @@ window.addEventListener('DOMContentLoaded', () => {
   applyTheme();
   applyLanguage();
   updateProfileUI();
+  updateNotifUI();
   renderTabContent();
+  checkAndTriggerTimedAlerts();
 });
 
 function applyTheme() {
@@ -947,6 +1164,71 @@ function updateProfileUI() {
   document.getElementById('profileNameInput').value = userName;
 }
 
+function updateNotifUI() {
+  const btn = document.getElementById('headerNotifBtn');
+  if (notificationsEnabled) {
+    btn.classList.add('active-bell');
+  } else {
+    btn.classList.remove('active-bell');
+  }
+}
+
+function toggleGlobalNotifications() {
+  if (!notificationsEnabled) {
+    if ('Notification' in window) {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          notificationsEnabled = true;
+          localStorage.setItem('rozana_notif_enabled', 'true');
+          updateNotifUI();
+          showInstantNotification(
+            'Rozana Notifications Active! 🔔',
+            'Namaz prayers and Lunch/Dinner reminders are now active for Mohsin.'
+          );
+        } else {
+          alert(appLang === 'ur' ? 'براہ کرم براؤزر میں نوٹیفیکیشنز کی اجازت دیں' : 'Please allow notifications in browser permissions');
+        }
+      });
+    } else {
+      notificationsEnabled = true;
+      localStorage.setItem('rozana_notif_enabled', 'true');
+      updateNotifUI();
+    }
+  } else {
+    notificationsEnabled = false;
+    localStorage.setItem('rozana_notif_enabled', 'false');
+    updateNotifUI();
+    alert(appLang === 'ur' ? 'نوٹیفیکیشنز بند کر دیے گئے ہیں' : 'Notifications paused');
+  }
+  renderTabContent();
+}
+
+function showInstantNotification(title, body) {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification(title, { body: body, icon: '/favicon.ico' });
+  } else {
+    alert(`${title}\n${body}`);
+  }
+}
+
+function togglePrayerAlert(id) {
+  const p = prayerSchedule.find(x => x.id === id);
+  if (p) {
+    p.alert = !p.alert;
+    localStorage.setItem('rozana_prayers', JSON.stringify(prayerSchedule));
+    renderTabContent();
+  }
+}
+
+function toggleMealAlert(id) {
+  const m = mealSchedule.find(x => x.id === id);
+  if (m) {
+    m.alert = !m.alert;
+    localStorage.setItem('rozana_meals', JSON.stringify(mealSchedule));
+    renderTabContent();
+  }
+}
+
 function handleProfilePicUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -977,13 +1259,8 @@ function saveProfileChanges() {
   closeModal('profileModal');
 }
 
-function openProfileModal() {
-  document.getElementById('profileModal').classList.add('open');
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-}
+function openProfileModal() { document.getElementById('profileModal').classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 function openAddModal(preCategory = null) {
   if (preCategory) {
@@ -1082,6 +1359,22 @@ function addCustomTask() {
   renderTabContent();
 }
 
+function incrementZikr(id) {
+  const z = azkarData.find(x => x.id === id);
+  if (z) {
+    z.count++;
+    renderTabContent();
+  }
+}
+
+function resetZikr(id) {
+  const z = azkarData.find(x => x.id === id);
+  if (z) {
+    z.count = 0;
+    renderTabContent();
+  }
+}
+
 function fillWaterGlass(index) {
   waterGlasses = index;
   localStorage.setItem('rozana_water', waterGlasses);
@@ -1098,31 +1391,37 @@ function resistUrge(habitId) {
   }
 }
 
-function resetHabitStreak(habitId) {
-  if (confirm(appLang === 'ur' ? 'کیا آپ اسٹریک ری سیٹ کرنا چاہتے ہیں؟ گھبرائیں نہیں، دوبارہ عزم سے شروع کریں!' : 'Reset streak? Stay strong, every fresh start is a step to victory!')) {
-    const h = habits.find(x => x.id === habitId);
-    if (h) {
-      h.streakDays = 0;
-      h.startDate = new Date().toISOString().split('T')[0];
-      localStorage.setItem('rozana_habits', JSON.stringify(habits));
-      renderTabContent();
-    }
-  }
-}
-
 function openTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.bar-item').forEach(b => b.classList.remove('active'));
   if (tab === 'dashboard') document.getElementById('tabBtnDashboard').classList.add('active');
+  if (tab === 'quran') document.getElementById('tabBtnQuran').classList.add('active');
+  if (tab === 'azkar') document.getElementById('tabBtnAzkar').classList.add('active');
   if (tab === 'bills') document.getElementById('tabBtnBills').classList.add('active');
   if (tab === 'habits') document.getElementById('tabBtnHabits').classList.add('active');
-  if (tab === 'routine') document.getElementById('tabBtnRoutine').classList.add('active');
-  if (tab === 'guide') document.getElementById('tabBtnGuide').classList.add('active');
   renderTabContent();
 }
 
 function formatPKR(num) {
   return 'Rs. ' + Math.round(num).toLocaleString('en-US');
+}
+
+function checkAndTriggerTimedAlerts() {
+  // Periodically check if Namaz or Lunch/Dinner time is reached
+  setInterval(() => {
+    if (!notificationsEnabled) return;
+    const now = new Date();
+    const currentHours = now.getHours();
+    const currentMins = now.getMinutes();
+    // 01:30 PM Lunch check
+    if (currentHours === 13 && currentMins === 30) {
+      showInstantNotification('Lunch Time Reminder! 🍲', 'محسن صاحب! دوپہر کے کھانے (لنچ) کا وقت ہو گیا ہے۔');
+    }
+    // 08:30 PM Dinner check
+    if (currentHours === 20 && currentMins === 30) {
+      showInstantNotification('Dinner Time Reminder! 🍽️', 'محسن صاحب! رات کے کھانے (ڈینر) کا وقت ہو گیا ہے۔');
+    }
+  }, 60000);
 }
 
 // Main Render Function
@@ -1134,12 +1433,13 @@ function renderTabContent() {
   const totalExpense = records.filter(r => r.type === 'EXPENSE').reduce((a, b) => a + b.amount, 0);
   const balance = totalIncome - totalExpense;
 
+  // 1. MAIN DISPLAY (Everything directly on screen as requested!)
   if (currentTab === 'dashboard') {
     vp.innerHTML = `
-      <!-- Hero Financial Card -->
+      <!-- Hero Net Balance Card -->
       <div class="hero-stat-card">
         <div class="hero-subtitle">
-          <span>${isUr ? 'کل بچت / بیلنس' : 'Net Cash Balance'}</span>
+          <span>${isUr ? 'کل بچت / کیش بیلنس' : 'Net Cash Balance'}</span>
           <span style="background:rgba(255,255,255,0.2); padding:3px 8px; border-radius:10px; font-size:11px;">Pakistan PKR</span>
         </div>
         <div class="hero-amount">${formatPKR(balance)}</div>
@@ -1159,71 +1459,123 @@ function renderTabContent() {
         </div>
       </div>
 
-      <!-- Quick Action Buttons for requested categories -->
+      <!-- 1. NAMAZ & PRAYER TIMES LIVE DISPLAY CARD WITH NOTIFICATION ALERTS -->
+      <div class="namaz-widget-card">
+        <div class="namaz-header">
+          <div class="namaz-title-box">
+            <h3>🕌 ${isUr ? 'اوقاتِ نماز و اذان نوٹیفیکیشنز' : 'Prayer Times & Azan Alerts'}</h3>
+            <p>${isUr ? 'اگلی نماز: عصر (04:45 PM) • نوٹیفیکیشنز فعال ہیں' : 'Next Prayer: Asr (04:45 PM) • Alerts Active'}</p>
+          </div>
+          <button class="lang-pill" onclick="toggleGlobalNotifications()" style="background:rgba(255,255,255,0.22); color:white;">
+            <span class="material-symbols-rounded" style="font-size:16px;">${notificationsEnabled ? 'notifications_active' : 'notifications_off'}</span>
+            ${notificationsEnabled ? (isUr ? 'الرٹ آن' : 'Alerts ON') : (isUr ? 'آن کریں' : 'Enable')}
+          </button>
+        </div>
+
+        <div class="prayer-grid">
+          ${prayerSchedule.map((p, idx) => `
+            <div class="prayer-slot ${p.id === 'asr' ? 'next-active' : ''}" onclick="togglePrayerAlert('${p.id}')">
+              <span class="prayer-name">${isUr ? p.nameUr : p.nameEn}</span>
+              <span class="prayer-time">${p.time}</span>
+              <span class="material-symbols-rounded prayer-bell">${p.alert ? 'notifications_active' : 'notifications_off'}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- 2. LUNCH & DINNER MEAL NOTIFICATION DISPLAY WIDGET -->
+      <div class="meals-widget-card">
+        <div class="section-title">
+          <span>🍽️ ${isUr ? 'کھانے اور لنچ / ڈینر کے نوٹیفیکیشنز' : 'Lunch, Dinner & Meal Reminders'}</span>
+          <span class="badge" style="background:#FEF3C7; color:#D97706;">Auto Alert 🔔</span>
+        </div>
+        <div class="meals-grid">
+          ${mealSchedule.map(m => `
+            <div class="meal-box" onclick="toggleMealAlert('${m.id}')">
+              ${m.alert ? '<div class="meal-bell-dot"></div>' : ''}
+              <div class="meal-icon" style="background:#FFFBEB; color:#D97706;">
+                <span class="material-symbols-rounded">${m.icon}</span>
+              </div>
+              <span class="meal-name">${isUr ? m.nameUr : m.nameEn}</span>
+              <span class="meal-time">${m.time}</span>
+              <span style="font-size:10px; color:${m.alert ? '#059669' : '#9CA3AF'}; font-weight:700;">
+                ${m.alert ? (isUr ? 'الرٹ آن ✓' : 'Alert ON ✓') : (isUr ? 'بند ✕' : 'Muted ✕')}
+              </span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- 3. QURAN MAJEED & SUBAH K AZKAR DISPLAY FOLDERS -->
+      <div class="section-title">
+        <span>📖 ${isUr ? 'قرآن مجید اور مسنون اذکار کے فولڈرز' : 'Holy Quran & Daily Azkar Folders'}</span>
+        <span class="badge" style="background:#ECFDF5; color:#059669;">1-Tap Read</span>
+      </div>
+
+      <div class="islamic-folders-row">
+        <!-- Quran Majeed Folder -->
+        <div class="islamic-folder-card quran-folder" onclick="openTab('quran')">
+          <div class="folder-top">
+            <div class="folder-icon"><span class="material-symbols-rounded">menu_book</span></div>
+            <span class="folder-badge">114 سورتیں</span>
+          </div>
+          <h4 class="folder-title">${isUr ? 'قرآن مجید' : 'Holy Quran'}</h4>
+          <p class="folder-sub">${isUr ? 'سورۃ یٰسین، الملک، الفاتحہ اور مکمل تلاوت اردو ترجمہ کے ساتھ' : 'Surah Ya-Sin, Al-Mulk, Fatihah with Urdu translation'}</p>
+        </div>
+
+        <!-- Subah k Azkar Folder -->
+        <div class="islamic-folder-card azkar-folder" onclick="openTab('azkar')">
+          <div class="folder-top">
+            <div class="folder-icon"><span class="material-symbols-rounded">spa</span></div>
+            <span class="folder-badge">حصن المسلم</span>
+          </div>
+          <h4 class="folder-title">${isUr ? 'صبح و شام کے اذکار' : 'Morning & Evening Azkar'}</h4>
+          <p class="folder-sub">${isUr ? 'صبح کے مسنون اذکار، شام کے اذکار اور تسبیح کاؤنٹر' : 'Authentic Masnoon Azkar with digital tap counter'}</p>
+        </div>
+      </div>
+
+      <!-- 4. QUICK BILLS & EXPENSES CHIPS (School Fee, Electric, Gas, Food, etc.) -->
       <div class="section-title">
         <span>${isUr ? 'فوری اخراجات و بلز' : 'Quick Expenses & Bills'}</span>
-        <span class="badge">${isUr ? 'ایک کلک اندراج' : '1-Tap Entry'}</span>
+        <span class="badge">${isUr ? '1 کلک اندراج' : '1-Tap'}</span>
       </div>
 
       <div class="quick-chips-grid">
         <div class="chip-card" onclick="openAddModal('School Fee')">
-          <div class="chip-icon" style="background:#ECE6FD; color:#6028E4;">
-            <span class="material-symbols-rounded">school</span>
-          </div>
+          <div class="chip-icon" style="background:#ECE6FD; color:#6028E4;"><span class="material-symbols-rounded">school</span></div>
           <span class="chip-title">${isUr ? 'سکول فیس' : 'School Fee'}</span>
         </div>
-
         <div class="chip-card" onclick="openAddModal('Food & Ration')">
-          <div class="chip-icon" style="background:#E6F9F3; color:#00C48C;">
-            <span class="material-symbols-rounded">restaurant</span>
-          </div>
+          <div class="chip-icon" style="background:#E6F9F3; color:#00C48C;"><span class="material-symbols-rounded">restaurant</span></div>
           <span class="chip-title">${isUr ? 'کھانا راشن' : 'Food & Ration'}</span>
         </div>
-
         <div class="chip-card" onclick="openAddModal('Electricity Bill')">
-          <div class="chip-icon" style="background:#FEF6E7; color:#F59E0B;">
-            <span class="material-symbols-rounded">electric_bolt</span>
-          </div>
+          <div class="chip-icon" style="background:#FEF6E7; color:#F59E0B;"><span class="material-symbols-rounded">electric_bolt</span></div>
           <span class="chip-title">${isUr ? 'بجلی بل' : 'Electric Bill'}</span>
         </div>
-
         <div class="chip-card" onclick="openAddModal('Gas Bill')">
-          <div class="chip-icon" style="background:#FEECEB; color:#EF4444;">
-            <span class="material-symbols-rounded">local_fire_department</span>
-          </div>
+          <div class="chip-icon" style="background:#FEECEB; color:#EF4444;"><span class="material-symbols-rounded">local_fire_department</span></div>
           <span class="chip-title">${isUr ? 'گیس بل' : 'Gas Bill'}</span>
         </div>
-
         <div class="chip-card" onclick="openAddModal('Internet / Wi-Fi')">
-          <div class="chip-icon" style="background:#EFF6FF; color:#2563EB;">
-            <span class="material-symbols-rounded">wifi</span>
-          </div>
+          <div class="chip-icon" style="background:#EFF6FF; color:#2563EB;"><span class="material-symbols-rounded">wifi</span></div>
           <span class="chip-title">${isUr ? 'انٹرنیٹ بل' : 'Internet Bill'}</span>
         </div>
-
         <div class="chip-card" onclick="openAddModal('Water Bill')">
-          <div class="chip-icon" style="background:#E0F2FE; color:#0284C7;">
-            <span class="material-symbols-rounded">water_drop</span>
-          </div>
+          <div class="chip-icon" style="background:#E0F2FE; color:#0284C7;"><span class="material-symbols-rounded">water_drop</span></div>
           <span class="chip-title">${isUr ? 'پانی کا بل' : 'Water Bill'}</span>
         </div>
-
         <div class="chip-card" onclick="openAddModal('Other Expenses')">
-          <div class="chip-icon" style="background:#F5F3FF; color:#7C3AED;">
-            <span class="material-symbols-rounded">receipt</span>
-          </div>
+          <div class="chip-icon" style="background:#F5F3FF; color:#7C3AED;"><span class="material-symbols-rounded">receipt</span></div>
           <span class="chip-title">${isUr ? 'دیگر خرچ' : 'Other Expense'}</span>
         </div>
-
         <div class="chip-card" onclick="openAddModal('Other Bills')">
-          <div class="chip-icon" style="background:#FFF1F2; color:#E11D48;">
-            <span class="material-symbols-rounded">folder_open</span>
-          </div>
+          <div class="chip-icon" style="background:#FFF1F2; color:#E11D48;"><span class="material-symbols-rounded">folder_open</span></div>
           <span class="chip-title">${isUr ? 'دیگر بلز' : 'Other Bills'}</span>
         </div>
       </div>
 
-      <!-- Clean Streak & Addiction Highlights -->
+      <!-- 5. BAD ADDICTION & CLEAN STREAK HIGHLIGHT -->
       <div class="streak-banner" onclick="openTab('habits')">
         <div class="streak-info">
           <h3>${isUr ? 'بد عادتوں سے نجات کا سفر' : 'Clean & Healthy Streaks'}</h3>
@@ -1235,16 +1587,32 @@ function renderTabContent() {
         </div>
       </div>
 
-      <!-- Daily Routine Quick View -->
+      <!-- 6. 8 GLASSES WATER TRACKER -->
       <div class="card">
         <div class="section-title">
-          <span>${isUr ? 'آج کے روزمرہ کام' : "Today's Routine & Tasks"}</span>
-          <span class="badge" onclick="openTab('routine')" style="cursor:pointer;">${isUr ? 'مکمل دیکھیں' : 'View All'}</span>
+          <span>💧 ${isUr ? 'روزانہ 8 گلاس پانی کا استعمال' : 'Daily Water Tracker (8 Glasses)'}</span>
+          <span class="badge">${waterGlasses} / 8 Glasses</span>
         </div>
-        ${routineTasks.slice(0, 3).map(t => `
+        <div class="water-tracker-row">
+          ${[1,2,3,4,5,6,7,8].map(i => `
+            <button class="water-glass-btn ${i <= waterGlasses ? 'filled' : ''}" onclick="fillWaterGlass(${i})" title="Glass ${i}">
+              <span class="material-symbols-rounded" style="font-size:17px;">local_drink</span>
+              <span style="font-size:9.5px; font-weight:800;">${i}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- 7. DAILY ROUTINE QUICK CHECKLIST -->
+      <div class="card">
+        <div class="section-title">
+          <span>📋 ${isUr ? 'آج کے روزمرہ معمولات اور کام' : "Today's Routine Checklist"}</span>
+          <button class="lang-pill" onclick="addCustomTask()"><span class="material-symbols-rounded">add</span> ${isUr ? 'نیا کام' : 'Add'}</button>
+        </div>
+        ${routineTasks.map(t => `
           <div class="item-row" onclick="toggleTaskDone(${t.id})" style="cursor:pointer;">
             <div class="item-left">
-              <span class="material-symbols-rounded" style="color:${t.done ? '#00C48C' : '#A39BBF'};">
+              <span class="material-symbols-rounded" style="color:${t.done ? '#00C48C' : '#A39BBF'}; font-size:22px;">
                 ${t.done ? 'check_circle' : 'radio_button_unchecked'}
               </span>
               <div class="item-meta">
@@ -1252,44 +1620,86 @@ function renderTabContent() {
                 <span class="item-sub">${t.time} • ${t.category}</span>
               </div>
             </div>
-          </div>
-        `).join('')}
-      </div>
-
-      <!-- Recent Expenses & Bills List -->
-      <div class="card">
-        <div class="section-title">
-          <span>${isUr ? 'حالیہ اخراجات و بلز' : 'Recent Expenses & Bills'}</span>
-          <span class="badge" onclick="openTab('bills')" style="cursor:pointer;">${isUr ? 'تفصیل' : 'Details'}</span>
-        </div>
-        ${records.slice(0, 5).map(r => `
-          <div class="item-row">
-            <div class="item-left">
-              <div class="item-icon-box" style="background:${r.type === 'INCOME' ? 'var(--income-bg)' : 'var(--expense-bg)'}; color:${r.type === 'INCOME' ? 'var(--income)' : 'var(--expense)'};">
-                <span class="material-symbols-rounded">${r.type === 'INCOME' ? 'trending_up' : 'payments'}</span>
-              </div>
-              <div class="item-meta">
-                <span class="item-title">${r.category}</span>
-                <span class="item-sub">${r.desc} • ${r.date}</span>
-              </div>
-            </div>
-            <div class="item-right">
-              <span class="item-amount" style="color:${r.type === 'INCOME' ? 'var(--income)' : 'var(--expense)'};">
-                ${r.type === 'INCOME' ? '+' : '-'}${formatPKR(r.amount)}
-              </span>
-              ${r.type === 'EXPENSE' ? `
-                <span class="item-status-pill" onclick="toggleBillPaid(${r.id})" style="cursor:pointer; background:${r.isPaid ? 'var(--income-bg)' : 'var(--warning-bg)'}; color:${r.isPaid ? 'var(--income)' : 'var(--warning)'};">
-                  ${r.isPaid ? (isUr ? 'ادا شدہ ✓' : 'Paid ✓') : (isUr ? 'غیر ادا شدہ ⏱' : 'Unpaid ⏱')}
-                </span>
-              ` : ''}
-            </div>
+            <span class="item-status-pill" style="background:${t.done ? 'var(--income-bg)' : 'var(--surface-variant)'}; color:${t.done ? 'var(--income)' : 'var(--text-muted)'};">
+              ${t.done ? (isUr ? 'مکمل' : 'Done') : (isUr ? 'باقی' : 'Pending')}
+            </span>
           </div>
         `).join('')}
       </div>
     `;
   }
 
-  // 2. Bills & Fees Tab
+  // 2. QURAN MAJEED TAB (Full Interactive Reader)
+  else if (currentTab === 'quran') {
+    vp.innerHTML = `
+      <div class="section-title">
+        <span>📖 ${isUr ? 'قرآن مجید (تلاوت و اردو ترجمہ)' : 'Holy Quran (Tilawat & Translation)'}</span>
+        <span class="badge" style="background:#B45309; color:white;">القرآن الکریم</span>
+      </div>
+
+      ${quranSurahs.map(s => `
+        <div class="card" style="border-top:3px solid #D97706;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:8px;">
+            <div>
+              <h3 style="font-size:18px; font-weight:800; color:#B45309;">${s.nameAr}</h3>
+              <p style="font-size:12px; color:var(--text-muted);">${s.num}. ${s.nameEn} • ${s.versesCount} ${isUr ? 'آیات' : 'Verses'}</p>
+            </div>
+            <span class="badge" style="background:#FFFBEB; color:#D97706;">مکی سورت</span>
+          </div>
+
+          ${s.verses.map((v, i) => `
+            <div style="display:flex; flex-direction:column; gap:4px; padding:8px 0; border-bottom:1px dashed var(--border);">
+              <div class="arabic-text">${v.ar} <span style="font-size:15px; color:#D97706;">﴿${i+1}﴾</span></div>
+              <div class="urdu-meaning">${v.ur}</div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('')}
+    `;
+  }
+
+  // 3. SUBAH K AZKAR FOLDER TAB (Morning, Evening & Digital Tasbeeh)
+  else if (currentTab === 'azkar') {
+    vp.innerHTML = `
+      <div class="section-title">
+        <span>📿 ${isUr ? 'صبح و شام کے مسنون اذکار و تسبیحات' : 'Morning & Evening Masnoon Azkar'}</span>
+        <span class="badge" style="background:#1E40AF; color:white;">حصن المسلم</span>
+      </div>
+
+      <!-- Subah k Azkar Folder Items -->
+      ${azkarData.map(z => `
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="badge" style="background:#EFF6FF; color:#1E40AF;">${z.category}</span>
+            <span style="font-size:12px; font-weight:700; color:var(--text-muted);">
+              ${isUr ? 'ہدف:' : 'Target:'} ${z.target} ${isUr ? 'مرتبہ' : 'times'}
+            </span>
+          </div>
+
+          <div class="arabic-text">${z.ar}</div>
+          <div class="urdu-meaning">${z.ur}</div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface-variant); border-radius:14px; padding:8px 12px; margin-top:4px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:13px; font-weight:700;">${isUr ? 'تعداد:' : 'Count:'}</span>
+              <span style="font-size:19px; font-weight:900; color:var(--primary);">${z.count} / ${z.target}</span>
+            </div>
+
+            <div style="display:flex; gap:8px;">
+              <button class="zikr-counter-btn" onclick="incrementZikr('${z.id}')" title="Tap to Count">
+                +1
+              </button>
+              <button class="lang-pill" style="height:36px; background:var(--border); color:var(--text); font-size:11px;" onclick="resetZikr('${z.id}')">
+                ${isUr ? 'ری سیٹ' : 'Reset'}
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    `;
+  }
+
+  // 4. BILLS & FEES TAB
   else if (currentTab === 'bills') {
     vp.innerHTML = `
       <div class="section-title">
@@ -1307,9 +1717,7 @@ function renderTabContent() {
         ` : records.filter(r => r.type === 'EXPENSE' && !r.isPaid).map(r => `
           <div class="item-row" style="border-left:4px solid var(--warning);">
             <div class="item-left">
-              <div class="item-icon-box" style="background:var(--warning-bg); color:var(--warning);">
-                <span class="material-symbols-rounded">pending_actions</span>
-              </div>
+              <div class="item-icon-box" style="background:var(--warning-bg); color:var(--warning);"><span class="material-symbols-rounded">pending_actions</span></div>
               <div class="item-meta">
                 <span class="item-title">${r.category}</span>
                 <span class="item-sub">${r.desc} • Due: ${r.date}</span>
@@ -1333,9 +1741,7 @@ function renderTabContent() {
         ${records.filter(r => r.type === 'EXPENSE' && r.isPaid).map(r => `
           <div class="item-row">
             <div class="item-left">
-              <div class="item-icon-box" style="background:var(--income-bg); color:var(--income);">
-                <span class="material-symbols-rounded">task_alt</span>
-              </div>
+              <div class="item-icon-box" style="background:var(--income-bg); color:var(--income);"><span class="material-symbols-rounded">task_alt</span></div>
               <div class="item-meta">
                 <span class="item-title">${r.category}</span>
                 <span class="item-sub">${r.desc} • ${r.date}</span>
@@ -1351,32 +1757,14 @@ function renderTabContent() {
     `;
   }
 
-  // 3. Habits, Bad Addictions & Health Tab
+  // 5. HABITS & ADDICTIONS TAB
   else if (currentTab === 'habits') {
     vp.innerHTML = `
       <div class="section-title">
         <span>${isUr ? 'بد عادتوں سے نجات اور صحت و عادات' : 'Habit & Addiction Recovery'}</span>
-        <span class="badge">${isUr ? 'روزانہ ٹریکر' : 'Daily Life Tracker'}</span>
+        <span class="badge">${isUr ? 'روزانہ ٹریکر' : 'Tracker'}</span>
       </div>
 
-      <!-- Water Tracker (8 glasses) -->
-      <div class="card">
-        <div class="section-title">
-          <span>${isUr ? 'روزانہ 8 گلاس پانی کا استعمال' : 'Daily Water Tracker (8 Glasses)'}</span>
-          <span class="badge">${waterGlasses} / 8 Glasses</span>
-        </div>
-        <div class="water-tracker-row">
-          ${[1,2,3,4,5,6,7,8].map(i => `
-            <button class="water-glass-btn ${i <= waterGlasses ? 'filled' : ''}" onclick="fillWaterGlass(${i})" title="Glass ${i}">
-              <span class="material-symbols-rounded" style="font-size:18px;">local_drink</span>
-              <span style="font-size:10px; font-weight:800;">${i}</span>
-            </button>
-          `).join('')}
-        </div>
-        <p style="font-size:12px; color:var(--text-muted);">${isUr ? 'پانی پینے کے بعد گلاس پر کلک کریں تاکہ صحت برقرار رہے۔' : 'Tap glasses as you drink to stay energized.'}</p>
-      </div>
-
-      <!-- Bad Habits / Addiction Recovery -->
       <div class="card">
         <div class="section-title">
           <span>${isUr ? 'بد عادات چھوڑنے کا کاؤنٹر (Addiction Streaks)' : 'Bad Addiction Recovery'}</span>
@@ -1388,11 +1776,11 @@ function renderTabContent() {
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <div>
                 <h4 style="font-size:15px; font-weight:800;">${h.name}</h4>
-                <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Started: ${h.startDate} • Urges defeated: <b>${h.urgesResisted}</b></p>
+                <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Started: ${h.startDate} • Defeated: <b>${h.urgesResisted}</b></p>
               </div>
               <div style="background:linear-gradient(135deg, #10B981, #059669); color:white; padding:6px 12px; border-radius:12px; text-align:center;">
                 <span style="font-size:18px; font-weight:900;">${h.streakDays}</span>
-                <span style="font-size:10px; display:block;">${isUr ? 'دن کلین' : 'Days Clean'}</span>
+                <span style="font-size:10px; display:block;">${isUr ? 'دن کلین' : 'Days'}</span>
               </div>
             </div>
 
@@ -1400,166 +1788,9 @@ function renderTabContent() {
               <button class="lang-pill" style="flex:1; justify-content:center; background:#00C48C; color:white; font-size:12px;" onclick="resistUrge('${h.id}')">
                 <span class="material-symbols-rounded" style="font-size:16px;">shield</span> ${isUr ? 'وسوسہ روکا! (+1 فتح)' : 'Resisted Urge! (+1)'}
               </button>
-              <button class="lang-pill" style="background:var(--surface-variant); color:var(--text-muted); font-size:12px;" onclick="resetHabitStreak('${h.id}')">
-                ${isUr ? 'ری سیٹ' : 'Reset'}
-              </button>
             </div>
           </div>
         `).join('')}
-      </div>
-
-      <!-- Exercise & Positive Habits -->
-      <div class="card">
-        <div class="section-title">
-          <span>${isUr ? 'مثبت عادات و ورزش (Fitness & Habits)' : 'Positive Habits & Fitness'}</span>
-          <span class="badge" style="background:var(--income-bg); color:var(--income);">${isUr ? 'روزانہ معمول' : 'Routine'}</span>
-        </div>
-
-        ${habits.filter(h => !h.isBadHabit).map(h => `
-          <div class="item-row">
-            <div class="item-left">
-              <div class="item-icon-box" style="background:var(--income-bg); color:var(--income);">
-                <span class="material-symbols-rounded">verified</span>
-              </div>
-              <div class="item-meta">
-                <span class="item-title">${h.name}</span>
-                <span class="item-sub">${isUr ? 'مسلسل کامیابی:' : 'Current streak:'} ${h.streakDays} ${isUr ? 'دن' : 'Days'}</span>
-              </div>
-            </div>
-            <span class="item-status-pill" style="background:var(--income-bg); color:var(--income);">Active ✓</span>
-          </div>
-        `).join('')}
-      </div>
-    `;
-  }
-
-  // 4. Daily Routine & Tasks Hub
-  else if (currentTab === 'routine') {
-    vp.innerHTML = `
-      <div class="section-title">
-        <span>${isUr ? 'روزمرہ معمولات اور ٹاسک مینیجر' : 'Daily Life & Routine Hub'}</span>
-        <button class="lang-pill" onclick="addCustomTask()"><span class="material-symbols-rounded">add</span> ${isUr ? 'نیا کام' : 'Add Task'}</button>
-      </div>
-
-      <div class="card">
-        <div class="section-title">
-          <span>${isUr ? 'صبح سے رات تک کے تمام کام' : 'Today Checklist'}</span>
-          <span class="badge">${routineTasks.filter(t => t.done).length} / ${routineTasks.length} Done</span>
-        </div>
-
-        ${routineTasks.map(t => `
-          <div class="item-row" onclick="toggleTaskDone(${t.id})" style="cursor:pointer;">
-            <div class="item-left">
-              <span class="material-symbols-rounded" style="color:${t.done ? '#00C48C' : '#A39BBF'}; font-size:24px;">
-                ${t.done ? 'check_circle' : 'radio_button_unchecked'}
-              </span>
-              <div class="item-meta">
-                <span class="item-title" style="text-decoration:${t.done ? 'line-through' : 'none'}; opacity:${t.done ? 0.6 : 1};">${t.title}</span>
-                <span class="item-sub">${t.time} • ${t.category}</span>
-              </div>
-            </div>
-            <span class="item-status-pill" style="background:${t.done ? 'var(--income-bg)' : 'var(--surface-variant)'}; color:${t.done ? 'var(--income)' : 'var(--text-muted)'};">
-              ${t.done ? (isUr ? 'مکمل' : 'Done') : (isUr ? 'باقی' : 'Pending')}
-            </span>
-          </div>
-        `).join('')}
-      </div>
-
-      <!-- Emergency Helpline Directory -->
-      <div class="card">
-        <div class="section-title">
-          <span>${isUr ? 'اہم ایمرجنسی ہیلپ لائنز (پاکستان)' : 'Emergency Helplines (Pakistan)'}</span>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-          <a href="tel:1122" class="item-row" style="text-decoration:none; padding:10px;">
-            <div class="item-left">
-              <span class="material-symbols-rounded" style="color:#EF4444;">emergency</span>
-              <div class="item-meta"><span class="item-title">Rescue 1122</span><span class="item-sub">ریسکیو ایمبولینس</span></div>
-            </div>
-          </a>
-          <a href="tel:15" class="item-row" style="text-decoration:none; padding:10px;">
-            <div class="item-left">
-              <span class="material-symbols-rounded" style="color:#2563EB;">local_police</span>
-              <div class="item-meta"><span class="item-title">Police 15</span><span class="item-sub">مددگار پولیس</span></div>
-            </div>
-          </a>
-          <a href="tel:1198" class="item-row" style="text-decoration:none; padding:10px;">
-            <div class="item-left">
-              <span class="material-symbols-rounded" style="color:#F59E0B;">bolt</span>
-              <div class="item-meta"><span class="item-title">WAPDA 1198</span><span class="item-sub">بجلی شکایت</span></div>
-            </div>
-          </a>
-          <a href="tel:1199" class="item-row" style="text-decoration:none; padding:10px;">
-            <div class="item-left">
-              <span class="material-symbols-rounded" style="color:#EF4444;">local_fire_department</span>
-              <div class="item-meta"><span class="item-title">SNGPL 1199</span><span class="item-sub">سوئی گیس شکایت</span></div>
-            </div>
-          </a>
-        </div>
-      </div>
-    `;
-  }
-
-  // 5. Complete User Guide & How to Use Tab
-  else if (currentTab === 'guide') {
-    vp.innerHTML = `
-      <div class="section-title">
-        <span>${isUr ? 'روزانہ ایپ استعمال کرنے کی مکمل رہنمائی' : 'Rozana App User Guide & Tutorial'}</span>
-        <span class="badge" style="background:#6028E4; color:white;">All-in-One</span>
-      </div>
-
-      <div class="guide-card">
-        <div class="guide-header">
-          <div class="guide-icon-box" style="background:#ECE6FD; color:#6028E4;">
-            <span class="material-symbols-rounded">account_circle</span>
-          </div>
-          <div>
-            <h4 class="guide-title">${isUr ? '1. اپنی تصویر اور نام لگانا' : '1. Profile Photo & Name Setup'}</h4>
-            <span style="font-size:11px; color:var(--text-muted);">${isUr ? 'محسن صاحب کے لیے خصوصی سیٹنگ' : 'Personalized for Mohsin'}</span>
-          </div>
-        </div>
-        <p class="guide-desc">${isUr ? 'اوپر دائیں کونے میں اپنی پروفائل پر کلک کریں اور "Choose / Upload Pic" دبا کر اپنے موبائل کی گیلری یا کیمرے سے اپنی تصویر لگائیں۔ آپ کسی بھی وقت اپنا نام اور شہر بھی تبدیل کر سکتے ہیں۔' : 'Click the top right profile avatar to upload your own picture from gallery/camera and update your name.'}</p>
-      </div>
-
-      <div class="guide-card">
-        <div class="guide-header">
-          <div class="guide-icon-box" style="background:#FEF6E7; color:#F59E0B;">
-            <span class="material-symbols-rounded">receipt_long</span>
-          </div>
-          <div>
-            <h4 class="guide-title">${isUr ? '2. سکول فیس، بجلی، گیس اور راشن کا اندراج' : '2. Bills, School Fees & Daily Expenses'}</h4>
-            <span style="font-size:11px; color:var(--text-muted);">${isUr ? 'بجلی، گیس، سکول فیس اور راشن' : 'Utilities & Household Spending'}</span>
-          </div>
-        </div>
-        <div class="guide-step"><div class="step-bullet">1</div><span>${isUr ? 'ڈیش بورڈ پر موجود 8 چپس میں سے مطلوبہ بٹن دبائیں (مثلاً سکول فیس، بجلی بل، گیس بل وغیرہ)۔' : 'Tap any 1-tap chip on the dashboard (e.g. School Fee, Electric Bill, Gas Bill).'}</span></div>
-        <div class="guide-step"><div class="step-bullet">2</div><span>${isUr ? 'رقم اور تفصیل لکھ کر تاریخ منتخب کریں اور محفوظ کریں۔' : 'Enter amount in PKR, description and due date, then hit save.'}</span></div>
-        <div class="guide-step"><div class="step-bullet">3</div><span>${isUr ? 'بلز والے ٹیب میں جا کر بل کو ادا شدہ (Paid) یا غیر ادا شدہ (Unpaid) مارک کریں۔' : 'In the Bills tab, easily toggle between Paid and Due.'}</span></div>
-      </div>
-
-      <div class="guide-card">
-        <div class="guide-header">
-          <div class="guide-icon-box" style="background:#E6F9F3; color:#00C48C;">
-            <span class="material-symbols-rounded">psychology</span>
-          </div>
-          <div>
-            <h4 class="guide-title">${isUr ? '3. بد عادتوں سے نجات اور اسٹریک کاؤنٹر' : '3. Bad Addiction Recovery Tracker'}</h4>
-            <span style="font-size:11px; color:var(--text-muted);">${isUr ? 'سگریٹ، سکرین ٹائم، فاسٹ فوڈ پرہیز' : 'Clean Days & Defeating Urges'}</span>
-          </div>
-        </div>
-        <p class="guide-desc">${isUr ? 'اگر آپ سگریٹ نوشی، فضول موبائل اسکرین ٹائم یا جنک فوڈ چھوڑنا چاہتے ہیں تو "Habits & Health" ٹیب میں ہر عادت کا اسٹریک کاؤنٹر چلتا ہے۔ جب بھی آپ کے دل میں برا خیال آئے اور آپ اس سے بچ جائیں تو "وسوسہ روکا (+1)" پر کلک کریں۔' : 'Track days clean from smoking, binge screen time and junk food. Tap "Resisted Urge" whenever you conquer temptation.'}</p>
-      </div>
-
-      <div class="guide-card">
-        <div class="guide-header">
-          <div class="guide-icon-box" style="background:#EFF6FF; color:#2563EB;">
-            <span class="material-symbols-rounded">checklist</span>
-          </div>
-          <div>
-            <h4 class="guide-title">${isUr ? '4. روزمرہ معمولات اور نماز و ورزش' : '4. Daily Life Tasks, Prayers & Exercise'}</h4>
-            <span style="font-size:11px; color:var(--text-muted);">${isUr ? 'صبح سے رات تک تمام کام ایک جگہ' : 'All daily life activities in one app'}</span>
-          </div>
-        </div>
-        <p class="guide-desc">${isUr ? 'آپ کو کسی اور ایپ کی ضرورت نہیں پڑے گی! "Daily Life" ٹیب میں فجر، مارننگ واک، بچوں کے سکول، دکان و دفتر، بلز جمع کروانے اور خریداری کے تمام کام ٹاسک لسٹ میں شامل ہیں۔ آپ نیا کام بھی شامل کر سکتے ہیں اور روزانہ 8 گلاس پانی کا کاؤنٹر بھی چلا سکتے ہیں۔' : 'Manage your entire day from morning to night, including prayers, workouts, water intake and Pakistani emergency numbers.'}</p>
       </div>
     `;
   }
