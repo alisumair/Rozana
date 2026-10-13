@@ -1,7 +1,7 @@
 package com.example.ui.components
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
@@ -9,11 +9,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.data.model.AppLanguage
-import com.example.data.model.RozanaStrings
+import com.example.ui.theme.*
 import com.example.ui.viewmodel.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,8 +35,9 @@ fun RozanaTopBar(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = if (language == AppLanguage.URDU) "روزانہ – Rozana" else "Rozana – روزانہ",
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleLarge
+                    fontWeight = FontWeight.ExtraBold,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         },
@@ -48,7 +50,7 @@ fun RozanaTopBar(
                 Icon(
                     imageVector = Icons.Default.MenuBook,
                     contentDescription = "Quran Majeed",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = RoyalElectricBlue
                 )
             }
 
@@ -60,7 +62,7 @@ fun RozanaTopBar(
                 Icon(
                     imageVector = Icons.Default.HelpOutline,
                     contentDescription = "User Guide",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = RoyalElectricBlue
                 )
             }
 
@@ -72,7 +74,7 @@ fun RozanaTopBar(
                 Icon(
                     imageVector = Icons.Default.Calculate,
                     contentDescription = "Calculator",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = RoyalElectricBlue
                 )
             }
 
@@ -84,14 +86,18 @@ fun RozanaTopBar(
                 Icon(
                     imageVector = Icons.Default.AutoAwesome,
                     contentDescription = "AI Assistant",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = ElectricCyan
                 )
             }
 
             // Language Switcher Badge
             FilledTonalButton(
                 onClick = onToggleLanguage,
-                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 2.dp),
+                colors = ButtonDefaults.filledTonalButtonColors(
+                    containerColor = IceBlueContainer,
+                    contentColor = RoyalElectricBlue
+                ),
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
                 modifier = Modifier.padding(horizontal = 2.dp).testTag("action_language")
             ) {
                 Text(
@@ -125,92 +131,119 @@ fun RozanaBottomBar(
     language: AppLanguage,
     onSelectScreen: (Screen) -> Unit
 ) {
-    NavigationBar(
-        containerColor = MaterialTheme.colorScheme.surface,
-        tonalElevation = 6.dp
+    // Modern Floating White Dock (matching the reference phone design)
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .padding(horizontal = 12.dp, vertical = 6.dp),
+        shape = RoundedCornerShape(26.dp),
+        color = MaterialTheme.colorScheme.surface,
+        shadowElevation = 10.dp,
+        tonalElevation = 4.dp
     ) {
-        // 1. Home Dashboard
-        NavigationBarItem(
-            selected = currentScreen == Screen.Dashboard,
-            onClick = { onSelectScreen(Screen.Dashboard) },
-            icon = {
-                Icon(
-                    if (currentScreen == Screen.Dashboard) Icons.Filled.Home else Icons.Outlined.Home,
-                    contentDescription = if (language == AppLanguage.URDU) "ہوم" else "Home"
-                )
-            },
-            label = { Text(if (language == AppLanguage.URDU) "ہوم" else "Home") },
-            modifier = Modifier.testTag("nav_item_home")
-        )
+        NavigationBar(
+            containerColor = Color.Transparent,
+            tonalElevation = 0.dp,
+            modifier = Modifier.height(66.dp)
+        ) {
+            val navColors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.White,
+                selectedTextColor = RoyalElectricBlue,
+                indicatorColor = RoyalElectricBlue,
+                unselectedIconColor = TextSecondaryLight,
+                unselectedTextColor = TextSecondaryLight
+            )
 
-        // 2. Holy Quran
-        NavigationBarItem(
-            selected = currentScreen == Screen.Quran,
-            onClick = { onSelectScreen(Screen.Quran) },
-            icon = {
-                Icon(
-                    if (currentScreen == Screen.Quran) Icons.Filled.MenuBook else Icons.Outlined.MenuBook,
-                    contentDescription = if (language == AppLanguage.URDU) "قرآن" else "Quran"
-                )
-            },
-            label = { Text(if (language == AppLanguage.URDU) "قرآن" else "Quran") },
-            modifier = Modifier.testTag("nav_item_quran")
-        )
+            // 1. Home Dashboard
+            NavigationBarItem(
+                selected = currentScreen == Screen.Dashboard,
+                onClick = { onSelectScreen(Screen.Dashboard) },
+                icon = {
+                    Icon(
+                        if (currentScreen == Screen.Dashboard) Icons.Filled.Home else Icons.Outlined.Home,
+                        contentDescription = if (language == AppLanguage.URDU) "ہوم" else "Home"
+                    )
+                },
+                label = { Text(if (language == AppLanguage.URDU) "ہوم" else "Home", fontWeight = FontWeight.Bold) },
+                colors = navColors,
+                modifier = Modifier.testTag("nav_item_home")
+            )
 
-        // 3. Masnoon Azkar
-        NavigationBarItem(
-            selected = currentScreen == Screen.Azkar,
-            onClick = { onSelectScreen(Screen.Azkar) },
-            icon = {
-                Icon(
-                    if (currentScreen == Screen.Azkar) Icons.Filled.Star else Icons.Outlined.Star,
-                    contentDescription = if (language == AppLanguage.URDU) "اذکار" else "Azkar"
-                )
-            },
-            label = { Text(if (language == AppLanguage.URDU) "اذکار" else "Azkar") },
-            modifier = Modifier.testTag("nav_item_azkar")
-        )
+            // 2. Holy Quran
+            NavigationBarItem(
+                selected = currentScreen == Screen.Quran,
+                onClick = { onSelectScreen(Screen.Quran) },
+                icon = {
+                    Icon(
+                        if (currentScreen == Screen.Quran) Icons.Filled.MenuBook else Icons.Outlined.MenuBook,
+                        contentDescription = if (language == AppLanguage.URDU) "قرآن" else "Quran"
+                    )
+                },
+                label = { Text(if (language == AppLanguage.URDU) "قرآن" else "Quran", fontWeight = FontWeight.Bold) },
+                colors = navColors,
+                modifier = Modifier.testTag("nav_item_quran")
+            )
 
-        // 4. Bills & School Fees
-        NavigationBarItem(
-            selected = currentScreen == Screen.Bills,
-            onClick = { onSelectScreen(Screen.Bills) },
-            icon = {
-                Icon(
-                    if (currentScreen == Screen.Bills) Icons.Filled.ReceiptLong else Icons.Outlined.ReceiptLong,
-                    contentDescription = if (language == AppLanguage.URDU) "بلز و فیس" else "Bills"
-                )
-            },
-            label = { Text(if (language == AppLanguage.URDU) "بلز و فیس" else "Bills") },
-            modifier = Modifier.testTag("nav_item_bills")
-        )
+            // 3. Masnoon Azkar
+            NavigationBarItem(
+                selected = currentScreen == Screen.Azkar,
+                onClick = { onSelectScreen(Screen.Azkar) },
+                icon = {
+                    Icon(
+                        if (currentScreen == Screen.Azkar) Icons.Filled.Star else Icons.Outlined.Star,
+                        contentDescription = if (language == AppLanguage.URDU) "اذکار" else "Azkar"
+                    )
+                },
+                label = { Text(if (language == AppLanguage.URDU) "اذکار" else "Azkar", fontWeight = FontWeight.Bold) },
+                colors = navColors,
+                modifier = Modifier.testTag("nav_item_azkar")
+            )
 
-        // 5. User Guide (ایپ استعمال کی مکمل گائیڈ)
-        NavigationBarItem(
-            selected = currentScreen == Screen.Guide,
-            onClick = { onSelectScreen(Screen.Guide) },
-            icon = {
-                Icon(
-                    if (currentScreen == Screen.Guide) Icons.Filled.Help else Icons.Outlined.HelpOutline,
-                    contentDescription = if (language == AppLanguage.URDU) "گائیڈ" else "Guide"
-                )
-            },
-            label = { Text(if (language == AppLanguage.URDU) "گائیڈ" else "Guide") },
-            modifier = Modifier.testTag("nav_item_guide")
-        )
+            // 4. Bills & School Fees
+            NavigationBarItem(
+                selected = currentScreen == Screen.Bills,
+                onClick = { onSelectScreen(Screen.Bills) },
+                icon = {
+                    Icon(
+                        if (currentScreen == Screen.Bills) Icons.Filled.ReceiptLong else Icons.Outlined.ReceiptLong,
+                        contentDescription = if (language == AppLanguage.URDU) "بلز و فیس" else "Bills"
+                    )
+                },
+                label = { Text(if (language == AppLanguage.URDU) "بلز و فیس" else "Bills", fontWeight = FontWeight.Bold) },
+                colors = navColors,
+                modifier = Modifier.testTag("nav_item_bills")
+            )
 
-        // 6. More (Finance, Tasks, Reports, Settings)
-        NavigationBarItem(
-            selected = currentScreen == Screen.Settings || currentScreen == Screen.Finance || currentScreen == Screen.Tasks || currentScreen == Screen.Reports || currentScreen == Screen.Documents || currentScreen == Screen.Calculator || currentScreen == Screen.AiAssistant,
-            onClick = { onSelectScreen(Screen.Settings) },
-            icon = {
-                Icon(
-                    if (currentScreen == Screen.Settings) Icons.Filled.GridView else Icons.Outlined.GridView,
-                    contentDescription = if (language == AppLanguage.URDU) "مزید" else "More"
-                )
-            },
-            label = { Text(if (language == AppLanguage.URDU) "مزید" else "More") },
-            modifier = Modifier.testTag("nav_item_more")
-        )
+            // 5. User Guide (ایپ استعمال کی مکمل گائیڈ)
+            NavigationBarItem(
+                selected = currentScreen == Screen.Guide,
+                onClick = { onSelectScreen(Screen.Guide) },
+                icon = {
+                    Icon(
+                        if (currentScreen == Screen.Guide) Icons.Filled.Help else Icons.Outlined.HelpOutline,
+                        contentDescription = if (language == AppLanguage.URDU) "گائیڈ" else "Guide"
+                    )
+                },
+                label = { Text(if (language == AppLanguage.URDU) "گائیڈ" else "Guide", fontWeight = FontWeight.Bold) },
+                colors = navColors,
+                modifier = Modifier.testTag("nav_item_guide")
+            )
+
+            // 6. More (Finance, Tasks, Reports, Settings)
+            NavigationBarItem(
+                selected = currentScreen == Screen.Settings || currentScreen == Screen.Finance || currentScreen == Screen.Tasks || currentScreen == Screen.Reports || currentScreen == Screen.Documents || currentScreen == Screen.Calculator || currentScreen == Screen.AiAssistant,
+                onClick = { onSelectScreen(Screen.Settings) },
+                icon = {
+                    Icon(
+                        if (currentScreen == Screen.Settings) Icons.Filled.GridView else Icons.Outlined.GridView,
+                        contentDescription = if (language == AppLanguage.URDU) "مزید" else "More"
+                    )
+                },
+                label = { Text(if (language == AppLanguage.URDU) "مزید" else "More", fontWeight = FontWeight.Bold) },
+                colors = navColors,
+                modifier = Modifier.testTag("nav_item_more")
+            )
+        }
     }
 }

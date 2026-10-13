@@ -218,114 +218,100 @@ fun DashboardScreen(
             }
         }
 
-        // 1c. Top Quick Access Hub (سب کچھ ایک کلک پر - نماز، قرآن، اذکار، گائیڈ، بلز، عادات)
+        // 1c. Top Quick Access Hub (Floating Modern Cards with 5-Star Ratings matching reference image)
         item {
             Column {
-                Text(
-                    text = if (isUr) "✨ سب کچھ ڈسپلے پر (Quick Access Hub)" else "✨ All Features Display Hub",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Quran Folder
-                    Card(
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFFD97706)),
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable { viewModel.navigateTo(Screen.Quran) }
-                            .testTag("hub_quran_card")
+                    Text(
+                        text = if (isUr) "✨ سب کچھ ڈسپلے پر (Quick Access Hub)" else "✨ All Features Display Hub",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = IceBlueContainer
                     ) {
-                        Column(
-                            modifier = Modifier.padding(12.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Icon(Icons.Default.MenuBook, contentDescription = null, tint = Color.White, modifier = Modifier.size(24.dp))
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = if (isUr) "قرآن مجید" else "Quran",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                text = if (isUr) "114 سورتیں" else "114 Surahs",
-                                color = Color.White.copy(alpha = 0.85f),
-                                fontSize = 10.sp
-                            )
-                        }
+                        Text(
+                            text = if (isUr) "100% مفت ✓" else "FREE ✓",
+                            color = RoyalElectricBlue,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 11.sp,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                        )
                     }
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    // 1. Quran Floating Card
+                    FloatingFeatureCard(
+                        titleUr = "قرآن مجید",
+                        titleEn = "Holy Quran",
+                        subtitle = "114 سورتیں و ترجمہ",
+                        icon = Icons.Default.MenuBook,
+                        iconBg = Color(0xFFFEF3C7),
+                        iconTint = Color(0xFFD97706),
+                        modifier = Modifier.weight(1f),
+                        onClick = { viewModel.navigateTo(Screen.Quran) }
+                    )
 
-                    // Azkar Folder
-                    Card(
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF2563EB)),
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable { viewModel.navigateTo(Screen.Azkar) }
-                            .testTag("hub_azkar_card")
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(12.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Icon(Icons.Default.Star, contentDescription = null, tint = Color.White, modifier = Modifier.size(24.dp))
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = if (isUr) "صبح کے اذکار" else "Azkar",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                text = if (isUr) "حصن المسلم" else "Daily Duas",
-                                color = Color.White.copy(alpha = 0.85f),
-                                fontSize = 10.sp
-                            )
-                        }
-                    }
+                    // 2. Azkar Floating Card
+                    FloatingFeatureCard(
+                        titleUr = "صبح کے اذکار",
+                        titleEn = "Masnoon Azkar",
+                        subtitle = "حصن المسلم و تسبیح",
+                        icon = Icons.Default.Star,
+                        iconBg = Color(0xFFE0F2FE),
+                        iconTint = RoyalElectricBlue,
+                        modifier = Modifier.weight(1f),
+                        onClick = { viewModel.navigateTo(Screen.Azkar) }
+                    )
+                }
 
-                    // User Guide Folder
-                    Card(
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF7C3AED)),
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable { viewModel.navigateTo(Screen.Guide) }
-                            .testTag("hub_guide_card")
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(12.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Icon(Icons.Default.HelpOutline, contentDescription = null, tint = Color.White, modifier = Modifier.size(24.dp))
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = if (isUr) "یوزر گائیڈ" else "Guide",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                text = if (isUr) "استعمال کی تفصیل" else "How to use",
-                                color = Color.White.copy(alpha = 0.85f),
-                                fontSize = 10.sp
-                            )
-                        }
-                    }
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    // 3. User Guide Floating Card
+                    FloatingFeatureCard(
+                        titleUr = "یوزر گائیڈ",
+                        titleEn = "User Guide",
+                        subtitle = "ایپ کے تمام فیچرز",
+                        icon = Icons.Default.HelpOutline,
+                        iconBg = IceBlueContainer,
+                        iconTint = RoyalElectricBlue,
+                        modifier = Modifier.weight(1f),
+                        onClick = { viewModel.navigateTo(Screen.Guide) }
+                    )
+
+                    // 4. Bills & Fees Floating Card
+                    FloatingFeatureCard(
+                        titleUr = "بلز و سکول فیس",
+                        titleEn = "Bills & Fees",
+                        subtitle = "بجلی، گیس، فیس",
+                        icon = Icons.Default.ReceiptLong,
+                        iconBg = Color(0xFFE0E7FF),
+                        iconTint = Color(0xFF4338CA),
+                        modifier = Modifier.weight(1f),
+                        onClick = { viewModel.navigateTo(Screen.Bills) }
+                    )
                 }
             }
         }
 
-        // 2. TransactFlow Hero Card (Today's Sales / Balance PKR 84,250 with sparkline)
+        // 2. TransactFlow Hero Card (Matching Reference Banner: "DID YOU KNOW? 90% Start Online" & Cyan SALE Tag)
         item {
             Card(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(26.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -336,40 +322,72 @@ fun DashboardScreen(
                         .fillMaxWidth()
                         .background(
                             Brush.linearGradient(
-                                colors = listOf(VioletBrand, VioletBrandDark)
+                                colors = listOf(RoyalBlueDeepNavy, RoyalBlueDark, RoyalElectricBlue)
                             )
                         )
-                        .padding(22.dp)
+                        .padding(20.dp)
                 ) {
                     Column {
+                        // Top Header with "DID YOU KNOW?" headline and floating cyan SALE tag
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.Top
                         ) {
-                            Text(
-                                text = if (language == AppLanguage.URDU) "آج کی کل سیلز / بیلنس" else "Today's Sales",
-                                color = Color.White.copy(alpha = 0.9f),
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Medium
-                            )
-                            IconButton(
-                                onClick = onOpenVoiceDialog,
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .clip(CircleShape)
-                                    .background(Color.White.copy(alpha = 0.18f))
-                            ) {
-                                Icon(
-                                    Icons.Default.MoreHoriz,
-                                    contentDescription = "Options",
-                                    tint = Color.White
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = if (isUr) "کیا آپ جانتے ہیں؟" else "DID YOU KNOW?",
+                                    color = ElectricCyan,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    letterSpacing = 0.5.sp
                                 )
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Text(
+                                    text = if (isUr) "90% روزمرہ معمولات، نماز، قرآن و بلز ایک جگہ" else "90% of Daily Needs Managed Online",
+                                    color = Color.White.copy(alpha = 0.95f),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+
+                            // Cyan SALE-Style Badge Tag (exactly like the blue tag in the reference image)
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = SaleTagBlue,
+                                shadowElevation = 4.dp
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(6.dp)
+                                            .clip(CircleShape)
+                                            .background(Color.White)
+                                    )
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Text(
+                                        text = if (isUr) "فعال ✓" else "ACTIVE ✓",
+                                        color = Color.White,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = 11.sp,
+                                        letterSpacing = 0.5.sp
+                                    )
+                                }
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(14.dp))
 
+                        // Balance Display
+                        Text(
+                            text = if (isUr) "آج کی کل سیلز / بیلنس" else "Today's Balance",
+                            color = Color.White.copy(alpha = 0.85f),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = "PKR ${FormatUtils.formatPKR(displayBalance, language).replace("Rs. ", "").replace(" روپے", "")}",
                             color = Color.White,
@@ -378,7 +396,7 @@ fun DashboardScreen(
                             letterSpacing = (-0.5).sp
                         )
 
-                        Spacer(modifier = Modifier.height(14.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -387,7 +405,7 @@ fun DashboardScreen(
                         ) {
                             Surface(
                                 shape = RoundedCornerShape(20.dp),
-                                color = Color.White.copy(alpha = 0.2f)
+                                color = Color.White.copy(alpha = 0.22f)
                             ) {
                                 Row(
                                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
@@ -401,7 +419,7 @@ fun DashboardScreen(
                                     )
                                     Spacer(modifier = Modifier.width(4.dp))
                                     Text(
-                                        text = "12.5% vs Yesterday",
+                                        text = "+12.5% vs Yesterday",
                                         color = Color.White,
                                         style = MaterialTheme.typography.labelSmall,
                                         fontWeight = FontWeight.Bold
@@ -409,7 +427,7 @@ fun DashboardScreen(
                                 }
                             }
 
-                            // Wave Sparkline Canvas
+                            // Wave Sparkline Canvas in pure white
                             Canvas(modifier = Modifier.size(width = 110.dp, height = 32.dp)) {
                                 val path = Path().apply {
                                     moveTo(0f, size.height * 0.8f)
@@ -443,15 +461,24 @@ fun DashboardScreen(
         item {
             Card(
                 shape = RoundedCornerShape(22.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF065F46)),
+                colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Brush.linearGradient(
+                                colors = listOf(RoyalBlueDark, RoyalBlueDeepNavy)
+                            )
+                        )
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                         Column {
                             Text(
                                 text = if (language == AppLanguage.URDU) "🕌 اوقاتِ نماز و اذان نوٹیفیکیشنز" else "🕌 Prayer Times & Azan Alerts",
@@ -511,13 +538,13 @@ fun DashboardScreen(
                                 ) {
                                     Text(
                                         text = pName,
-                                        color = if (isCurrent) Color(0xFF065F46) else Color.White,
+                                        color = if (isCurrent) RoyalElectricBlue else Color.White,
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 11.sp
                                     )
                                     Text(
                                         text = pTime.replace(" ", "\n"),
-                                        color = if (isCurrent) Color(0xFF065F46) else Color.White.copy(alpha = 0.9f),
+                                        color = if (isCurrent) RoyalElectricBlue else Color.White.copy(alpha = 0.9f),
                                         fontSize = 10.sp,
                                         fontWeight = FontWeight.SemiBold,
                                         lineHeight = 12.sp,
@@ -526,7 +553,7 @@ fun DashboardScreen(
                                     Icon(
                                         imageVector = if (isAlert) Icons.Default.NotificationsActive else Icons.Default.NotificationsOff,
                                         contentDescription = null,
-                                        tint = if (isCurrent) Color(0xFF065F46) else Color.White.copy(alpha = 0.8f),
+                                        tint = if (isCurrent) RoyalElectricBlue else Color.White.copy(alpha = 0.8f),
                                         modifier = Modifier.size(13.dp)
                                     )
                                 }
@@ -536,6 +563,7 @@ fun DashboardScreen(
                 }
             }
         }
+    }
 
         // 2c. Meals (Lunch & Dinner) Notification Card
         item {
@@ -1531,6 +1559,82 @@ fun QuickEntryChip(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 fontSize = 9.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun FloatingFeatureCard(
+    titleUr: String,
+    titleEn: String,
+    subtitle: String,
+    icon: ImageVector,
+    iconBg: Color,
+    iconTint: Color,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Card(
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+        modifier = modifier.clickable { onClick() }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(14.dp)
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(42.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(iconBg),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(22.dp))
+                }
+
+                // 5-Star Rating (★★★★★) matching reference product card
+                Row {
+                    repeat(5) {
+                        Text(
+                            text = "★",
+                            color = VibrantSky,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = titleUr,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = titleEn,
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = RoyalElectricBlue
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 10.sp,
+                maxLines = 1
             )
         }
     }
