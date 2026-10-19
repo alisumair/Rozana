@@ -70,6 +70,21 @@ class RozanaViewModel(application: Application) : AndroidViewModel(application) 
     private val _ishaAlert = MutableStateFlow(prefs.getBoolean("isha_alert", true))
     val ishaAlert: StateFlow<Boolean> = _ishaAlert.asStateFlow()
 
+    private val _fajrTime = MutableStateFlow(prefs.getString("fajr_time", "05:00 AM") ?: "05:00 AM")
+    val fajrTime: StateFlow<String> = _fajrTime.asStateFlow()
+
+    private val _dhuhrTime = MutableStateFlow(prefs.getString("dhuhr_time", "01:15 PM") ?: "01:15 PM")
+    val dhuhrTime: StateFlow<String> = _dhuhrTime.asStateFlow()
+
+    private val _asrTime = MutableStateFlow(prefs.getString("asr_time", "04:45 PM") ?: "04:45 PM")
+    val asrTime: StateFlow<String> = _asrTime.asStateFlow()
+
+    private val _maghribTime = MutableStateFlow(prefs.getString("maghrib_time", "06:05 PM") ?: "06:05 PM")
+    val maghribTime: StateFlow<String> = _maghribTime.asStateFlow()
+
+    private val _ishaTime = MutableStateFlow(prefs.getString("isha_time", "07:45 PM") ?: "07:45 PM")
+    val ishaTime: StateFlow<String> = _ishaTime.asStateFlow()
+
     private val _breakfastAlert = MutableStateFlow(prefs.getBoolean("breakfast_alert", true))
     val breakfastAlert: StateFlow<Boolean> = _breakfastAlert.asStateFlow()
 
@@ -202,6 +217,46 @@ class RozanaViewModel(application: Application) : AndroidViewModel(application) 
                 prefs.edit().putBoolean("isha_alert", next).apply()
             }
         }
+    }
+
+    fun updatePrayerTime(prayerIdx: Int, newTime: String) {
+        when (prayerIdx) {
+            0 -> {
+                _fajrTime.value = newTime
+                prefs.edit().putString("fajr_time", newTime).apply()
+            }
+            1 -> {
+                _dhuhrTime.value = newTime
+                prefs.edit().putString("dhuhr_time", newTime).apply()
+            }
+            2 -> {
+                _asrTime.value = newTime
+                prefs.edit().putString("asr_time", newTime).apply()
+            }
+            3 -> {
+                _maghribTime.value = newTime
+                prefs.edit().putString("maghrib_time", newTime).apply()
+            }
+            4 -> {
+                _ishaTime.value = newTime
+                prefs.edit().putString("isha_time", newTime).apply()
+            }
+        }
+    }
+
+    fun updateAllPrayerTimes(fajr: String, dhuhr: String, asr: String, maghrib: String, isha: String) {
+        _fajrTime.value = fajr
+        _dhuhrTime.value = dhuhr
+        _asrTime.value = asr
+        _maghribTime.value = maghrib
+        _ishaTime.value = isha
+        prefs.edit()
+            .putString("fajr_time", fajr)
+            .putString("dhuhr_time", dhuhr)
+            .putString("asr_time", asr)
+            .putString("maghrib_time", maghrib)
+            .putString("isha_time", isha)
+            .apply()
     }
 
     fun toggleMealAlert(mealIdx: Int) {

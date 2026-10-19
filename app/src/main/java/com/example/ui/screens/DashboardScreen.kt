@@ -12,6 +12,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -73,6 +75,13 @@ fun DashboardScreen(
     val asrAlert by viewModel.asrAlert.collectAsState()
     val maghribAlert by viewModel.maghribAlert.collectAsState()
     val ishaAlert by viewModel.ishaAlert.collectAsState()
+
+    val fajrTime by viewModel.fajrTime.collectAsState()
+    val dhuhrTime by viewModel.dhuhrTime.collectAsState()
+    val asrTime by viewModel.asrTime.collectAsState()
+    val maghribTime by viewModel.maghribTime.collectAsState()
+    val ishaTime by viewModel.ishaTime.collectAsState()
+
     val breakfastAlert by viewModel.breakfastAlert.collectAsState()
     val lunchAlert by viewModel.lunchAlert.collectAsState()
     val dinnerAlert by viewModel.dinnerAlert.collectAsState()
@@ -87,6 +96,7 @@ fun DashboardScreen(
 
     var showEditProfileDialog by remember { mutableStateOf(false) }
     var showShareAppDialog by remember { mutableStateOf(false) }
+    var showPrayerSettingsDialog by remember { mutableStateOf(false) }
 
     // Android Photo Picker launcher
     val photoPickerLauncher = rememberLauncherForActivityResult(
@@ -459,6 +469,33 @@ fun DashboardScreen(
 
         // 2b. Namaz & Prayer Times Widget with Azan notification toggles
         item {
+            val prayerNamesUr = listOf("فجر", "ظہر", "عصر", "مغرب", "عشاء")
+            val prayerNamesEn = listOf("Fajr", "Zuhr", "Asr", "Maghrib", "Isha")
+            val prayerTimesList = listOf(fajrTime, dhuhrTime, asrTime, maghribTime, ishaTime)
+            val prayerAlertsList = listOf(fajrAlert, dhuhrAlert, asrAlert, maghribAlert, ishaAlert)
+
+            val nowCal = Calendar.getInstance()
+            val nowMinutes = nowCal.get(Calendar.HOUR_OF_DAY) * 60 + nowCal.get(Calendar.MINUTE)
+
+            val prayerMinutes = remember(fajrTime, dhuhrTime, asrTime, maghribTime, ishaTime) {
+                prayerTimesList.map { parseTimeToMinutes(it) }
+            }
+
+            val nextPrayerIdx = remember(nowMinutes, prayerMinutes) {
+                var found = -1
+                for (i in prayerMinutes.indices) {
+                    if (nowMinutes < prayerMinutes[i]) {
+                        found = i
+                        break
+                    }
+                }
+                if (found != -1) found else 0
+            }
+
+            val nextPrayerName = if (language == AppLanguage.URDU) prayerNamesUr[nextPrayerIdx] else prayerNamesEn[nextPrayerIdx]
+            val nextPrayerTimeStr = prayerTimesList[nextPrayerIdx]
+            val nextPrayerSubtitle = if (language == AppLanguage.URDU) "اگلی نماز: $nextPrayerName ($nextPrayerTimeStr)" else "Next: $nextPrayerName ($nextPrayerTimeStr)"
+
             Card(
                 shape = RoundedCornerShape(22.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent),
@@ -479,83 +516,116 @@ fun DashboardScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                        Column {
-                            Text(
-                                text = if (language == AppLanguage.URDU) "🕌 اوقاتِ نماز و اذان نوٹیفیکیشنز" else "🕌 Prayer Times & Azan Alerts",
-                                color = Color.White,
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = if (language == AppLanguage.URDU) "اگلی نماز: عصر (04:45 PM)" else "Next: Asr (04:45 PM)",
-                                color = Color.White.copy(alpha = 0.85f),
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                        }
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = if (language == AppLanguage.URDU) "🕌 اوقاتِ نماز و اذان نوٹیفیکیشنز" else "🕌 Prayer Times & Azan Alerts",
+                                    color = Color.White,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = nextPrayerSubtitle,
+                                    color = Color.White.copy(alpha = 0.9f),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
 
-                        Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = Color.White.copy(alpha = 0.2f)
-                        ) {
-                            Text(
-                                text = if (language == AppLanguage.URDU) "فعال ✓" else "Active ✓",
-                                color = Color.White,
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        listOf(
-                            Triple("فجر", "05:00 AM", fajrAlert),
-                            Triple("ظہر", "01:15 PM", dhuhrAlert),
-                            Triple("عصر", "04:45 PM", asrAlert),
-                            Triple("مغرب", "06:05 PM", maghribAlert),
-                            Triple("عشاء", "07:45 PM", ishaAlert)
-                        ).forEachIndexed { idx, (pName, pTime, isAlert) ->
-                            val isCurrent = idx == 2
-                            Surface(
-                                shape = RoundedCornerShape(12.dp),
-                                color = if (isCurrent) Color.White else Color.White.copy(alpha = 0.14f),
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .clickable {
-                                        viewModel.togglePrayerAlert(idx)
-                                        NotificationHelper.showNamazAlertNotification(context, pName, pTime)
-                                        Toast.makeText(context, if (isUr) "$pName اذان الرٹ تبدیل ہو گیا" else "$pName Azan alert updated", Toast.LENGTH_SHORT).show()
-                                    }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                Column(
-                                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 2.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                                // Settings button to adjust prayer times
+                                Surface(
+                                    shape = RoundedCornerShape(12.dp),
+                                    color = Color.White.copy(alpha = 0.25f),
+                                    modifier = Modifier.clickable { showPrayerSettingsDialog = true }
+                                ) {
+                                    Row(
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Settings,
+                                            contentDescription = "Prayer Settings",
+                                            tint = Color.White,
+                                            modifier = Modifier.size(13.dp)
+                                        )
+                                        Text(
+                                            text = if (language == AppLanguage.URDU) "سیٹنگز" else "Settings",
+                                            color = Color.White,
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
+
+                                Surface(
+                                    shape = RoundedCornerShape(12.dp),
+                                    color = Color.White.copy(alpha = 0.2f)
                                 ) {
                                     Text(
-                                        text = pName,
-                                        color = if (isCurrent) RoyalElectricBlue else Color.White,
+                                        text = if (language == AppLanguage.URDU) "فعال ✓" else "Active ✓",
+                                        color = Color.White,
+                                        fontSize = 11.sp,
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = 11.sp
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                                     )
-                                    Text(
-                                        text = pTime.replace(" ", "\n"),
-                                        color = if (isCurrent) RoyalElectricBlue else Color.White.copy(alpha = 0.9f),
-                                        fontSize = 10.sp,
-                                        fontWeight = FontWeight.SemiBold,
-                                        lineHeight = 12.sp,
-                                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                                    )
-                                    Icon(
-                                        imageVector = if (isAlert) Icons.Default.NotificationsActive else Icons.Default.NotificationsOff,
-                                        contentDescription = null,
-                                        tint = if (isCurrent) RoyalElectricBlue else Color.White.copy(alpha = 0.8f),
-                                        modifier = Modifier.size(13.dp)
-                                    )
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            listOf(
+                                Triple(prayerNamesUr[0], fajrTime, fajrAlert),
+                                Triple(prayerNamesUr[1], dhuhrTime, dhuhrAlert),
+                                Triple(prayerNamesUr[2], asrTime, asrAlert),
+                                Triple(prayerNamesUr[3], maghribTime, maghribAlert),
+                                Triple(prayerNamesUr[4], ishaTime, ishaAlert)
+                            ).forEachIndexed { idx, (pName, pTime, isAlert) ->
+                                val isCurrent = idx == nextPrayerIdx
+                                Surface(
+                                    shape = RoundedCornerShape(12.dp),
+                                    color = if (isCurrent) Color.White else Color.White.copy(alpha = 0.14f),
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .clickable {
+                                            viewModel.togglePrayerAlert(idx)
+                                            NotificationHelper.showNamazAlertNotification(context, pName, pTime)
+                                            Toast.makeText(context, if (isUr) "$pName اذان الرٹ تبدیل ہو گیا" else "$pName Azan alert updated", Toast.LENGTH_SHORT).show()
+                                        }
+                                ) {
+                                    Column(
+                                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 2.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(
+                                            text = pName,
+                                            color = if (isCurrent) RoyalElectricBlue else Color.White,
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 11.sp
+                                        )
+                                        Text(
+                                            text = pTime.replace(" ", "\n"),
+                                            color = if (isCurrent) RoyalElectricBlue else Color.White.copy(alpha = 0.9f),
+                                            fontSize = 10.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                            lineHeight = 12.sp,
+                                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                        )
+                                        Icon(
+                                            imageVector = if (isAlert) Icons.Default.NotificationsActive else Icons.Default.NotificationsOff,
+                                            contentDescription = null,
+                                            tint = if (isCurrent) RoyalElectricBlue else Color.White.copy(alpha = 0.8f),
+                                            modifier = Modifier.size(13.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -563,7 +633,6 @@ fun DashboardScreen(
                 }
             }
         }
-    }
 
         // 2c. Meals (Lunch & Dinner) Notification Card
         item {
@@ -1384,6 +1453,191 @@ fun DashboardScreen(
                     Text(if (isUr) "بند کریں" else "Close")
                 }
             }
+        )
+    }
+
+    if (showPrayerSettingsDialog) {
+        PrayerSettingsDialog(
+            currentFajr = fajrTime,
+            currentDhuhr = dhuhrTime,
+            currentAsr = asrTime,
+            currentMaghrib = maghribTime,
+            currentIsha = ishaTime,
+            isUr = isUr,
+            onDismiss = { showPrayerSettingsDialog = false },
+            onSave = { f, d, a, m, i ->
+                viewModel.updateAllPrayerTimes(f, d, a, m, i)
+                showPrayerSettingsDialog = false
+                Toast.makeText(context, if (isUr) "نماز کے اوقات محفوظ ہو گئے ہیں!" else "Prayer times saved successfully!", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+}
+
+private fun parseTimeToMinutes(timeStr: String): Int {
+    return try {
+        val parts = timeStr.trim().split(" ")
+        val hm = parts[0].split(":")
+        var h = hm[0].toInt()
+        val m = hm[1].toInt()
+        val amPm = parts.getOrNull(1)?.uppercase() ?: "AM"
+        if (amPm == "PM" && h < 12) h += 12
+        if (amPm == "AM" && h == 12) h = 0
+        h * 60 + m
+    } catch (e: Exception) {
+        0
+    }
+}
+
+@Composable
+fun PrayerSettingsDialog(
+    currentFajr: String,
+    currentDhuhr: String,
+    currentAsr: String,
+    currentMaghrib: String,
+    currentIsha: String,
+    isUr: Boolean,
+    onDismiss: () -> Unit,
+    onSave: (String, String, String, String, String) -> Unit
+) {
+    var fajr by remember { mutableStateOf(currentFajr) }
+    var dhuhr by remember { mutableStateOf(currentDhuhr) }
+    var asr by remember { mutableStateOf(currentAsr) }
+    var maghrib by remember { mutableStateOf(currentMaghrib) }
+    var isha by remember { mutableStateOf(currentIsha) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.AccessTime,
+                    contentDescription = null,
+                    tint = RoyalElectricBlue
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = if (isUr) "اوقاتِ نماز سیٹنگز (وقت تبدیل کریں)" else "Prayer Times Settings",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 17.sp
+                )
+            }
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    text = if (isUr)
+                        "اپنے علاقے یا مسجد کے مطابق نماز کے اوقات سیٹ کریں یا نیچے دیے گئے بٹن سے پری سیٹ منتخب کریں:"
+                    else
+                        "Adjust prayer times according to your local mosque or select a preset:",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                // Quick Presets Row
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    // Standard Pakistan
+                    OutlinedButton(
+                        onClick = {
+                            fajr = "05:00 AM"
+                            dhuhr = "01:15 PM"
+                            asr = "04:45 PM"
+                            maghrib = "06:05 PM"
+                            isha = "07:45 PM"
+                        },
+                        modifier = Modifier.weight(1f),
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)
+                    ) {
+                        Text(if (isUr) "معیاری" else "Standard", fontSize = 11.sp)
+                    }
+
+                    // Summer (گرما)
+                    OutlinedButton(
+                        onClick = {
+                            fajr = "04:30 AM"
+                            dhuhr = "01:30 PM"
+                            asr = "05:15 PM"
+                            maghrib = "07:10 PM"
+                            isha = "08:45 PM"
+                        },
+                        modifier = Modifier.weight(1f),
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)
+                    ) {
+                        Text(if (isUr) "گرما" else "Summer", fontSize = 11.sp)
+                    }
+
+                    // Winter (سرما)
+                    OutlinedButton(
+                        onClick = {
+                            fajr = "05:30 AM"
+                            dhuhr = "01:00 PM"
+                            asr = "04:00 PM"
+                            maghrib = "05:25 PM"
+                            isha = "07:00 PM"
+                        },
+                        modifier = Modifier.weight(1f),
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)
+                    ) {
+                        Text(if (isUr) "سرما" else "Winter", fontSize = 11.sp)
+                    }
+                }
+
+                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+
+                PrayerTimeInputField(label = if (isUr) "فجر (Fajr)" else "Fajr", value = fajr, onValueChange = { fajr = it })
+                PrayerTimeInputField(label = if (isUr) "ظہر (Zuhr)" else "Zuhr", value = dhuhr, onValueChange = { dhuhr = it })
+                PrayerTimeInputField(label = if (isUr) "عصر (Asr)" else "Asr", value = asr, onValueChange = { asr = it })
+                PrayerTimeInputField(label = if (isUr) "مغرب (Maghrib)" else "Maghrib", value = maghrib, onValueChange = { maghrib = it })
+                PrayerTimeInputField(label = if (isUr) "عشاء (Isha)" else "Isha", value = isha, onValueChange = { isha = it })
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = { onSave(fajr, dhuhr, asr, maghrib, isha) },
+                colors = ButtonDefaults.buttonColors(containerColor = RoyalElectricBlue)
+            ) {
+                Text(if (isUr) "محفوظ کریں (Save)" else "Save")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(if (isUr) "منسوخ" else "Cancel")
+            }
+        }
+    )
+}
+
+@Composable
+fun PrayerTimeInputField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.weight(1f)
+        )
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            singleLine = true,
+            modifier = Modifier.width(135.dp),
+            textStyle = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
         )
     }
 }
