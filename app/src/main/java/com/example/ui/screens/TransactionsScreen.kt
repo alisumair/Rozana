@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,10 +14,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.data.model.*
+import com.example.ui.components.CategoryManagementDialog
 import com.example.ui.theme.ExpenseRed
 import com.example.ui.theme.IncomeGreen
 import com.example.ui.viewmodel.RozanaViewModel
@@ -28,11 +32,15 @@ fun TransactionsScreen(
     onAddTransaction: (TransactionType) -> Unit,
     onEditTransaction: (TransactionEntity) -> Unit
 ) {
+    val context = LocalContext.current
     val language by viewModel.language.collectAsState()
     val transactions by viewModel.allTransactions.collectAsState()
+    val customExpenseCategories by viewModel.customExpenseCategories.collectAsState()
+    val customIncomeCategories by viewModel.customIncomeCategories.collectAsState()
 
     var selectedFilter by remember { mutableStateOf<TransactionType?>(null) }
     var transactionToDelete by remember { mutableStateOf<TransactionEntity?>(null) }
+    var showCategoryManagerDialog by remember { mutableStateOf(false) }
 
     val filteredTransactions = remember(transactions, selectedFilter) {
         if (selectedFilter == null) transactions
@@ -150,7 +158,34 @@ fun TransactionsScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Categories Management Bar
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = if (language == AppLanguage.URDU) "ریکارڈ شدہ اندراجات" else "Recent Transactions",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
+                )
+                TextButton(
+                    onClick = { showCategoryManagerDialog = true },
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
+                ) {
+                    Icon(Icons.Default.Tune, contentDescription = null, modifier = Modifier.size(15.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = if (language == AppLanguage.URDU) "کیٹیگریز مینیجر" else "Categories ⚙",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(4.dp))
 
             // History List
             if (filteredTransactions.isEmpty()) {
@@ -305,6 +340,27 @@ fun TransactionsScreen(
                 TextButton(onClick = { transactionToDelete = null }) {
                     Text(RozanaStrings.get("cancel", language))
                 }
+            }
+        )
+    }
+
+    if (showCategoryManagerDialog) {
+        CategoryManagementDialog(
+            customExpenseCategories = customExpenseCategories,
+            customIncomeCategories = customIncomeCategories,
+            language = language,
+            onDismiss = { showCategoryManagerDialog = false },
+            onAddCategory = { type, name ->
+                viewModel.addCustomCategory(type, name)
+                Toast.makeText(context, if (language == AppLanguage.URDU) "'$name' کیٹیگری شامل ہو گئی" else "'$name' added!", Toast.LENGTH_SHORT).show()
+            },
+            onDeleteCategory = { type, name ->
+                viewModel.deleteCustomCategory(type, name)
+                Toast.makeText(context, if (language == AppLanguage.URDU) "'$name' حذف کر دی گئی" else "'$name' deleted!", Toast.LENGTH_SHORT).show()
+            },
+            onRenameCategory = { type, oldName, newName ->
+                viewModel.renameCustomCategory(type, oldName, newName)
+                Toast.makeText(context, if (language == AppLanguage.URDU) "نام تبدیل ہو گیا" else "Category renamed!", Toast.LENGTH_SHORT).show()
             }
         )
     }

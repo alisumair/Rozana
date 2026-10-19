@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.*
+import com.example.ui.components.*
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.RozanaViewModel
 import com.example.ui.viewmodel.Screen
@@ -68,7 +69,16 @@ fun DashboardScreen(
 
     val cleanDays by viewModel.habitDaysClean.collectAsState()
     val urgesResisted by viewModel.urgesResisted.collectAsState()
+    val habitTitleUr by viewModel.habitTitleUr.collectAsState()
+    val habitTitleEn by viewModel.habitTitleEn.collectAsState()
+    val habitSubtitleUr by viewModel.habitSubtitleUr.collectAsState()
+    val habitSubtitleEn by viewModel.habitSubtitleEn.collectAsState()
+
     val waterGlasses by viewModel.waterGlasses.collectAsState()
+    val waterDailyGoal by viewModel.waterDailyGoal.collectAsState()
+
+    val customExpenseCategories by viewModel.customExpenseCategories.collectAsState()
+    val customIncomeCategories by viewModel.customIncomeCategories.collectAsState()
 
     val fajrAlert by viewModel.fajrAlert.collectAsState()
     val dhuhrAlert by viewModel.dhuhrAlert.collectAsState()
@@ -97,6 +107,9 @@ fun DashboardScreen(
     var showEditProfileDialog by remember { mutableStateOf(false) }
     var showShareAppDialog by remember { mutableStateOf(false) }
     var showPrayerSettingsDialog by remember { mutableStateOf(false) }
+    var showWaterSettingsDialog by remember { mutableStateOf(false) }
+    var showHabitSettingsDialog by remember { mutableStateOf(false) }
+    var showCategoryManagerDialog by remember { mutableStateOf(false) }
 
     // Android Photo Picker launcher
     val photoPickerLauncher = rememberLauncherForActivityResult(
@@ -885,12 +898,26 @@ fun DashboardScreen(
         // 2f. 8-Chip Quick Grid for School Fee, Food, Electric, Gas, Water, Internet, Other
         item {
             Column {
-                Text(
-                    text = if (language == AppLanguage.URDU) "فوری اخراجات و بلز (Quick Entries)" else "Quick Expenses & Bills",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = if (language == AppLanguage.URDU) "فوری اخراجات و بلز (Quick Entries)" else "Quick Expenses & Bills",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    TextButton(
+                        onClick = { showCategoryManagerDialog = true },
+                        contentPadding = PaddingValues(horizontal = 6.dp, vertical = 2.dp)
+                    ) {
+                        Icon(Icons.Default.Tune, contentDescription = null, modifier = Modifier.size(15.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(if (language == AppLanguage.URDU) "کیٹیگریز سیٹنگ" else "Categories ⚙", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+                Spacer(modifier = Modifier.height(4.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     QuickEntryChip("سکول فیس", "School Fee", Icons.Default.School, Color(0xFF6028E4), Color(0xFFECE6FD), Modifier.weight(1f)) {
                         onOpenAddTransaction(TransactionType.EXPENSE)
@@ -923,7 +950,7 @@ fun DashboardScreen(
             }
         }
 
-        // 2g. Bad Addiction Recovery Card
+        // 2g. Bad Addiction Recovery Card (عادات و نشہ سے نجات کا ٹریکر اور تدوین)
         item {
             Card(
                 shape = RoundedCornerShape(18.dp),
@@ -936,31 +963,52 @@ fun DashboardScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Text(
+                                text = if (language == AppLanguage.URDU) habitTitleUr else habitTitleEn,
+                                color = Color.White,
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            IconButton(
+                                onClick = { showHabitSettingsDialog = true },
+                                modifier = Modifier.size(24.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.Tune,
+                                    contentDescription = "Edit Habit Settings",
+                                    tint = Color.White.copy(alpha = 0.95f),
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                        }
                         Text(
-                            text = if (language == AppLanguage.URDU) "بد عادتوں سے نجات کا سفر" else "Clean & Healthy Streaks",
-                            color = Color.White,
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = if (language == AppLanguage.URDU) "سگریٹ، سکرین ٹائم اور فاسٹ فوڈ پرہیز" else "Smoking, Screen time & Junk food free",
+                            text = if (language == AppLanguage.URDU) habitSubtitleUr else habitSubtitleEn,
                             color = Color.White.copy(alpha = 0.88f),
                             style = MaterialTheme.typography.bodySmall,
                             fontSize = 11.sp
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        FilledTonalButton(
-                            onClick = {
-                                viewModel.incrementUrgesResisted()
-                                Toast.makeText(context, if (isUr) "ماشاءاللہ! وسوسہ کامیابی سے روکا گیا" else "Urge resisted successfully!", Toast.LENGTH_SHORT).show()
-                            },
-                            colors = ButtonDefaults.filledTonalButtonColors(containerColor = Color.White, contentColor = Color(0xFF065F46)),
-                            shape = RoundedCornerShape(10.dp),
-                            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp)
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(Icons.Default.Shield, contentDescription = null, modifier = Modifier.size(14.dp))
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(if (isUr) "وسوسہ روکا! ($urgesResisted)" else "Resisted ($urgesResisted)", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            FilledTonalButton(
+                                onClick = {
+                                    viewModel.incrementUrgesResisted()
+                                    Toast.makeText(context, if (isUr) "ماشاءاللہ! وسوسہ کامیابی سے روکا گیا" else "Urge resisted successfully!", Toast.LENGTH_SHORT).show()
+                                },
+                                colors = ButtonDefaults.filledTonalButtonColors(containerColor = Color.White, contentColor = Color(0xFF065F46)),
+                                shape = RoundedCornerShape(10.dp),
+                                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp)
+                            ) {
+                                Icon(Icons.Default.Shield, contentDescription = null, modifier = Modifier.size(14.dp))
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(if (isUr) "وسوسہ روکا! ($urgesResisted)" else "Resisted ($urgesResisted)", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
 
@@ -968,8 +1016,7 @@ fun DashboardScreen(
                         shape = RoundedCornerShape(14.dp),
                         color = Color.White.copy(alpha = 0.25f),
                         modifier = Modifier.clickable {
-                            viewModel.incrementCleanDays()
-                            Toast.makeText(context, if (isUr) "مبارک ہو! ایک اور دن صاف رہا" else "Clean day added!", Toast.LENGTH_SHORT).show()
+                            showHabitSettingsDialog = true
                         }
                     ) {
                         Column(
@@ -983,7 +1030,7 @@ fun DashboardScreen(
                                 fontWeight = FontWeight.ExtraBold
                             )
                             Text(
-                                text = if (isUr) "دن کلین (+)" else "Days Clean (+)",
+                                text = if (isUr) "دن کلین (تدوین ⚙)" else "Days (Edit ⚙)",
                                 color = Color.White,
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Bold
@@ -994,7 +1041,7 @@ fun DashboardScreen(
             }
         }
 
-        // 2h. Daily Water & Exercise Tracker (پانی اور ورزش کا روزانہ ٹریکر)
+        // 2h. Daily Water & Exercise Tracker (پانی اور صحت کا روزانہ ٹریکر و سیٹنگ)
         item {
             Card(
                 shape = RoundedCornerShape(18.dp),
@@ -1007,13 +1054,27 @@ fun DashboardScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = if (isUr) "💧 روزانہ پانی ($waterDailyGoal گلاس)" else "💧 Daily Water ($waterDailyGoal Glasses)",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            IconButton(
+                                onClick = { showWaterSettingsDialog = true },
+                                modifier = Modifier.size(24.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.Tune,
+                                    contentDescription = "Water Settings",
+                                    tint = Color(0xFF0284C7),
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                        }
                         Text(
-                            text = if (isUr) "💧 روزانہ پانی (8 گلاس) اور ورزش" else "💧 Daily Water (8 Glasses) & Workout",
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "$waterGlasses / 8 Glasses",
+                            text = "$waterGlasses / $waterDailyGoal Glasses",
                             color = Color(0xFF0284C7),
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 12.sp
@@ -1022,11 +1083,12 @@ fun DashboardScreen(
 
                     Spacer(modifier = Modifier.height(10.dp))
 
+                    val displayGoal = waterDailyGoal.coerceIn(4, 12)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        for (i in 1..8) {
+                        for (i in 1..displayGoal) {
                             val filled = i <= waterGlasses
                             Surface(
                                 shape = RoundedCornerShape(8.dp),
@@ -1036,9 +1098,9 @@ fun DashboardScreen(
                                     .height(34.dp)
                                     .clickable {
                                         if (filled && i == waterGlasses) {
-                                            viewModel.resetWaterGlasses()
+                                            viewModel.removeWaterGlass()
                                         } else {
-                                            viewModel.addWaterGlass()
+                                            viewModel.setWaterGlasses(i)
                                         }
                                     }
                             ) {
@@ -1062,21 +1124,31 @@ fun DashboardScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = if (isUr) "گلاس پر کلک کر کے پانی کا اضافہ کریں" else "Tap glass to log +1 water intake",
+                            text = if (isUr) "گلاس پر ٹیپ کریں یا سیٹنگ سے ہدف بدلیں" else "Tap glass to log or change target",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 11.sp
                         )
-                        FilledTonalButton(
-                            onClick = {
-                                viewModel.addWaterGlass()
-                                Toast.makeText(context, if (isUr) "شاباش! ایک اور گلاس پانی پیا" else "+1 Glass logged!", Toast.LENGTH_SHORT).show()
-                            },
-                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
-                        ) {
-                            Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(14.dp))
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(if (isUr) "پانی پیا" else "+1 Glass", fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                            if (waterGlasses > 0) {
+                                OutlinedIconButton(
+                                    onClick = { viewModel.removeWaterGlass() },
+                                    modifier = Modifier.size(32.dp)
+                                ) {
+                                    Icon(Icons.Default.Remove, contentDescription = "Undo glass", modifier = Modifier.size(14.dp))
+                                }
+                            }
+                            FilledTonalButton(
+                                onClick = {
+                                    viewModel.addWaterGlass()
+                                    Toast.makeText(context, if (isUr) "شاباش! ایک اور گلاس پانی پیا" else "+1 Glass logged!", Toast.LENGTH_SHORT).show()
+                                },
+                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
+                            ) {
+                                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(14.dp))
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(if (isUr) "پانی پیا" else "+1 Glass", fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
                 }
@@ -1469,6 +1541,68 @@ fun DashboardScreen(
                 viewModel.updateAllPrayerTimes(f, d, a, m, i)
                 showPrayerSettingsDialog = false
                 Toast.makeText(context, if (isUr) "نماز کے اوقات محفوظ ہو گئے ہیں!" else "Prayer times saved successfully!", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    if (showWaterSettingsDialog) {
+        WaterSettingsDialog(
+            currentGoal = waterDailyGoal,
+            currentGlasses = waterGlasses,
+            language = language,
+            onDismiss = { showWaterSettingsDialog = false },
+            onSave = { goal, glasses ->
+                viewModel.updateWaterSettings(goal, glasses)
+                showWaterSettingsDialog = false
+                Toast.makeText(context, if (isUr) "پانی کا ہدف اور گلاسز محفوظ ہو گئے!" else "Water settings saved successfully!", Toast.LENGTH_SHORT).show()
+            },
+            onReset = {
+                viewModel.resetWaterGlasses()
+                Toast.makeText(context, if (isUr) "پانی صفر کر دیا گیا ہے" else "Water glasses reset to 0", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    if (showHabitSettingsDialog) {
+        HabitSettingsDialog(
+            currentTitleUr = habitTitleUr,
+            currentTitleEn = habitTitleEn,
+            currentSubtitleUr = habitSubtitleUr,
+            currentSubtitleEn = habitSubtitleEn,
+            currentDaysClean = cleanDays,
+            currentUrgesResisted = urgesResisted,
+            language = language,
+            onDismiss = { showHabitSettingsDialog = false },
+            onSave = { tUr, tEn, sUr, sEn, days, urges ->
+                viewModel.updateHabitSettings(tUr, tEn, sUr, sEn, days, urges)
+                showHabitSettingsDialog = false
+                Toast.makeText(context, if (isUr) "عادت کی سیٹنگ محفوظ ہو گئی!" else "Habit settings saved successfully!", Toast.LENGTH_SHORT).show()
+            },
+            onResetStreak = {
+                viewModel.resetHabitStreak()
+                viewModel.resetUrgesResisted()
+                Toast.makeText(context, if (isUr) "سٹریک صفر کر دی گئی ہے" else "Streak reset to 0", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    if (showCategoryManagerDialog) {
+        CategoryManagementDialog(
+            customExpenseCategories = customExpenseCategories,
+            customIncomeCategories = customIncomeCategories,
+            language = language,
+            onDismiss = { showCategoryManagerDialog = false },
+            onAddCategory = { type, name ->
+                viewModel.addCustomCategory(type, name)
+                Toast.makeText(context, if (isUr) "'$name' کیٹیگری شامل ہو گئی" else "'$name' added!", Toast.LENGTH_SHORT).show()
+            },
+            onDeleteCategory = { type, name ->
+                viewModel.deleteCustomCategory(type, name)
+                Toast.makeText(context, if (isUr) "'$name' حذف کر دی گئی" else "'$name' deleted!", Toast.LENGTH_SHORT).show()
+            },
+            onRenameCategory = { type, oldName, newName ->
+                viewModel.renameCustomCategory(type, oldName, newName)
+                Toast.makeText(context, if (isUr) "نام تبدیل ہو گیا" else "Category renamed!", Toast.LENGTH_SHORT).show()
             }
         )
     }

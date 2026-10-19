@@ -44,6 +44,8 @@ class MainActivity : ComponentActivity() {
             val currentScreen by viewModel.currentScreen.collectAsState()
             val pendingVoiceCandidates by viewModel.pendingVoiceCandidates.collectAsState()
             val budget by viewModel.currentBudget.collectAsState()
+            val customExpenseCategories by viewModel.customExpenseCategories.collectAsState()
+            val customIncomeCategories by viewModel.customIncomeCategories.collectAsState()
 
             val isDark = userDarkMode ?: isSystemInDarkTheme()
             val layoutDirection = if (language == AppLanguage.URDU) LayoutDirection.Rtl else LayoutDirection.Ltr
@@ -199,6 +201,11 @@ class MainActivity : ComponentActivity() {
                             initialType = transactionTypeForDialog,
                             transactionToEdit = transactionToEdit,
                             language = language,
+                            customExpenseCategories = customExpenseCategories,
+                            customIncomeCategories = customIncomeCategories,
+                            onAddCustomCategory = { type, name ->
+                                viewModel.addCustomCategory(type, name)
+                            },
                             onDismiss = {
                                 showAddTransactionDialog = false
                                 transactionToEdit = null

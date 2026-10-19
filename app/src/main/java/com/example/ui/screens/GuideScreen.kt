@@ -81,16 +81,24 @@ fun GuideScreen(
             iconColor = Color(0xFF2563EB)
         ),
         GuideItem(
-            titleEn = "6. Bad Addiction Recovery & Healthy Habits",
-            titleUr = "6. بد عادتوں سے نجات اور ورزش و پانی",
-            descEn = "Track clean streak days from smoking, excessive screen time, and junk food. Tap 'Resisted Urge' whenever you overcome a temptation. Track 8 daily water glasses.",
-            descUr = "سگریٹ، غیر ضروری سکرین ٹائم اور فاسٹ فوڈ سے پرہیز کی اسٹریک چلائیں۔ جب بھی وسوسہ روکا، فتح بٹن دبائیں۔ روزانہ 8 گلاس پانی کا ٹریکر استعمال کریں۔",
+            titleEn = "6. Bad Addiction Recovery & Water Target",
+            titleUr = "6. بد عادتوں سے نجات اور پانی کا ٹریکر",
+            descEn = "Set your custom addiction/habit to quit (smoking, social media, junk food, etc.), set clean days streak, and customize daily water glasses goal with the gear ⚙ settings icon.",
+            descUr = "جس عادت یا نشہ سے پرہیز کرنا چاہتے ہیں اس کا نام، دن کی سٹریک اور روزانہ پانی پینے کا ہدف اپنی مرضی کے مطابق ⚙ سیٹنگ آئیکون سے تبدیل کریں۔",
             icon = Icons.Default.Psychology,
             iconColor = Color(0xFF10B981)
         ),
         GuideItem(
-            titleEn = "7. How to Install & Share APK with Anyone",
-            titleUr = "7. ایپ کو انسٹال اور لامحدود شیئر کرنا",
+            titleEn = "7. Custom Folders & Categories Editing",
+            titleUr = "7. ہر فولڈر اور کیٹیگری کی ذاتی تدوین",
+            descEn = "You are not restricted to predefined categories! Tap '+ Add Category' or 'Categories ⚙' in Transactions or Settings to add, rename, or delete your own custom expense and income categories.",
+            descUr = "آپ پہلے سے موجود کیٹیگریز کے پابند نہیں ہیں۔ ٹرانزیکشنز یا سیٹنگز میں 'کیٹیگریز مینیجر' سے اپنی مرضی کی نئی کیٹیگریز شامل کریں، نام بدلیں یا حذف کریں۔",
+            icon = Icons.Default.Tune,
+            iconColor = Color(0xFF8B5CF6)
+        ),
+        GuideItem(
+            titleEn = "8. How to Install & Share APK with Anyone",
+            titleUr = "8. ایپ کو انسٹال اور لامحدود شیئر کرنا",
             descEn = "Tap the green [APK] button at the top header to download Rozana.apk (21 MB). You can install it on your Android phone and send the APK file via WhatsApp to anyone without restrictions!",
             descUr = "اوپر ہیڈر میں سبز [APK] بٹن دبائیں اور 21 MB کی مکمل ایپ ڈاؤنلوڈ کریں۔ آپ اسے اپنے فون میں انسٹال کر سکتے ہیں اور واٹس ایپ پر جس کے ساتھ چاہیں شیئر کر سکتے ہیں!",
             icon = Icons.Default.Share,

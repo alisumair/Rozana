@@ -52,8 +52,29 @@ class RozanaViewModel(application: Application) : AndroidViewModel(application) 
     private val _urgesResisted = MutableStateFlow(prefs.getInt("urges_resisted", 22))
     val urgesResisted: StateFlow<Int> = _urgesResisted.asStateFlow()
 
+    private val _habitTitleUr = MutableStateFlow(prefs.getString("habit_title_ur", "بد عادتوں سے نجات کا سفر") ?: "بد عادتوں سے نجات کا سفر")
+    val habitTitleUr: StateFlow<String> = _habitTitleUr.asStateFlow()
+
+    private val _habitTitleEn = MutableStateFlow(prefs.getString("habit_title_en", "Clean & Healthy Streaks") ?: "Clean & Healthy Streaks")
+    val habitTitleEn: StateFlow<String> = _habitTitleEn.asStateFlow()
+
+    private val _habitSubtitleUr = MutableStateFlow(prefs.getString("habit_subtitle_ur", "سگریٹ، سکرین ٹائم اور فاسٹ فوڈ پرہیز") ?: "سگریٹ، سکرین ٹائم اور فاسٹ فوڈ پرہیز")
+    val habitSubtitleUr: StateFlow<String> = _habitSubtitleUr.asStateFlow()
+
+    private val _habitSubtitleEn = MutableStateFlow(prefs.getString("habit_subtitle_en", "Smoking, Screen time & Junk food free") ?: "Smoking, Screen time & Junk food free")
+    val habitSubtitleEn: StateFlow<String> = _habitSubtitleEn.asStateFlow()
+
     private val _waterGlasses = MutableStateFlow(prefs.getInt("water_glasses", 5))
     val waterGlasses: StateFlow<Int> = _waterGlasses.asStateFlow()
+
+    private val _waterDailyGoal = MutableStateFlow(prefs.getInt("water_daily_goal", 8))
+    val waterDailyGoal: StateFlow<Int> = _waterDailyGoal.asStateFlow()
+
+    private val _customExpenseCategories = MutableStateFlow(loadCustomCategoriesFromPrefs("custom_expense_cats"))
+    val customExpenseCategories: StateFlow<List<String>> = _customExpenseCategories.asStateFlow()
+
+    private val _customIncomeCategories = MutableStateFlow(loadCustomCategoriesFromPrefs("custom_income_cats"))
+    val customIncomeCategories: StateFlow<List<String>> = _customIncomeCategories.asStateFlow()
 
     private val _fajrAlert = MutableStateFlow(prefs.getBoolean("fajr_alert", true))
     val fajrAlert: StateFlow<Boolean> = _fajrAlert.asStateFlow()
@@ -166,6 +187,63 @@ class RozanaViewModel(application: Application) : AndroidViewModel(application) 
         prefs.edit().putString("profile_image_uri", uriString).apply()
     }
 
+    private fun loadCustomCategoriesFromPrefs(key: String): List<String> {
+        val raw = prefs.getString(key, "") ?: ""
+        if (raw.isBlank()) return emptyList()
+        return raw.split("|||").map { it.trim() }.filter { it.isNotEmpty() }
+    }
+
+    private fun saveCustomCategoriesToPrefs(key: String, list: List<String>) {
+        val raw = list.joinToString("|||")
+        prefs.edit().putString(key, raw).apply()
+    }
+
+    fun addCustomCategory(type: TransactionType, name: String) {
+        val clean = name.trim()
+        if (clean.isBlank()) return
+        if (type == TransactionType.EXPENSE) {
+            val current = _customExpenseCategories.value.toMutableList()
+            if (!current.any { it.equals(clean, ignoreCase = true) }) {
+                current.add(clean)
+                _customExpenseCategories.value = current
+                saveCustomCategoriesToPrefs("custom_expense_cats", current)
+            }
+        } else {
+            val current = _customIncomeCategories.value.toMutableList()
+            if (!current.any { it.equals(clean, ignoreCase = true) }) {
+                current.add(clean)
+                _customIncomeCategories.value = current
+                saveCustomCategoriesToPrefs("custom_income_cats", current)
+            }
+        }
+    }
+
+    fun deleteCustomCategory(type: TransactionType, name: String) {
+        if (type == TransactionType.EXPENSE) {
+            val current = _customExpenseCategories.value.filterNot { it.equals(name, ignoreCase = true) }
+            _customExpenseCategories.value = current
+            saveCustomCategoriesToPrefs("custom_expense_cats", current)
+        } else {
+            val current = _customIncomeCategories.value.filterNot { it.equals(name, ignoreCase = true) }
+            _customIncomeCategories.value = current
+            saveCustomCategoriesToPrefs("custom_income_cats", current)
+        }
+    }
+
+    fun renameCustomCategory(type: TransactionType, oldName: String, newName: String) {
+        val clean = newName.trim()
+        if (clean.isBlank()) return
+        if (type == TransactionType.EXPENSE) {
+            val current = _customExpenseCategories.value.map { if (it.equals(oldName, ignoreCase = true)) clean else it }
+            _customExpenseCategories.value = current
+            saveCustomCategoriesToPrefs("custom_expense_cats", current)
+        } else {
+            val current = _customIncomeCategories.value.map { if (it.equals(oldName, ignoreCase = true)) clean else it }
+            _customIncomeCategories.value = current
+            saveCustomCategoriesToPrefs("custom_income_cats", current)
+        }
+    }
+
     fun incrementCleanDays() {
         val next = _habitDaysClean.value + 1
         _habitDaysClean.value = next
@@ -178,10 +256,70 @@ class RozanaViewModel(application: Application) : AndroidViewModel(application) 
         prefs.edit().putInt("urges_resisted", next).apply()
     }
 
+    fun updateHabitSettings(
+        titleUr: String,
+        titleEn: String,
+        subtitleUr: String,
+        subtitleEn: String,
+        cleanDays: Int,
+        urges: Int
+    ) {
+        val safeClean = cleanDays.coerceAtLeast(0)
+        val safeUrges = urges.coerceAtLeast(0)
+        _habitTitleUr.value = titleUr.trim().ifEmpty { "بد عادتوں سے نجات کا سفر" }
+        _habitTitleEn.value = titleEn.trim().ifEmpty { "Clean & Healthy Streaks" }
+        _habitSubtitleUr.value = subtitleUr.trim().ifEmpty { "پرہیز اور صحت مند طرز زندگی" }
+        _habitSubtitleEn.value = subtitleEn.trim().ifEmpty { "Healthy & disciplined lifestyle" }
+        _habitDaysClean.value = safeClean
+        _urgesResisted.value = safeUrges
+
+        prefs.edit()
+            .putString("habit_title_ur", _habitTitleUr.value)
+            .putString("habit_title_en", _habitTitleEn.value)
+            .putString("habit_subtitle_ur", _habitSubtitleUr.value)
+            .putString("habit_subtitle_en", _habitSubtitleEn.value)
+            .putInt("habit_days_clean", safeClean)
+            .putInt("urges_resisted", safeUrges)
+            .apply()
+    }
+
+    fun resetHabitStreak() {
+        _habitDaysClean.value = 0
+        prefs.edit().putInt("habit_days_clean", 0).apply()
+    }
+
+    fun resetUrgesResisted() {
+        _urgesResisted.value = 0
+        prefs.edit().putInt("urges_resisted", 0).apply()
+    }
+
+    fun updateWaterSettings(goal: Int, currentGlasses: Int) {
+        val safeGoal = goal.coerceIn(1, 30)
+        val safeGlasses = currentGlasses.coerceIn(0, 50)
+        _waterDailyGoal.value = safeGoal
+        _waterGlasses.value = safeGlasses
+        prefs.edit()
+            .putInt("water_daily_goal", safeGoal)
+            .putInt("water_glasses", safeGlasses)
+            .apply()
+    }
+
+    fun setWaterGlasses(count: Int) {
+        val safe = count.coerceIn(0, 50)
+        _waterGlasses.value = safe
+        prefs.edit().putInt("water_glasses", safe).apply()
+    }
+
     fun addWaterGlass() {
-        val next = (_waterGlasses.value + 1).coerceAtMost(12)
+        val next = (_waterGlasses.value + 1).coerceAtMost(30)
         _waterGlasses.value = next
         prefs.edit().putInt("water_glasses", next).apply()
+    }
+
+    fun removeWaterGlass() {
+        val prev = (_waterGlasses.value - 1).coerceAtLeast(0)
+        _waterGlasses.value = prev
+        prefs.edit().putInt("water_glasses", prev).apply()
     }
 
     fun resetWaterGlasses() {

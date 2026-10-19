@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.data.model.AppLanguage
 import com.example.data.model.RozanaStrings
+import com.example.data.model.TransactionType
+import com.example.ui.components.*
 import com.example.ui.theme.ExpenseRed
 import com.example.ui.viewmodel.RozanaViewModel
 import com.example.ui.viewmodel.Screen
@@ -29,9 +31,34 @@ fun SettingsScreen(
     val context = LocalContext.current
     val language by viewModel.language.collectAsState()
     val isDarkMode by viewModel.isDarkMode.collectAsState()
+    val isUr = language == AppLanguage.URDU
+
+    val waterGlasses by viewModel.waterGlasses.collectAsState()
+    val waterDailyGoal by viewModel.waterDailyGoal.collectAsState()
+    val cleanDays by viewModel.habitDaysClean.collectAsState()
+    val urgesResisted by viewModel.urgesResisted.collectAsState()
+    val habitTitleUr by viewModel.habitTitleUr.collectAsState()
+    val habitTitleEn by viewModel.habitTitleEn.collectAsState()
+    val habitSubtitleUr by viewModel.habitSubtitleUr.collectAsState()
+    val habitSubtitleEn by viewModel.habitSubtitleEn.collectAsState()
+
+    val fajrTime by viewModel.fajrTime.collectAsState()
+    val dhuhrTime by viewModel.dhuhrTime.collectAsState()
+    val asrTime by viewModel.asrTime.collectAsState()
+    val maghribTime by viewModel.maghribTime.collectAsState()
+    val ishaTime by viewModel.ishaTime.collectAsState()
+
+    val customExpenseCategories by viewModel.customExpenseCategories.collectAsState()
+    val customIncomeCategories by viewModel.customIncomeCategories.collectAsState()
+    val currentBudget by viewModel.currentBudget.collectAsState()
 
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
     var showGithubGuideDialog by remember { mutableStateOf(false) }
+    var showWaterSettingsDialog by remember { mutableStateOf(false) }
+    var showHabitSettingsDialog by remember { mutableStateOf(false) }
+    var showCategoryManagerDialog by remember { mutableStateOf(false) }
+    var showPrayerSettingsDialog by remember { mutableStateOf(false) }
+    var showBudgetDialog by remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
@@ -115,6 +142,61 @@ fun SettingsScreen(
                         title = RozanaStrings.get("reports", language),
                         subtitle = "Income vs expense analysis & savings",
                         onClick = { viewModel.navigateTo(Screen.Reports) }
+                    )
+                }
+            }
+        }
+
+        // App Customization & Folders Editing (ہر فیچر کی ذاتی سیٹنگز اور تدوین)
+        item {
+            Text(
+                text = if (isUr) "ایپ کی ذاتی سیٹنگز اور تدوین (Customization)" else "Module Settings & Customization",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Card(
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+            ) {
+                Column {
+                    SettingsNavigationItem(
+                        icon = Icons.Default.WaterDrop,
+                        title = if (isUr) "پانی ٹریکر سیٹنگز (Water Goal & Intake)" else "Water Tracker Goal & Log",
+                        subtitle = if (isUr) "روزانہ $waterDailyGoal گلاس ہدف • فی الحال $waterGlasses گلاس (تبدیل کریں)" else "Target: $waterDailyGoal glasses • Today: $waterGlasses (Edit)",
+                        onClick = { showWaterSettingsDialog = true }
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                    SettingsNavigationItem(
+                        icon = Icons.Default.Shield,
+                        title = if (isUr) "عادت و نشہ ریکوری سیٹنگ (Habit & Recovery)" else "Habit & Addiction Recovery Settings",
+                        subtitle = if (isUr) "$habitTitleUr • $cleanDays دن کلین (تبدیل کریں)" else "$habitTitleEn • $cleanDays days (Edit)",
+                        onClick = { showHabitSettingsDialog = true }
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                    SettingsNavigationItem(
+                        icon = Icons.Default.Category,
+                        title = if (isUr) "آمدنی اور اخراجات کی کیٹیگریز (Categories Manager)" else "Income & Expense Categories",
+                        subtitle = if (isUr) "اپنی پسند کی نئی کیٹیگریز بنائیں، نام بدلیں یا ڈیلیٹ کریں" else "Create, rename, or delete custom categories",
+                        onClick = { showCategoryManagerDialog = true }
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                    SettingsNavigationItem(
+                        icon = Icons.Default.AccessTime,
+                        title = if (isUr) "نماز کے اوقات تبدیل کریں (Prayer Times)" else "Prayer Times Customization",
+                        subtitle = if (isUr) "فجر: $fajrTime ، ظہر: $dhuhrTime ، عصر: $asrTime" else "Fajr: $fajrTime, Zuhr: $dhuhrTime, Asr: $asrTime",
+                        onClick = { showPrayerSettingsDialog = true }
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                    SettingsNavigationItem(
+                        icon = Icons.Default.AccountBalanceWallet,
+                        title = if (isUr) "ماہانہ بجٹ کی حد (Monthly Spending Limit)" else "Monthly Spending Budget",
+                        subtitle = if (currentBudget != null && currentBudget!!.monthlyBudget > 0)
+                            "Rs. ${"%.0f".format(currentBudget!!.monthlyBudget)} limit set"
+                        else
+                            if (isUr) "اس مہینے کا کل خرچ بجٹ سیٹ کریں" else "Set monthly budget limit",
+                        onClick = { showBudgetDialog = true }
                     )
                 }
             }
@@ -410,6 +492,98 @@ fun SettingsScreen(
                 Button(onClick = { showGithubGuideDialog = false }) {
                     Text("ٹھیک ہے (Got it)")
                 }
+            }
+        )
+    }
+
+    if (showWaterSettingsDialog) {
+        WaterSettingsDialog(
+            currentGoal = waterDailyGoal,
+            currentGlasses = waterGlasses,
+            language = language,
+            onDismiss = { showWaterSettingsDialog = false },
+            onSave = { goal, glasses ->
+                viewModel.updateWaterSettings(goal, glasses)
+                showWaterSettingsDialog = false
+                Toast.makeText(context, if (isUr) "پانی کا ہدف محفوظ ہو گیا!" else "Water settings saved!", Toast.LENGTH_SHORT).show()
+            },
+            onReset = {
+                viewModel.resetWaterGlasses()
+                Toast.makeText(context, if (isUr) "پانی صفر کر دیا گیا ہے" else "Water glasses reset to 0", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    if (showHabitSettingsDialog) {
+        HabitSettingsDialog(
+            currentTitleUr = habitTitleUr,
+            currentTitleEn = habitTitleEn,
+            currentSubtitleUr = habitSubtitleUr,
+            currentSubtitleEn = habitSubtitleEn,
+            currentDaysClean = cleanDays,
+            currentUrgesResisted = urgesResisted,
+            language = language,
+            onDismiss = { showHabitSettingsDialog = false },
+            onSave = { tUr, tEn, sUr, sEn, days, urges ->
+                viewModel.updateHabitSettings(tUr, tEn, sUr, sEn, days, urges)
+                showHabitSettingsDialog = false
+                Toast.makeText(context, if (isUr) "عادت کی سیٹنگ محفوظ ہو گئی!" else "Habit settings saved!", Toast.LENGTH_SHORT).show()
+            },
+            onResetStreak = {
+                viewModel.resetHabitStreak()
+                viewModel.resetUrgesResisted()
+                Toast.makeText(context, if (isUr) "سٹریک صفر کر دی گئی ہے" else "Streak reset to 0", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    if (showCategoryManagerDialog) {
+        CategoryManagementDialog(
+            customExpenseCategories = customExpenseCategories,
+            customIncomeCategories = customIncomeCategories,
+            language = language,
+            onDismiss = { showCategoryManagerDialog = false },
+            onAddCategory = { type, name ->
+                viewModel.addCustomCategory(type, name)
+                Toast.makeText(context, if (isUr) "'$name' کیٹیگری شامل ہو گئی" else "'$name' added!", Toast.LENGTH_SHORT).show()
+            },
+            onDeleteCategory = { type, name ->
+                viewModel.deleteCustomCategory(type, name)
+                Toast.makeText(context, if (isUr) "'$name' حذف کر دی گئی" else "'$name' deleted!", Toast.LENGTH_SHORT).show()
+            },
+            onRenameCategory = { type, oldName, newName ->
+                viewModel.renameCustomCategory(type, oldName, newName)
+                Toast.makeText(context, if (isUr) "نام تبدیل ہو گیا" else "Category renamed!", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    if (showPrayerSettingsDialog) {
+        PrayerSettingsDialog(
+            currentFajr = fajrTime,
+            currentDhuhr = dhuhrTime,
+            currentAsr = asrTime,
+            currentMaghrib = maghribTime,
+            currentIsha = ishaTime,
+            isUr = isUr,
+            onDismiss = { showPrayerSettingsDialog = false },
+            onSave = { f, d, a, m, i ->
+                viewModel.updateAllPrayerTimes(f, d, a, m, i)
+                showPrayerSettingsDialog = false
+                Toast.makeText(context, if (isUr) "نماز کے اوقات محفوظ ہو گئے ہیں!" else "Prayer times saved!", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    if (showBudgetDialog) {
+        SetBudgetDialog(
+            currentBudgetAmount = currentBudget?.monthlyBudget ?: 0.0,
+            language = language,
+            onDismiss = { showBudgetDialog = false },
+            onSave = { amount ->
+                viewModel.setMonthlyBudget(amount)
+                showBudgetDialog = false
+                Toast.makeText(context, if (isUr) "ماہانہ بجٹ محفوظ ہو گیا!" else "Monthly budget saved!", Toast.LENGTH_SHORT).show()
             }
         )
     }
