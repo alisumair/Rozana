@@ -96,10 +96,12 @@ fun DashboardScreen(
     val lunchAlert by viewModel.lunchAlert.collectAsState()
     val dinnerAlert by viewModel.dinnerAlert.collectAsState()
 
+    val startingBalance by viewModel.startingBalance.collectAsState()
+    val isBalanceVisible by viewModel.isBalanceVisible.collectAsState()
+
     val totalIncome = transactions.filter { it.type == TransactionType.INCOME }.sumOf { it.amount }
     val totalExpense = transactions.filter { it.type == TransactionType.EXPENSE }.sumOf { it.amount }
-    val balance = totalIncome - totalExpense
-    val displayBalance = if (balance > 0) balance else 84250.0
+    val netBalance = startingBalance + totalIncome - totalExpense
 
     val pendingBills = bills.filter { !it.isPaid }.sortedBy { it.dueDate }
     val todaysTasks = tasks.filter { !it.isCompleted }.take(4)
@@ -110,6 +112,7 @@ fun DashboardScreen(
     var showWaterSettingsDialog by remember { mutableStateOf(false) }
     var showHabitSettingsDialog by remember { mutableStateOf(false) }
     var showCategoryManagerDialog by remember { mutableStateOf(false) }
+    var showEditBalanceDialog by remember { mutableStateOf(false) }
 
     // Android Photo Picker launcher
     val photoPickerLauncher = rememberLauncherForActivityResult(
@@ -404,20 +407,112 @@ fun DashboardScreen(
 
                         Spacer(modifier = Modifier.height(14.dp))
 
-                        // Balance Display
-                        Text(
-                            text = if (isUr) "آج کی کل سیلز / بیلنس" else "Today's Balance",
-                            color = Color.White.copy(alpha = 0.85f),
-                            style = MaterialTheme.typography.bodySmall
-                        )
+                        // Balance Header & Actions
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = if (isUr) "کل موجودہ بیلنس / نقد رقم" else "Total Cash & Balance",
+                                color = Color.White.copy(alpha = 0.88f),
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.Medium
+                            )
+
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                // Privacy Eye Toggle (Show/Hide Balance)
+                                Surface(
+                                    shape = CircleShape,
+                                    color = Color.White.copy(alpha = 0.22f),
+                                    modifier = Modifier.clickable { viewModel.toggleBalanceVisibility() }
+                                ) {
+                                    Icon(
+                                        imageVector = if (isBalanceVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                        contentDescription = "Toggle Balance Visibility",
+                                        tint = Color.White,
+                                        modifier = Modifier.padding(6.dp).size(16.dp)
+                                    )
+                                }
+
+                                // Edit Balance Button
+                                Surface(
+                                    shape = RoundedCornerShape(12.dp),
+                                    color = Color.White.copy(alpha = 0.25f),
+                                    modifier = Modifier.clickable { showEditBalanceDialog = true }
+                                ) {
+                                    Row(
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            Icons.Default.Edit,
+                                            contentDescription = "Edit Balance",
+                                            tint = Color.White,
+                                            modifier = Modifier.size(13.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text(
+                                            text = if (isUr) "بیلنس ایڈٹ کریں" else "Edit Balance",
+                                            color = Color.White,
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = "PKR ${FormatUtils.formatPKR(displayBalance, language).replace("Rs. ", "").replace(" روپے", "")}",
-                            color = Color.White,
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = (-0.5).sp
-                        )
+
+                        if (isBalanceVisible) {
+                            Text(
+                                text = "PKR ${FormatUtils.formatPKR(netBalance, language).replace("Rs. ", "").replace(" روپے", "")}",
+                                color = Color.White,
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = (-0.5).sp
+                            )
+                        } else {
+                            Text(
+                                text = "PKR ••••••",
+                                color = Color.White,
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = 2.sp
+                            )
+                        }
+
+                        // Breakdown row
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = if (isUr) "ابتدائی نقد: Rs. ${"%.0f".format(startingBalance)}" else "Starting: Rs. ${"%.0f".format(startingBalance)}",
+                                color = Color.White.copy(alpha = 0.75f),
+                                fontSize = 11.sp
+                            )
+                            Text(text = "•", color = Color.White.copy(alpha = 0.5f), fontSize = 10.sp)
+                            Text(
+                                text = if (isUr) "آمدنی: +Rs. ${"%.0f".format(totalIncome)}" else "Income: +Rs. ${"%.0f".format(totalIncome)}",
+                                color = Color(0xFFA7F3D0),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(text = "•", color = Color.White.copy(alpha = 0.5f), fontSize = 10.sp)
+                            Text(
+                                text = if (isUr) "اخراجات: -Rs. ${"%.0f".format(totalExpense)}" else "Expense: -Rs. ${"%.0f".format(totalExpense)}",
+                                color = Color(0xFFFECDD3),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
 
                         Spacer(modifier = Modifier.height(12.dp))
 
@@ -837,18 +932,107 @@ fun DashboardScreen(
                         }
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(
-                            text = if (language == AppLanguage.URDU) "صبح و شام کے اذکار" else "Masnoon Azkar",
+                            text = if (language == AppLanguage.URDU) "مسنون دعائیں و اذکار" else "Masnoon Duas & Azkar",
                             color = Color.White,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = if (language == AppLanguage.URDU) "صبح کے اذکار اور ڈیجیٹل تسبیح" else "Morning Azkar & Tasbeeh",
+                            text = if (language == AppLanguage.URDU) "۲۷+ مسنون دعائیں، صبح شام کے اذکار" else "27+ Masnoon Duas & Azkar",
                             color = Color.White.copy(alpha = 0.88f),
                             style = MaterialTheme.typography.bodySmall,
                             fontSize = 11.sp
                         )
                     }
+                }
+            }
+        }
+
+        // 2d-2. Today's Featured Masnoon Dua Card
+        item {
+            Card(
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { viewModel.navigateTo(Screen.Azkar) }
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Surface(
+                                shape = CircleShape,
+                                color = Color(0xFF2563EB).copy(alpha = 0.15f),
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        Icons.Default.AutoAwesome,
+                                        contentDescription = null,
+                                        tint = Color(0xFF2563EB),
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = if (language == AppLanguage.URDU) "آج کی منتخب مسنون دعا" else "Daily Featured Masnoon Dua",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+
+                        TextButton(
+                            onClick = { viewModel.navigateTo(Screen.Azkar) },
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
+                        ) {
+                            Text(
+                                text = if (language == AppLanguage.URDU) "تمام ۲۷+ دعائیں →" else "View All 27+ →",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ",
+                            fontSize = 17.sp,
+                            lineHeight = 28.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(6.dp))
+
+                    Text(
+                        text = if (language == AppLanguage.URDU)
+                            "اے اللہ! میں غم و فکر، کمزوری و سستی، اور قرض کے بوجھ اور لوگوں کے دباؤ سے تیری پناہ مانگتا ہوں۔ (صحیح بخاری)"
+                        else
+                            "O Allah! I seek refuge in You from grief and worry, weakness, laziness, burden of debts and overpowering of people. (Sahih Bukhari)",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        lineHeight = 18.sp,
+                        textAlign = if (language == AppLanguage.URDU) androidx.compose.ui.text.style.TextAlign.End else androidx.compose.ui.text.style.TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }
@@ -1603,6 +1787,23 @@ fun DashboardScreen(
             onRenameCategory = { type, oldName, newName ->
                 viewModel.renameCustomCategory(type, oldName, newName)
                 Toast.makeText(context, if (isUr) "نام تبدیل ہو گیا" else "Category renamed!", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    if (showEditBalanceDialog) {
+        EditBalanceDialog(
+            currentStartingBalance = startingBalance,
+            language = language,
+            onDismiss = { showEditBalanceDialog = false },
+            onSave = { newBal ->
+                viewModel.updateStartingBalance(newBal)
+                showEditBalanceDialog = false
+                Toast.makeText(
+                    context,
+                    if (isUr) "ابتدائی نقد بیلنس کامیابی سے محفوظ ہو گیا!" else "Starting balance saved successfully!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         )
     }

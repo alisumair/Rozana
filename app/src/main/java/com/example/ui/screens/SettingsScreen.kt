@@ -23,6 +23,7 @@ import com.example.ui.components.*
 import com.example.ui.theme.ExpenseRed
 import com.example.ui.viewmodel.RozanaViewModel
 import com.example.ui.viewmodel.Screen
+import com.example.util.FormatUtils
 
 @Composable
 fun SettingsScreen(
@@ -51,6 +52,8 @@ fun SettingsScreen(
     val customExpenseCategories by viewModel.customExpenseCategories.collectAsState()
     val customIncomeCategories by viewModel.customIncomeCategories.collectAsState()
     val currentBudget by viewModel.currentBudget.collectAsState()
+    val startingBalance by viewModel.startingBalance.collectAsState()
+    val isBalanceVisible by viewModel.isBalanceVisible.collectAsState()
 
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
     var showGithubGuideDialog by remember { mutableStateOf(false) }
@@ -59,6 +62,7 @@ fun SettingsScreen(
     var showCategoryManagerDialog by remember { mutableStateOf(false) }
     var showPrayerSettingsDialog by remember { mutableStateOf(false) }
     var showBudgetDialog by remember { mutableStateOf(false) }
+    var showEditBalanceDialog by remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
@@ -198,6 +202,16 @@ fun SettingsScreen(
                             if (isUr) "اس مہینے کا کل خرچ بجٹ سیٹ کریں" else "Set monthly budget limit",
                         onClick = { showBudgetDialog = true }
                     )
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                    SettingsNavigationItem(
+                        icon = Icons.Default.Payments,
+                        title = if (isUr) "ابتدائی نقد بیلنس (Edit Starting Balance)" else "Cash in Hand / Starting Balance",
+                        subtitle = if (startingBalance > 0)
+                            "PKR ${FormatUtils.formatPKR(startingBalance, language)} (تبدیل کرنے کے لیے کلک کریں)"
+                        else
+                            if (isUr) "0 روپے (کوئی فرضی رقم نہیں، اپنی مرضی سے درج کریں)" else "Rs. 0 (Click to set initial balance)",
+                        onClick = { showEditBalanceDialog = true }
+                    )
                 }
             }
         }
@@ -286,6 +300,31 @@ fun SettingsScreen(
                         AssistChip(
                             onClick = {},
                             label = { Text("Pakistani Rupee (PKR - روپے)", fontWeight = FontWeight.Bold) }
+                        )
+                    }
+
+                    HorizontalDivider()
+
+                    // Balance Display Privacy Toggle
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = if (isUr) "ڈیش بورڈ پر بیلنس دکھائیں" else "Show Balance on Dashboard",
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                text = if (isUr) "اگر بند کریں گے تو رقم خفیہ رہے گی (••••••)" else "Hide balance for privacy",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        Switch(
+                            checked = isBalanceVisible,
+                            onCheckedChange = { viewModel.setBalanceVisibility(it) }
                         )
                     }
                 }
@@ -584,6 +623,23 @@ fun SettingsScreen(
                 viewModel.setMonthlyBudget(amount)
                 showBudgetDialog = false
                 Toast.makeText(context, if (isUr) "ماہانہ بجٹ محفوظ ہو گیا!" else "Monthly budget saved!", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    if (showEditBalanceDialog) {
+        EditBalanceDialog(
+            currentStartingBalance = startingBalance,
+            language = language,
+            onDismiss = { showEditBalanceDialog = false },
+            onSave = { amount ->
+                viewModel.updateStartingBalance(amount)
+                showEditBalanceDialog = false
+                Toast.makeText(
+                    context,
+                    if (isUr) "ابتدائی نقد بیلنس محفوظ ہو گیا!" else "Starting balance saved!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         )
     }

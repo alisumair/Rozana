@@ -76,6 +76,23 @@ class RozanaViewModel(application: Application) : AndroidViewModel(application) 
     private val _customIncomeCategories = MutableStateFlow(loadCustomCategoriesFromPrefs("custom_income_cats"))
     val customIncomeCategories: StateFlow<List<String>> = _customIncomeCategories.asStateFlow()
 
+    private val _startingBalance = MutableStateFlow(prefs.getFloat("starting_balance", 0.0f).toDouble())
+    val startingBalance: StateFlow<Double> = _startingBalance.asStateFlow()
+
+    private val _isBalanceVisible = MutableStateFlow(prefs.getBoolean("is_balance_visible", true))
+    val isBalanceVisible: StateFlow<Boolean> = _isBalanceVisible.asStateFlow()
+
+    fun toggleBalanceVisibility() {
+        val next = !_isBalanceVisible.value
+        _isBalanceVisible.value = next
+        prefs.edit().putBoolean("is_balance_visible", next).apply()
+    }
+
+    fun setBalanceVisibility(visible: Boolean) {
+        _isBalanceVisible.value = visible
+        prefs.edit().putBoolean("is_balance_visible", visible).apply()
+    }
+
     private val _fajrAlert = MutableStateFlow(prefs.getBoolean("fajr_alert", true))
     val fajrAlert: StateFlow<Boolean> = _fajrAlert.asStateFlow()
 
@@ -325,6 +342,12 @@ class RozanaViewModel(application: Application) : AndroidViewModel(application) 
     fun resetWaterGlasses() {
         _waterGlasses.value = 0
         prefs.edit().putInt("water_glasses", 0).apply()
+    }
+
+    fun updateStartingBalance(amount: Double) {
+        val safe = amount.coerceAtLeast(0.0)
+        _startingBalance.value = safe
+        prefs.edit().putFloat("starting_balance", safe.toFloat()).apply()
     }
 
     fun togglePrayerAlert(prayerIdx: Int) {

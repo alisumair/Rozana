@@ -1454,3 +1454,109 @@ fun CategoryManagementDialog(
     )
 }
 
+@Composable
+fun EditBalanceDialog(
+    currentStartingBalance: Double,
+    language: AppLanguage,
+    onDismiss: () -> Unit,
+    onSave: (Double) -> Unit
+) {
+    val isUr = language == AppLanguage.URDU
+    var balanceText by remember {
+        mutableStateOf(if (currentStartingBalance > 0) "%.0f".format(currentStartingBalance) else "0")
+    }
+    val presets = listOf(0.0, 1000.0, 5000.0, 10000.0, 25000.0, 50000.0)
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.AccountBalanceWallet, contentDescription = null, tint = Color(0xFF00C48C))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = if (isUr) "ابتدائی نقد بیلنس (بیلنس تبدیل کریں)" else "Edit Cash / Starting Balance",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 17.sp
+                )
+            }
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    text = if (isUr)
+                        "اگر آپ کے پاس نقد رقم یا بینک بیلنس موجود ہے تو یہاں درج کریں۔ اگر کوئی بیلنس نہیں ہے تو 0 رکھیں تاکہ غلط بیلنس ظاہر نہ ہو۔"
+                    else
+                        "Enter your initial cash in hand or wallet balance. Set to 0 if starting with no initial balance.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                OutlinedTextField(
+                    value = balanceText,
+                    onValueChange = {
+                        balanceText = it.filter { char -> char.isDigit() || char == '.' }
+                    },
+                    label = { Text(if (isUr) "بیلنس کی رقم درج کریں" else "Starting Balance Amount") },
+                    prefix = { Text("PKR ", fontWeight = FontWeight.Bold) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth().testTag("edit_balance_input"),
+                    singleLine = true
+                )
+
+                Text(
+                    text = if (isUr) "تیار بیلنس پری سیٹس:" else "Quick Presets:",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    presets.take(3).forEach { p ->
+                        FilterChip(
+                            selected = balanceText == "%.0f".format(p),
+                            onClick = { balanceText = "%.0f".format(p) },
+                            label = { Text(if (p == 0.0) (if (isUr) "صفر (Rs. 0)" else "Rs. 0") else "Rs. ${"%.0f".format(p)}") },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    presets.drop(3).forEach { p ->
+                        FilterChip(
+                            selected = balanceText == "%.0f".format(p),
+                            onClick = { balanceText = "%.0f".format(p) },
+                            label = { Text("Rs. ${"%.0f".format(p)}") },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    val amount = balanceText.toDoubleOrNull() ?: 0.0
+                    onSave(amount)
+                }
+            ) {
+                Text(if (isUr) "محفوظ کریں (Save)" else "Save")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(if (isUr) "منسوخ" else "Cancel")
+            }
+        }
+    )
+}
+

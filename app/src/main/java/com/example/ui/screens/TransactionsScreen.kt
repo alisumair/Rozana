@@ -2,6 +2,7 @@ package com.example.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.*
 import com.example.ui.components.CategoryManagementDialog
+import com.example.ui.components.EditBalanceDialog
 import com.example.ui.theme.ExpenseRed
 import com.example.ui.theme.IncomeGreen
 import com.example.ui.viewmodel.RozanaViewModel
@@ -37,10 +39,13 @@ fun TransactionsScreen(
     val transactions by viewModel.allTransactions.collectAsState()
     val customExpenseCategories by viewModel.customExpenseCategories.collectAsState()
     val customIncomeCategories by viewModel.customIncomeCategories.collectAsState()
+    val startingBalance by viewModel.startingBalance.collectAsState()
+    val isBalanceVisible by viewModel.isBalanceVisible.collectAsState()
 
     var selectedFilter by remember { mutableStateOf<TransactionType?>(null) }
     var transactionToDelete by remember { mutableStateOf<TransactionEntity?>(null) }
     var showCategoryManagerDialog by remember { mutableStateOf(false) }
+    var showEditBalanceDialog by remember { mutableStateOf(false) }
 
     val filteredTransactions = remember(transactions, selectedFilter) {
         if (selectedFilter == null) transactions
@@ -49,7 +54,7 @@ fun TransactionsScreen(
 
     val totalIncome = transactions.filter { it.type == TransactionType.INCOME }.sumOf { it.amount }
     val totalExpense = transactions.filter { it.type == TransactionType.EXPENSE }.sumOf { it.amount }
-    val balance = totalIncome - totalExpense
+    val netBalance = startingBalance + totalIncome - totalExpense
 
     Scaffold(
         floatingActionButton = {
@@ -112,19 +117,42 @@ fun TransactionsScreen(
                         )
                     }
 
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = RozanaStrings.get("remaining_balance", language),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable { showEditBalanceDialog = true }
+                            .padding(4.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = RozanaStrings.get("remaining_balance", language),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Icon(
+                                Icons.Default.Edit,
+                                contentDescription = "Edit Balance",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(13.dp)
+                            )
+                        }
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = FormatUtils.formatPKR(balance, language),
+                            text = if (isBalanceVisible) FormatUtils.formatPKR(netBalance, language) else "••••••",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = if (balance >= 0) MaterialTheme.colorScheme.primary else ExpenseRed
+                            color = if (netBalance >= 0) MaterialTheme.colorScheme.primary else ExpenseRed
                         )
+                        if (startingBalance > 0) {
+                            Text(
+                                text = if (language == AppLanguage.URDU) "(شروع: Rs. ${"%.0f".format(startingBalance)})" else "(Start: Rs. ${"%.0f".format(startingBalance)})",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontSize = 10.sp
+                            )
+                        }
                     }
                 }
             }
@@ -361,6 +389,23 @@ fun TransactionsScreen(
             onRenameCategory = { type, oldName, newName ->
                 viewModel.renameCustomCategory(type, oldName, newName)
                 Toast.makeText(context, if (language == AppLanguage.URDU) "نام تبدیل ہو گیا" else "Category renamed!", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    if (showEditBalanceDialog) {
+        EditBalanceDialog(
+            currentStartingBalance = startingBalance,
+            language = language,
+            onDismiss = { showEditBalanceDialog = false },
+            onSave = { newBal ->
+                viewModel.updateStartingBalance(newBal)
+                showEditBalanceDialog = false
+                Toast.makeText(
+                    context,
+                    if (language == AppLanguage.URDU) "ابتدائی بیلنس کامیابی سے محفوظ ہو گیا!" else "Starting balance saved successfully!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         )
     }

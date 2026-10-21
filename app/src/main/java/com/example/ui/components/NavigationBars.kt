@@ -185,17 +185,17 @@ fun RozanaBottomBar(
                 modifier = Modifier.testTag("nav_item_quran")
             )
 
-            // 3. Masnoon Azkar
+            // 3. Masnoon Duas & Azkar
             NavigationBarItem(
                 selected = currentScreen == Screen.Azkar,
                 onClick = { onSelectScreen(Screen.Azkar) },
                 icon = {
                     Icon(
-                        if (currentScreen == Screen.Azkar) Icons.Filled.Star else Icons.Outlined.Star,
-                        contentDescription = if (language == AppLanguage.URDU) "اذکار" else "Azkar"
+                        if (currentScreen == Screen.Azkar) Icons.Filled.AutoAwesome else Icons.Outlined.AutoAwesome,
+                        contentDescription = if (language == AppLanguage.URDU) "دعائیں و اذکار" else "Duas & Azkar"
                     )
                 },
-                label = { Text(if (language == AppLanguage.URDU) "اذکار" else "Azkar", fontWeight = FontWeight.Bold) },
+                label = { Text(if (language == AppLanguage.URDU) "دعائیں" else "Duas", fontWeight = FontWeight.Bold) },
                 colors = navColors,
                 modifier = Modifier.testTag("nav_item_azkar")
             )
