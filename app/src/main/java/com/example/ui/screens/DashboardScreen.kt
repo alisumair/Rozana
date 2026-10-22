@@ -1665,9 +1665,9 @@ fun DashboardScreen(
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(
                         text = if (isUr)
-                            "1. اپنے موبائل میں انسٹال کرنے کے لیے APK فائل ڈائریکٹ حاصل کریں یا ڈاؤنلوڈ کریں۔\n2. واٹس ایپ پر کسی بھی دوست یا فیملی کو بغیر کسی پابندی کے شیئر کریں۔"
+                            "1. تازہ ترین ورژن (v1.1) میں بیلنس ایڈٹ/ہائیڈ اور ۲۷+ مسنون دعائیں شامل ہیں۔\n2. اگر موبائل میں پرانی ایپ موجود ہے تو پہلے اسے اَن انسٹال (Uninstall) کر لیں تاکہ نیا ورژن بغیر کسی مسئلے کے انسٹال ہو۔\n3. نیچے دیے گئے لنک سے ڈائریکٹ نیا APK ڈاؤنلوڈ کریں۔"
                         else
-                            "1. Download Rozana.apk directly to install on any Android phone.\n2. Share the APK file or download link via WhatsApp with anyone!"
+                            "1. Latest Version v1.1 includes editable balance and 27+ Masnoon Duas.\n2. If an older version is already on your phone, uninstall it first to avoid conflicts.\n3. Download the new APK directly from the link."
                     )
                     Surface(
                         color = MaterialTheme.colorScheme.surfaceVariant,
@@ -1675,7 +1675,7 @@ fun DashboardScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = "Rozana.apk (21 MB) - 100% Offline, Fast & Free",
+                            text = "Rozana_v1.1.apk (Latest Update) - 100% Offline",
                             modifier = Modifier.padding(10.dp),
                             fontWeight = FontWeight.Bold,
                             fontSize = 12.sp,
