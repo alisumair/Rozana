@@ -41,9 +41,14 @@ targetDirs.forEach((dirName) => {
   fs.writeFileSync(path.join(dirPath, 'manifest.json'), manifestContent, 'utf8');
   fs.writeFileSync(path.join(dirPath, 'robots.txt'), robotsContent, 'utf8');
   
-  const sourceApk = path.join(__dirname, 'rozana.apk');
-  if (fs.existsSync(sourceApk)) {
-    fs.copyFileSync(sourceApk, path.join(dirPath, 'rozana.apk'));
+  const sourceApkCandidates = [
+    path.join(__dirname, 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk'),
+    path.join(__dirname, 'rozana.apk')
+  ];
+  let src = sourceApkCandidates.find(p => fs.existsSync(p));
+  if (src) {
+    fs.copyFileSync(src, path.join(dirPath, 'Rozana_v1.1_Updated.apk'));
+    fs.copyFileSync(src, path.join(dirPath, 'rozana.apk'));
   }
   console.log(`Created output in ${dirName}/`);
 });

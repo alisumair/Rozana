@@ -395,7 +395,7 @@ fun DashboardScreen(
                                     )
                                     Spacer(modifier = Modifier.width(6.dp))
                                     Text(
-                                        text = if (isUr) "فعال ✓" else "ACTIVE ✓",
+                                        text = if (isUr) "v1.1 نیا ورژن ✓" else "v1.1 UPDATED ✓",
                                         color = Color.White,
                                         fontWeight = FontWeight.ExtraBold,
                                         fontSize = 11.sp,
@@ -1692,7 +1692,7 @@ fun DashboardScreen(
                             type = "text/plain"
                             putExtra(
                                 Intent.EXTRA_TEXT,
-                                "Rozana – روزانہ (All-in-One Daily Life, Namaz, Quran, Azkar & Bills App for Pakistan)\nDownload & Install directly: https://ais-pre-csznmc4fckb7mu6v5pcya6-896921133693.asia-southeast1.run.app/rozana.apk"
+                                "Rozana – روزانہ (All-in-One Daily Life, Namaz, Quran, 27+ Masnoon Duas & Editable Balance)\nDownload & Install directly: https://ais-pre-csznmc4fckb7mu6v5pcya6-896921133693.asia-southeast1.run.app/Rozana_v1.1_Updated.apk"
                             )
                         }
                         context.startActivity(Intent.createChooser(shareIntent, "Share Rozana App via"))

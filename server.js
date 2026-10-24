@@ -59,16 +59,31 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Direct APK Download support (Rozana.apk)
-  if (urlPath === '/rozana.apk' || urlPath === '/download-apk' || urlPath === '/Rozana.apk') {
-    const apkPath = path.join(__dirname, 'rozana.apk');
-    if (fs.existsSync(apkPath)) {
+  // Direct APK Download support (Rozana_v1.1_Updated.apk, Rozana.apk)
+  if (urlPath === '/rozana.apk' || urlPath === '/download-apk' || urlPath === '/Rozana.apk' || 
+      urlPath === '/Rozana_v1.1_Updated.apk' || urlPath === '/rozana_v1.1.apk' || urlPath === '/rozana-v1.1.apk') {
+    const candidatePaths = [
+      path.join(__dirname, 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk'),
+      path.join(__dirname, 'Rozana_v1.1_Updated.apk'),
+      path.join(__dirname, 'public', 'Rozana_v1.1_Updated.apk'),
+      path.join(__dirname, 'rozana.apk')
+    ];
+    let apkPath = null;
+    for (const p of candidatePaths) {
+      if (fs.existsSync(p)) {
+        apkPath = p;
+        break;
+      }
+    }
+    if (apkPath) {
       const stat = fs.statSync(apkPath);
       res.writeHead(200, {
         'Content-Type': 'application/vnd.android.package-archive',
         'Content-Length': stat.size,
-        'Content-Disposition': 'attachment; filename="Rozana.apk"',
-        'Cache-Control': 'public, max-age=3600'
+        'Content-Disposition': 'attachment; filename="Rozana_v1.1_Updated.apk"',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        'Pragma': 'no-cache',
+        'Expires': '0'
       });
       const readStream = fs.createReadStream(apkPath);
       readStream.pipe(res);
